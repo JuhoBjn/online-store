@@ -1,1 +1,1 @@
-http://localhost:5000/pulsecheck
+http://localhost:5000/healthz
