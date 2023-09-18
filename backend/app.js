@@ -2,8 +2,8 @@ const express = require('express')
 
 const app = express()
 
-app.get('/pulsecheck', (req, res) => {
-  res.send('Pulsecheck OK')
+app.get('/healthz', (req, res) => {
+  res.send('ok')
 })
 
 module.exports = app
