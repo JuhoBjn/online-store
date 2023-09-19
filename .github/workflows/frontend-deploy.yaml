@@ -1,0 +1,88 @@
+name: Frontend Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - production
+    paths:
+      - frontend/**
+      - .github/workflows/frontend-deploy.yml
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Lint code
+        working-directory: ./frontend
+        run: npm run lint
+
+      - name: Prettier check
+        working-directory: ./frontend
+        run: npx prettier --check .
+
+      - name: Install DB
+        uses: shogo82148/actions-setup-mysql@v1.16.0
+        with:
+          distribution: "mysql"
+          mysql-version: "8.1"
+          user: testuser
+          password: testpass
+
+      - name: Init DB
+        working-directory: ./frontend
+        env:
+          TEST_DATABASE_URL: "mysql://testuser:testpass@127.0.0.1:3306/test"
+        run: |
+          npx -y dbmate -e TEST_DATABASE_URL --no-dump-schema up
+          # possibly also want insert test data
+          # mysql -h 127.0.0.1 -u testuser -ptestpass < ./db/testdata/file.sql
+
+      - name: Run tests
+        working-directory: ./frontend
+        run: npm run test
+
+      - name: Save code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-code-coverage-report
+          path: ./frontend/coverage
+
+      # - name: Upload code coverage results to code coverage service
+
+      # - name: Run end-to-end tests
+      #   run: npm run test:e2e
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: tests
+    if: github.ref == "refs/heads/main"
+    env:
+      FRONTEND_DEPLOY_STAGING_WEBHOOK: ${{secrets.FRONTEND_DEPLOY_STAGING_WEBHOOK}}
+    steps:
+      - name: Trigger deploy to staging
+        run: curl -s "$FRONTEND_DEPLOY_STAGING_WEBHOOK"
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: tests
+    if: github.ref == "refs/heads/production"
+    env:
+      FRONTEND_DEPLOY_PRODUCTION_WEBHOOK: ${{secrets.FRONTEND_DEPLOY_PRODUCTION_WEBHOOK}}
+    steps:
+      - name: Trigger deploy to production
+        run: curl -s "$FRONTEND_DEPLOY_PRODUCTION_WEBHOOK"
