@@ -1,9 +1,9 @@
-const express = require('express')
+const express = require("express");
 
-const app = express()
+const app = express();
 
-app.get('/healthz', (req, res) => {
-  res.send('ok')
-})
+app.get("/healthz", (req, res) => {
+  res.send("ok");
+});
 
-module.exports = app
+module.exports = app;
