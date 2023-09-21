@@ -50,7 +50,7 @@ jobs:
         run: |
           npx -y dbmate -e TEST_DATABASE_URL --no-dump-schema up
           # possibly also want insert test data
-          # mysql -h 127.0.0.1 -u testuser -ptestpass < ./db/testdata/file.sql
+          # mysql -h 127.0.0.1 -u testuser -ptestpass test < ./db/testdata/file.sql
 
       - name: Run tests
         working-directory: ./backend
