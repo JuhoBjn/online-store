@@ -53,7 +53,7 @@ jobs:
 
       - name: Run tests
         working-directory: ./frontend
-        run: npm run test
+        run: npx -y vitest run --coverage
 
       - name: Save code coverage results
         uses: actions/upload-artifact@v3
