@@ -8,7 +8,9 @@
     "dev": "nodemon server.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "jest --coverage --forceExit"
+    "test": "jest --coverage",
+    "test:run": "jest --coverage --forceExit",
+    "test:debug": "jest --coverage --detectOpenHandles"
   },
   "author": "",
   "license": "ISC",
