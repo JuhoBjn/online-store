@@ -36,7 +36,7 @@ jobs:
         run: npx prettier --check .
 
       - name: Install DB
-        uses: shogo82148/actions-setup-mysql@v1.16.0
+        uses: shogo82148/actions-setup-mysql@v1.23.0
         with:
           distribution: "mysql"
           mysql-version: "8.1"
