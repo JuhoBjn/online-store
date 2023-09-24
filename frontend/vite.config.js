@@ -8,5 +8,8 @@ export default defineConfig({
     globals: true,
     setupFiles: "./test/setup.js",
     environment: "jsdom"
+  },
+  server: {
+    host: "127.0.0.1"
   }
 });
