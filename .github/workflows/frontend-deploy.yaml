@@ -73,7 +73,7 @@ jobs:
     needs: [tests, e2e-tests]
     if: github.ref == "refs/heads/main"
     env:
-      FRONTEND_DEPLOY_STAGING_WEBHOOK: ${{secrets.FRONTEND_DEPLOY_STAGING_WEBHOOK}}
+      FRONTEND_DEPLOY_STAGING_WEBHOOK: ${{ secrets.FRONTEND_DEPLOY_STAGING_WEBHOOK }}
     steps:
       - name: Trigger deploy to staging
         run: curl -s "$FRONTEND_DEPLOY_STAGING_WEBHOOK"
@@ -83,7 +83,7 @@ jobs:
     needs: [tests, e2e-tests]
     if: github.ref == "refs/heads/production"
     env:
-      FRONTEND_DEPLOY_PRODUCTION_WEBHOOK: ${{secrets.FRONTEND_DEPLOY_PRODUCTION_WEBHOOK}}
+      FRONTEND_DEPLOY_PRODUCTION_WEBHOOK: ${{ secrets.FRONTEND_DEPLOY_PRODUCTION_WEBHOOK }}
     steps:
       - name: Trigger deploy to production
         run: curl -s "$FRONTEND_DEPLOY_PRODUCTION_WEBHOOK"

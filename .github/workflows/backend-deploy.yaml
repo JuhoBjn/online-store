@@ -73,7 +73,7 @@ jobs:
     needs: [tests, e2e-tests]
     if: github.ref == "refs/heads/main"
     env:
-      BACKEND_DEPLOY_STAGING_WEBHOOK: ${{secrets.BACKEND_DEPLOY_STAGING_WEBHOOK}}
+      BACKEND_DEPLOY_STAGING_WEBHOOK: ${{ secrets.BACKEND_DEPLOY_STAGING_WEBHOOK }}
     steps:
       - name: Trigger deploy to staging
         run: curl -s "$BACKEND_DEPLOY_STAGING_WEBHOOK"
@@ -83,7 +83,7 @@ jobs:
     needs: [tests, e2e-tests]
     if: github.ref == "refs/heads/production"
     env:
-      BACKEND_DEPLOY_PRODUCTION_WEBHOOK: ${{secrets.BACKEND_DEPLOY_PRODUCTION_WEBHOOK }}
+      BACKEND_DEPLOY_PRODUCTION_WEBHOOK: ${{ secrets.BACKEND_DEPLOY_PRODUCTION_WEBHOOK }}
     steps:
       - name: Trigger deploy to production
         run: curl -s "$BACKEND_DEPLOY_PRODUCTION_WEBHOOK"
