@@ -76,8 +76,12 @@ jobs:
     needs: [tests, e2e-tests]
     if: github.ref == 'refs/heads/main'
     env:
+      DATABASE_URL_STAGING: ${{ secrets.DATABASE_URL_STAGING }}
       BACKEND_DEPLOY_STAGING_WEBHOOK: ${{ secrets.BACKEND_DEPLOY_STAGING_WEBHOOK }}
     steps:
+      - name: Run DB migration
+        working-directory: backend
+        run: npx -y dbmate -e DATABASE_URL_STAGING --no-dump-schema up
       - name: Trigger deploy to staging
         run: curl -s "$BACKEND_DEPLOY_STAGING_WEBHOOK"
 
@@ -86,7 +90,11 @@ jobs:
     needs: [tests, e2e-tests]
     if: github.ref == 'refs/heads/production'
     env:
+      DATABASE_URL_PRODUCTION: ${{ secrets.DATABASE_URL_PRODUCTION }}
       BACKEND_DEPLOY_PRODUCTION_WEBHOOK: ${{ secrets.BACKEND_DEPLOY_PRODUCTION_WEBHOOK }}
     steps:
+      - name: Run DB migration
+        working-directory: backend
+        run: npx -y dbmate -e DATABASE_URL_PRODUCTION --no-dump-schema up
       - name: Trigger deploy to production
         run: curl -s "$BACKEND_DEPLOY_PRODUCTION_WEBHOOK"
