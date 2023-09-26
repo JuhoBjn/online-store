@@ -8,12 +8,15 @@
     "dev": "nodemon server.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "jest --coverage --forceExit"
+    "test": "jest --coverage",
+    "test:run": "jest --coverage --forceExit",
+    "test:debug": "jest --coverage --detectOpenHandles"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@jest/globals": "^29.7.0",
+    "dbmate": "^2.6.0",
     "eslint": "^8.49.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.28.1",
