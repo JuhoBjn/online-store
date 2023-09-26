@@ -1,0 +1,100 @@
+name: Backend Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - production
+    paths:
+      - backend/**
+      - .github/workflows/backend-deploy.yml
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Lint code
+        working-directory: ./backend
+        run: npm run lint
+
+      - name: Prettier check
+        working-directory: ./backend
+        run: npx prettier --check .
+
+      - name: Install DB
+        uses: shogo82148/actions-setup-mysql@v1.23.0
+        with:
+          distribution: "mysql"
+          mysql-version: "8.1"
+          user: testuser
+          password: testpass
+
+      - name: Init DB
+        working-directory: ./backend
+        env:
+          TEST_DATABASE_URL: "mysql://testuser:testpass@127.0.0.1:3306/test"
+        run: |
+          npx -y dbmate -e TEST_DATABASE_URL --no-dump-schema up
+          # possibly also want insert test data
+          # mysql -h 127.0.0.1 -u testuser -ptestpass test < ./db/testdata/file.sql
+
+      - name: Run tests
+        working-directory: ./backend
+        run: npm run test
+
+      - name: Save code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-code-coverage-report
+          path: ./backend/coverage
+
+      - name: Upload test coverage results to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          base-path: ./backend/coverage
+
+  e2e-tests:
+    uses: ./.github/workflows/e2e-tests.yaml
+    secrets: inherit
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: [tests, e2e-tests]
+    if: github.ref == 'refs/heads/main'
+    env:
+      DATABASE_URL_STAGING: ${{ secrets.DATABASE_URL_STAGING }}
+      BACKEND_DEPLOY_STAGING_WEBHOOK: ${{ secrets.BACKEND_DEPLOY_STAGING_WEBHOOK }}
+    steps:
+      - name: Run DB migration
+        working-directory: backend
+        run: npx -y dbmate -e DATABASE_URL_STAGING --no-dump-schema up
+      - name: Trigger deploy to staging
+        run: curl -s "$BACKEND_DEPLOY_STAGING_WEBHOOK"
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: [tests, e2e-tests]
+    if: github.ref == 'refs/heads/production'
+    env:
+      DATABASE_URL_PRODUCTION: ${{ secrets.DATABASE_URL_PRODUCTION }}
+      BACKEND_DEPLOY_PRODUCTION_WEBHOOK: ${{ secrets.BACKEND_DEPLOY_PRODUCTION_WEBHOOK }}
+    steps:
+      - name: Run DB migration
+        working-directory: backend
+        run: npx -y dbmate -e DATABASE_URL_PRODUCTION --no-dump-schema up
+      - name: Trigger deploy to production
+        run: curl -s "$BACKEND_DEPLOY_PRODUCTION_WEBHOOK"

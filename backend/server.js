@@ -1,5 +1,11 @@
 const app = require("./app");
-require("dotenv").config();
+
+// Load test environment variables when running tests
+if (process.env.NODE_ENV === "test") {
+  require("dotenv").config({ path: ".env.test" });
+} else {
+  require("dotenv").config({ path: ".env" });
+}
 
 const port = process.env.PORT || 5000;
 
