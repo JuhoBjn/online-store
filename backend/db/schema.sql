@@ -42,7 +42,7 @@ CREATE TABLE `schema_migrations` (
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` varchar(36) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
   `email` varchar(320) NOT NULL,
   `postal_code` varchar(5) DEFAULT NULL,
   `city` varchar(85) DEFAULT NULL,
@@ -54,6 +54,7 @@ CREATE TABLE `users` (
   `premium` tinyint(1) DEFAULT '0',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_name` varchar(20) DEFAULT NULL,
   `role_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_users_roles_idx` (`role_id`),

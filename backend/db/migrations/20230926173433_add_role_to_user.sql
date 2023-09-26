@@ -7,6 +7,10 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles`(`name`) VALUES ('user'),('caretaker'),('admin');
 
+ALTER TABLE `users` RENAME COLUMN `name` TO `first_name`;
+
+ALTER TABLE `users` ADD COLUMN `last_name` VARCHAR(20) DEFAULT NULL;
+
 ALTER TABLE `users` ADD COLUMN `role_id` INT NOT NULL;
 
 ALTER TABLE `users`
