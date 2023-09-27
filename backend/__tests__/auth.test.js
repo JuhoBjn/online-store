@@ -138,7 +138,6 @@ describe("User login endpoint", () => {
   const testUser = {
     id: "7997f9f8-b006-4cde-a1b1-18dcb4aafea9",
     role_id: 1,
-    role: "user",
     first_name: "Tommy",
     last_name: "Tester",
     email: "tommy@tester.com",
@@ -149,20 +148,19 @@ describe("User login endpoint", () => {
     last_location_longitude: 24.929831,
     phone: "0123456789",
     password: "Tommy@test123",
-    password_hash: null,
     premium: 1
   };
+  const testUserRole = "user";
 
   beforeAll(() => {
     return new Promise((resolve, reject) => {
       bcrypt.hash(testUser.password, 12, (error, hash) => {
         if (error) return reject(error);
-        testUser.password_hash = hash;
+        testUser.password = hash;
 
         pool.getConnection((error, connection) => {
           if (error) return reject(error);
-          const insertQuery =
-            "INSERT INTO `users`(`id`,`role_id`,`first_name`,`last_name`,`email`,`postal_code`,`city`,`country`,`last_location_latitude`,`last_location_longitude`,`phone`,`password`,`premium`) SET ?;";
+          const insertQuery = "INSERT INTO `users` SET ?;";
           connection.query(insertQuery, [testUser], (error, result) => {
             connection.release();
             if (error) return reject(error);
@@ -206,7 +204,7 @@ describe("User login endpoint", () => {
     expect(response.status).toBe(200);
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.body.id).toEqual(testUser.id);
-    expect(response.body.role).toEqual(testUser.role);
+    expect(response.body.role).toEqual(testUserRole);
     expect(response.body.firstname).toEqual(testUser.first_name);
     expect(response.body.lastname).toEqual(testUser.last_name);
     expect(response.body.email).toEqual(testUser.email);
