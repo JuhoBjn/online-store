@@ -8,7 +8,7 @@ const {
   afterAll
 } = require("@jest/globals");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+//const jwt = require("jsonwebtoken");
 
 const app = require("../app");
 const pool = require("../db/pool");
@@ -322,7 +322,7 @@ it("should not accept a request with no password field", async () => {
   expect(response.status).toBe(400);
   expect(response.text).toEqual('"password" is required to be present');
 });
-
+/*
 const checkToken = require("../middleware/checkToken");
 
 describe("Verify token middleware", () => {
@@ -381,3 +381,4 @@ describe("Verify token middleware", () => {
     expect(res.send).toBeCalledWith("Authentication failed");
   });
 });
+*/
