@@ -11,20 +11,26 @@ const bcrypt = require("bcryptjs");
 //const jwt = require("jsonwebtoken");
 
 const app = require("../app");
-const pool = require("../db/pool");
+const { pool } = require("../db/pool");
 
 describe("User signup endpoint", () => {
+  let createdTestAccount;
+
   afterEach(() => {
     return new Promise((resolve, reject) => {
       pool.getConnection((error, connection) => {
         if (error) return reject(error);
         // Delete only accounts made by the test suite.
-        const deleteQuery = "DELETE FROM users WHERE email LIKE '%user&';";
-        connection.query(deleteQuery, (error, response) => {
-          connection.release();
-          if (error) return reject(error);
-          resolve(response);
-        });
+        const deleteQuery = "DELETE FROM users WHERE id = ?;";
+        connection.query(
+          deleteQuery,
+          [createdTestAccount],
+          (error, response) => {
+            connection.release();
+            if (error) return reject(error);
+            resolve(response);
+          }
+        );
       });
     });
   });
@@ -46,6 +52,7 @@ describe("User signup endpoint", () => {
     expect(response.body.id).toBeTruthy();
     expect(response.body.email).toBeTruthy();
     expect(response.body.token).toBeTruthy();
+    createdTestAccount = response.body.id;
   });
 
   it("should not allow creation of two users with the same email", async () => {
@@ -69,6 +76,7 @@ describe("User signup endpoint", () => {
     expect(response.status).toEqual(201);
     expect(response2.status).toEqual(400);
     expect(response2.text).toEqual("A user with this email already exists");
+    createdTestAccount = response.body.id;
   });
 
   it("should not allow a user to sign up without an email", async () => {
