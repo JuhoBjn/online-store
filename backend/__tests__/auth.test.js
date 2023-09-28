@@ -99,7 +99,7 @@ describe("User signup endpoint", () => {
       .send(testUser);
 
     expect(response.status).toEqual(400);
-    expect(response.text).toEqual('"email" is required to be present');
+    expect(response.text).toEqual('"email" is required');
   });
 
   it("should not allow a user to sign up without a password", async () => {
@@ -130,7 +130,7 @@ describe("User signup endpoint", () => {
       .send(testUser);
 
     expect(response.status).toEqual(400);
-    expect(response.text).toEqual('"password" is required to be present');
+    expect(response.text).toEqual('"password" is required');
   });
 });
 
@@ -286,7 +286,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toBe(400);
-    expect(response.text).toEqual('"email" is required to be present');
+    expect(response.text).toEqual('"email" is required');
   });
 
   it("should not allow a user to log in with empty password", async () => {
@@ -304,21 +304,21 @@ describe("User login endpoint", () => {
     expect(response.status).toBe(400);
     expect(response.text).toBe('"password" is not allowed to be empty');
   });
-});
 
-it("should not accept a request with no password field", async () => {
-  const testCredentials = {
-    email: "tommy@test.com"
-  };
+  it("should not accept a request with no password field", async () => {
+    const testCredentials = {
+      email: "tommy@test.com"
+    };
 
-  const response = await supertest(app)
-    .post("/api/users/login")
-    .set("Accept", "application/json")
-    .set("Content", "application/json")
-    .send(testCredentials);
+    const response = await supertest(app)
+      .post("/api/users/login")
+      .set("Accept", "application/json")
+      .set("Content", "application/json")
+      .send(testCredentials);
 
-  expect(response.status).toBe(400);
-  expect(response.text).toEqual('"password" is required to be present');
+    expect(response.status).toBe(400);
+    expect(response.text).toEqual('"password" is required');
+  });
 });
 /*
 const checkToken = require("../middleware/checkToken");
