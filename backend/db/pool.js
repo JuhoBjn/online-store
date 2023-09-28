@@ -9,4 +9,6 @@ const pool = mysql.createPool({
   password: process.env.MYSQL_ROOT_PASSWORD
 })
 
-module.exports = pool;
+const promisePool = pool.promise();
+
+module.exports = { pool, promisePool };
