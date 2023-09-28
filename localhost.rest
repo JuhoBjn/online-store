@@ -5,9 +5,10 @@ http://localhost:5000/healthz
 POST http://localhost:5000/api/users/signup
 Content-Type: application/json
 Accept: application/json
+
 {
   "email": "timothy@tester.com",
-  "password": "timothy@tester12345"
+  "password": "Timothy@tester12345"
 }
 
 ###
@@ -17,7 +18,7 @@ Content-Type: application/json
 Accept: application/json
 {
   "email": "timothy@tester.com",
-  "password": "timothy@tester12345"
+  "password": "Timothy12345"
 }
 
 ###
