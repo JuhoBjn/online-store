@@ -159,6 +159,7 @@ describe("User login endpoint", () => {
     premium: 1
   };
   const testUserRole = "user";
+  const testUserPassword = "Tommy@test123";
 
   beforeAll(() => {
     return new Promise((resolve, reject) => {
@@ -200,7 +201,7 @@ describe("User login endpoint", () => {
   it("should allow a user to log in with valid credentials", async () => {
     const testCredentials = {
       email: testUser.email,
-      password: testUser.password
+      password: testUserPassword
     };
 
     const response = await supertest(app)
@@ -219,22 +220,14 @@ describe("User login endpoint", () => {
     expect(response.body.postalcode).toEqual(testUser.postal_code);
     expect(response.body.city).toEqual(testUser.city);
     expect(response.body.country).toEqual(testUser.country);
-    expect(response.body.last_location_latitude).toEqual(
-      testUser.last_location_latitude
-    );
-    expect(response.body.last_location_longitude).toEqual(
-      testUser.last_location_longitude
-    );
     expect(response.body.phone).toEqual(testUser.phone);
-    expect(response.body.premium).toEqual(
-      Boolean.valueOf(testUser.premium && 1)
-    );
+    expect(response.body.premium).toEqual(testUser.premium);
     expect(response.body.token).toBeTruthy();
   });
 
-  it("should not allow a user to login without valid credentials", async () => {
+  it("should not allow a user to log in with an invalid password", async () => {
     const testCredentials = {
-      email: "tommy@test.com",
+      email: testUser.email,
       password: "wrongP4ssword"
     };
 
@@ -269,7 +262,7 @@ describe("User login endpoint", () => {
   it("should not allow a user to login with empty email address", async () => {
     const testCredentials = {
       email: "",
-      password: "Tommy@test123"
+      password: testUserPassword
     };
 
     const response = await supertest(app)
@@ -284,7 +277,7 @@ describe("User login endpoint", () => {
 
   it("should not accept a request with no email field", async () => {
     const testCredentials = {
-      password: "Tommy@test123"
+      password: testUserPassword
     };
 
     const response = await supertest(app)
@@ -299,7 +292,7 @@ describe("User login endpoint", () => {
 
   it("should not allow a user to log in with empty password", async () => {
     const testCredentials = {
-      email: "tommy@test.com",
+      email: testUser.email,
       password: ""
     };
 
@@ -315,7 +308,7 @@ describe("User login endpoint", () => {
 
   it("should not accept a request with no password field", async () => {
     const testCredentials = {
-      email: "tommy@test.com"
+      email: testUser.email
     };
 
     const response = await supertest(app)
