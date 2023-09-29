@@ -10,7 +10,8 @@
     "lint:fix": "eslint --fix .",
     "test": "jest --coverage",
     "test:run": "jest --coverage --forceExit",
-    "test:debug": "jest --coverage --detectOpenHandles"
+    "test:debug": "jest --coverage --detectOpenHandles",
+    "test:clean": "./localtestrun.sh"
   },
   "author": "",
   "license": "ISC",
