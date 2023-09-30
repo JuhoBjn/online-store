@@ -31,9 +31,8 @@ const signup = async (req, res) => {
 
   // Make sure no duplicate users are created.
   try {
-    const users = await userModels.findByEmail(providedCredentials.email);
-    if (users.length > 0)
-      throw new Error("A user with this email already exists");
+    const user = await userModels.findByEmail(providedCredentials.email);
+    if (user) throw new Error("A user with this email already exists");
   } catch (error) {
     return res.status(400).send(error.message);
   }
@@ -82,10 +81,10 @@ const login = async (req, res) => {
   }
 
   // Check that a user with the email exists.
-  let users;
+  let user;
   try {
-    users = await userModels.findByEmail(providedCredentials.email);
-    if (users.length === 0) {
+    user = await userModels.findByEmail(providedCredentials.email);
+    if (!user) {
       throw new Error("No user exists for given email");
     }
   } catch (error) {
@@ -94,7 +93,7 @@ const login = async (req, res) => {
 
   const passwordsMatch = await bcrypt.compare(
     providedCredentials.password,
-    users[0].password
+    user.password
   );
 
   if (!passwordsMatch) {
@@ -104,8 +103,6 @@ const login = async (req, res) => {
         "Invalid credentials. Please check email and password and try again."
       );
   }
-
-  const user = users[0];
 
   const authenticatedUser = {
     id: user.id,

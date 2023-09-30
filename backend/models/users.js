@@ -13,7 +13,7 @@ const users = {
       LEFT JOIN roles ON users.role_id = roles.id
       HAVING email = ?;`;
     const [rows] = await promisePool.query(queryString, [email]);
-    return rows;
+    return rows[0] === undefined ? null : rows[0];
   },
   /**
    * Create a new user entry.
