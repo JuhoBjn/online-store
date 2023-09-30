@@ -9,7 +9,7 @@ CREATE TABLE `users` (
   `last_location_latitude` DECIMAL(8, 6),
   `last_location_longitude` DECIMAL(9, 6),
   `phone` VARCHAR(15),
-  `password` VARCHAR(72) NOT NULL,
+  `password` VARCHAR(60) NOT NULL,
   `premium` BOOLEAN DEFAULT FALSE,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
