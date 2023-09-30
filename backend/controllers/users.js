@@ -105,17 +105,19 @@ const login = async (req, res) => {
       );
   }
 
+  const user = users[0];
+
   const authenticatedUser = {
-    id: users[0].id,
-    role: users[0].role,
-    firstname: users[0].first_name,
-    lastname: users[0].last_name,
-    email: users[0].email,
-    postalcode: users[0].postal_code,
-    city: users[0].city,
-    country: users[0].country,
-    phone: users[0].phone,
-    premium: users[0].premium
+    id: user.id,
+    role: user.role,
+    firstname: user.first_name,
+    lastname: user.last_name,
+    email: user.email,
+    postalcode: user.postal_code,
+    city: user.city,
+    country: user.country,
+    phone: user.phone,
+    premium: user.premium
   };
 
   try {
