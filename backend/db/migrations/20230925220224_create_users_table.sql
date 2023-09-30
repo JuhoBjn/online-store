@@ -1,7 +1,8 @@
 -- migrate:up
 CREATE TABLE `users` (
   `id` VARCHAR(36) NOT NULL,
-  `name` VARCHAR(50),
+  `first_name` VARCHAR(20),
+  `last_name` VARCHAR(30),
   `email` VARCHAR(320) NOT NULL,
   `postal_code` VARCHAR(5),
   `city` VARCHAR(85),

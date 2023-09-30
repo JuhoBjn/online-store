@@ -7,10 +7,6 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles`(`name`) VALUES ('user'),('caretaker'),('admin');
 
-ALTER TABLE `users` RENAME COLUMN `name` TO `first_name`;
-
-ALTER TABLE `users` ADD COLUMN `last_name` VARCHAR(20) DEFAULT NULL;
-
 ALTER TABLE `users` ADD COLUMN `role_id` INT NOT NULL;
 
 ALTER TABLE `users`
@@ -19,5 +15,6 @@ ADD CONSTRAINT `fk_users_roles_idx`
   REFERENCES `roles`(`id`);
 
 -- migrate:down
-ALTER TABLE `users` REMOVE CONSTRAINT `fk_users_roles_idx`;
+ALTER TABLE `users` DROP FOREIGN KEY `fk_users_roles_idx`;
+ALTER TABLE `users` DROP COLUMN `role_id`;
 DROP TABLE `roles`;
