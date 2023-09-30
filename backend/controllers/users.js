@@ -62,6 +62,8 @@ const login = async (req, res) => {
     email: Joi.string().email().required(),
     password: Joi.string()
       .pattern(
+        // Password must be at least 8 characters long,
+        // contain at least one upper case letter, one lower case letter and one number.
         new RegExp("^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z].{8,}$")
       )
       .required()
