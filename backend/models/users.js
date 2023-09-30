@@ -3,8 +3,8 @@ const { promisePool } = require("../db/pool");
 const users = {
   /**
    * Find users based on email.
-   * @param {*} email
-   * @returns List of user ids
+   * @param {string} email The user's email address
+   * @returns User account found with email
    */
   findByEmail: async (email) => {
     const queryString = `
@@ -17,8 +17,11 @@ const users = {
   },
   /**
    * Create a new user entry.
-   * @param {*} user
-   * @returns Created user
+   * @param {Object} user - The user object containing user details.
+   * @param {string} user.id - The user's ID.
+   * @param {string} user.email - The user's email.
+   * @param {string} user.password - The user's password.
+   * @returns The created user object.
    */
   create: async (user) => {
     const insertString =
