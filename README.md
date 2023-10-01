@@ -7,7 +7,6 @@ Software development team:
 - Juho Björkman
 - Valtteri Huuskonen
 - Jyri Pappinen
-- Riku Kopponen
 
 ## Development instructions
 
@@ -23,6 +22,7 @@ Software development team:
 
 - `docker compose up -d` in the root of the project to run the database and database management console containers
 - `npm install` to install all necessary Node modules
+- `npx dbmate up` to run all pending migrations to the database
 - `npm run start` to run the backend
 - `npm run dev` to start a development server with Nodemon
 
