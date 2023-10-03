@@ -78,6 +78,18 @@ jobs:
       DATABASE_URL_STAGING: ${{ secrets.DATABASE_URL_STAGING }}
       BACKEND_DEPLOY_STAGING_WEBHOOK: ${{ secrets.BACKEND_DEPLOY_STAGING_WEBHOOK }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
       - name: Run DB migration
         working-directory: backend
         run: npx -y dbmate -e DATABASE_URL_STAGING --no-dump-schema up
@@ -93,6 +105,18 @@ jobs:
       DATABASE_URL_PRODUCTION: ${{ secrets.DATABASE_URL_PRODUCTION }}
       BACKEND_DEPLOY_PRODUCTION_WEBHOOK: ${{ secrets.BACKEND_DEPLOY_PRODUCTION_WEBHOOK }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
       - name: Run DB migration
         working-directory: backend
         run: npx -y dbmate -e DATABASE_URL_PRODUCTION --no-dump-schema up
