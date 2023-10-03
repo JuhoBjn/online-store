@@ -81,6 +81,7 @@ jobs:
       - name: Run DB migration
         working-directory: backend
         run: npx -y dbmate -e DATABASE_URL_STAGING --no-dump-schema up
+
       - name: Trigger deploy to staging
         run: curl -s "$BACKEND_DEPLOY_STAGING_WEBHOOK"
 
@@ -95,5 +96,6 @@ jobs:
       - name: Run DB migration
         working-directory: backend
         run: npx -y dbmate -e DATABASE_URL_PRODUCTION --no-dump-schema up
+
       - name: Trigger deploy to production
         run: curl -s "$BACKEND_DEPLOY_PRODUCTION_WEBHOOK"
