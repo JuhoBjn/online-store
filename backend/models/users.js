@@ -32,7 +32,7 @@ const users = {
 
     const fetchString = "SELECT id, email FROM users WHERE id = ?;";
     const [createdUser] = await promisePool.query(fetchString, [user.id]);
-    return createdUser;
+    return createdUser[0];
   }
 };
 
