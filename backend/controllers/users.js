@@ -45,11 +45,17 @@ const signup = async (req, res) => {
 
   try {
     const createdUser = await userModels.create(newUser);
-    if (createdUser.length === 0) throw new Error("Failed to create new user");
-    jwt.sign(createdUser[0], process.env.JWT_KEY, (err, token) => {
+    if (!createdUser) throw new Error("Failed to create new user");
+
+    const tokenPayload = {
+      id: createdUser.id,
+      role_id: createdUser.role_id
+    };
+
+    jwt.sign(tokenPayload, process.env.JWT_KEY, (err, token) => {
       if (err) throw err;
-      createdUser[0].token = token;
-      res.status(201).send(createdUser[0]);
+      createdUser.token = token;
+      res.status(201).send(createdUser);
     });
   } catch (error) {
     return res.status(500).send(error.message);
