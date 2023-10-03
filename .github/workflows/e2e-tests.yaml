@@ -17,15 +17,6 @@ jobs:
           mysql-version: "8.1"
           root-password: pass
 
-      - name: Init DB
-        working-directory: ./backend
-        env:
-          TEST_DATABASE_URL: "mysql://root:pass@127.0.0.1:3306/test"
-        run: |
-          npx -y dbmate -e TEST_DATABASE_URL --no-dump-schema up
-          # possibly also want insert test data
-          # mysql -h 127.0.0.1 -u root -ppass test < ./db/testdata/file.sql
-
       - name: Install NodeJS
         uses: actions/setup-node@v3
         with:
@@ -38,6 +29,15 @@ jobs:
       - name: Install backend node-modules
         working-directory: ./backend
         run: npm ci
+
+      - name: Init DB
+        working-directory: ./backend
+        env:
+          TEST_DATABASE_URL: "mysql://root:pass@127.0.0.1:3306/test"
+        run: |
+          npx dbmate -e TEST_DATABASE_URL --no-dump-schema up
+          # possibly also want insert test data
+          # mysql -h 127.0.0.1 -u root -ppass test < ./db/testdata/file.sql
 
       - name: Start backend
         working-directory: ./backend
@@ -54,7 +54,7 @@ jobs:
 
       - name: Run e2e tests
         working-directory: ./frontend
-        run: npx -y cypress run
+        run: npx cypress run
 
       - name: Save e2e test screenshots
         if: failure()

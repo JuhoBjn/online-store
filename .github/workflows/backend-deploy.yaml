@@ -47,7 +47,7 @@ jobs:
         env:
           TEST_DATABASE_URL: "mysql://root:pass@127.0.0.1:3306/test"
         run: |
-          npx -y dbmate -e TEST_DATABASE_URL --no-dump-schema up
+          npx dbmate -e TEST_DATABASE_URL --no-dump-schema up
           # insert test data
           mysql -h 127.0.0.1 -u root -ppass test < ./db/testdata/file.sql
 
@@ -92,7 +92,7 @@ jobs:
 
       - name: Run DB migration
         working-directory: backend
-        run: npx -y dbmate -e DATABASE_URL_STAGING --no-dump-schema up
+        run: npx dbmate -e DATABASE_URL_STAGING --no-dump-schema up
 
       - name: Trigger deploy to staging
         run: curl -s "$BACKEND_DEPLOY_STAGING_WEBHOOK"
@@ -119,7 +119,7 @@ jobs:
 
       - name: Run DB migration
         working-directory: backend
-        run: npx -y dbmate -e DATABASE_URL_PRODUCTION --no-dump-schema up
+        run: npx dbmate -e DATABASE_URL_PRODUCTION --no-dump-schema up
 
       - name: Trigger deploy to production
         run: curl -s "$BACKEND_DEPLOY_PRODUCTION_WEBHOOK"
