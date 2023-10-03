@@ -117,8 +117,13 @@ const login = async (req, res) => {
     premium: user.premium
   };
 
+  const tokenPayload = {
+    id: user.id,
+    role_id: user.role_id
+  };
+
   try {
-    jwt.sign(authenticatedUser, process.env.JWT_KEY, (error, token) => {
+    jwt.sign(tokenPayload, process.env.JWT_KEY, (error, token) => {
       if (error) throw error;
       authenticatedUser.token = token;
       res.send(authenticatedUser);
