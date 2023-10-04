@@ -52,13 +52,18 @@ const signup = async (req, res) => {
       role_id: createdUser.role_id
     };
 
-    jwt.sign(tokenPayload, process.env.JWT_KEY, (err, token) => {
-      if (err) throw err;
-      createdUser.token = token;
-      // role_id is returned only as part of the JSON Web Token.
-      delete createdUser.role_id;
-      res.status(201).send(createdUser);
-    });
+    jwt.sign(
+      tokenPayload,
+      process.env.JWT_KEY,
+      { expiresIn: "7d" },
+      (err, token) => {
+        if (err) throw err;
+        createdUser.token = token;
+        // role_id is returned only as part of the JSON Web Token.
+        delete createdUser.role_id;
+        res.status(201).send(createdUser);
+      }
+    );
   } catch (error) {
     return res.status(500).send(error.message);
   }
@@ -131,11 +136,16 @@ const login = async (req, res) => {
   };
 
   try {
-    jwt.sign(tokenPayload, process.env.JWT_KEY, (error, token) => {
-      if (error) throw error;
-      authenticatedUser.token = token;
-      res.send(authenticatedUser);
-    });
+    jwt.sign(
+      tokenPayload,
+      process.env.JWT_KEY,
+      { expiresIn: "7d" },
+      (error, token) => {
+        if (error) throw error;
+        authenticatedUser.token = token;
+        res.send(authenticatedUser);
+      }
+    );
   } catch (error) {
     return res.status(500).send(error.message);
   }
