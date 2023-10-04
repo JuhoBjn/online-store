@@ -59,6 +59,8 @@ const signup = async (req, res) => {
       (err, token) => {
         if (err) throw err;
         createdUser.token = token;
+        // role_id is returned only as part of the JSON Web Token.
+        delete createdUser.role_id;
         res.status(201).send(createdUser);
       }
     );
