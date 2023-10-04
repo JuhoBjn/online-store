@@ -1,6 +1,6 @@
 const checkCaretaker = (req, res, next) => {
   if (req.method === "OPTIONS") {
-    next();
+    return next();
   }
 
   // Prevent the app from crashing in case of missing request body

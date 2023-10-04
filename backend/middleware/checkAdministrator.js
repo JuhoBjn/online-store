@@ -1,6 +1,6 @@
 const checkAdministrator = (req, res, next) => {
   if (req.method === "OPTIONS") {
-    next();
+    return next();
   }
 
   // Prevent missing request body from crashing the app.
