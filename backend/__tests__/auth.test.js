@@ -422,3 +422,48 @@ describe("Verify token middleware", () => {
     expect(res.send).toBeCalledWith("Authentication failed");
   });
 });
+
+const checkCaretaker = require("../middleware/checkCaretaker");
+
+describe("The user caretaker role checking middleware", () => {
+  it("should call next if the user is a caretaker", () => {
+    const req = { body: { role_id: 2 } };
+    const res = {};
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkCaretaker(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+  });
+
+  it("should call next if the user is an administrator", () => {
+    const req = { body: { role_id: 3 } };
+    const res = {};
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkCaretaker(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+  });
+
+  it("shoud return an error if the user is not a caretaker", () => {
+    const req = { body: { role_id: 1 } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkCaretaker(req, res, next);
+
+    expect(res.status).toBeCalledWith(401);
+    expect(res.send).toBeCalledWith("Insufficient account role");
+    expect(next).not.toBeCalled();
+  });
+});
