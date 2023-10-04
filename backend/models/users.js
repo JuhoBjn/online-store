@@ -30,7 +30,11 @@ const users = {
       [user.id, user.email, user.password]
     ]);
 
-    const fetchString = "SELECT id, email FROM users WHERE id = ?;";
+    const fetchString = `
+      SELECT id, email, role_id 
+      FROM users
+      WHERE id = ?;
+      `;
     const [createdUser] = await promisePool.query(fetchString, [user.id]);
     return createdUser[0];
   }
