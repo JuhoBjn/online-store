@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const supertest = require("supertest");
 const {
   describe,
@@ -8,7 +9,6 @@ const {
   afterAll
 } = require("@jest/globals");
 const bcrypt = require("bcryptjs");
-//const jwt = require("jsonwebtoken");
 
 const app = require("../app");
 const { pool } = require("../db/pool");
@@ -321,26 +321,50 @@ describe("User login endpoint", () => {
     expect(response.text).toEqual('"password" is required');
   });
 });
-/*
-const checkToken = require("../middleware/checkToken");
+
+const jwt = require("jsonwebtoken");
+const verifyToken = require("../middleware/verifyToken");
 
 describe("Verify token middleware", () => {
   it("should allow request if the request contains a valid token", () => {
     const payload = {
-      id: "123oiusfd",
-      firstname: "Tommy",
-      lastname: "Test",
-      email: "tommy@test.com"
+      id: "3ecdb73e-5f82-4f7f-b3d5-0c3ef2add945",
+      role_id: 1
     };
-    const token = jwt.sign(payload, process.env.JWT_KEY);
-    const req = { headers: { authorization: `Bearer ${token}` } };
-    const res = {};
+    const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: "7d" });
+    const req = { headers: { authorization: `Bearer ${token}` }, body: {} };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
     const next = jest.fn(() => {
       return true;
     });
-    checkToken(req, res, next);
+
+    verifyToken(req, res, next);
 
     expect(next).toHaveBeenCalled();
+  });
+
+  it("should add users role ID contained in a valid token", () => {
+    const payload = {
+      id: "fd5c3c32-c346-41ec-9456-fa70b99120ca",
+      role_id: 1
+    };
+    const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: "7d" });
+    const req = { headers: { authorization: `Bearer ${token}` }, body: {} };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    verifyToken(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(req.body.role_id).toEqual(1);
   });
 
   it("should return an error if the request has invalid token", () => {
@@ -358,13 +382,14 @@ describe("Verify token middleware", () => {
     const next = jest.fn(() => {
       return true;
     });
-    checkToken(req, res, next);
+
+    verifyToken(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
     expect(res.send).toBeCalledWith("Authentication failed");
   });
 
-  it("should return an error when no token is provided in the request", () => {
+  it("should return an error when token provided in the request is empty", () => {
     const token = "";
     const req = { headers: { authorization: `Bearer ${token}` } };
     const res = {
@@ -374,10 +399,26 @@ describe("Verify token middleware", () => {
     const next = jest.fn(() => {
       return true;
     });
-    checkToken(req, res, next);
+
+    verifyToken(req, res, next);
+
+    expect(res.status).toBeCalledWith(401);
+    expect(res.send).toBeCalledWith("Authentication failed");
+  });
+
+  it("should return an error when no token is provided in the request", () => {
+    const req = {};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    verifyToken(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
     expect(res.send).toBeCalledWith("Authentication failed");
   });
 });
-*/
