@@ -467,3 +467,70 @@ describe("The user caretaker role checking middleware", () => {
     expect(next).not.toBeCalled();
   });
 });
+
+const checkAdministrator = require("../middleware/checkAdministrator");
+
+describe("The user administrator role checking middleware", () => {
+  it("should call next if the user is an administrator", () => {
+    const req = { body: { role_id: 3 } };
+    const res = {};
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkAdministrator(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+  });
+
+  it("should return an error if the user is a caretaker", () => {
+    const req = { body: { role_id: 2 } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkAdministrator(req, res, next);
+
+    expect(res.status).toBeCalledWith(401);
+    expect(res.send).toBeCalledWith("Insufficient account role");
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it("should return an error if the user is a normal user", () => {
+    const req = { body: { role_id: 1 } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkAdministrator(req, res, next);
+
+    expect(res.status).toBeCalledWith(401);
+    expect(res.send).toBeCalledWith("Insufficient account role");
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it("should return an error if no role ID is provided", () => {
+    const req = { body: {} };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkAdministrator(req, res, next);
+
+    expect(res.status).toBeCalledWith(401);
+    expect(res.send).toBeCalledWith("No role ID was provided");
+    expect(next).not.toHaveBeenCalled();
+  });
+});
