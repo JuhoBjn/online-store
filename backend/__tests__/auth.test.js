@@ -421,6 +421,18 @@ describe("Verify token middleware", () => {
     expect(res.status).toBeCalledWith(401);
     expect(res.send).toBeCalledWith("Authentication failed");
   });
+
+  it("should call next() if the request method is OPTIONS", () => {
+    const req = { method: "OPTIONS" };
+    const res = {};
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    verifyToken(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+  });
 });
 
 const checkCaretaker = require("../middleware/checkCaretaker");
@@ -482,6 +494,18 @@ describe("The user caretaker role checking middleware", () => {
     expect(res.status).toBeCalledWith(401);
     expect(res.send).toBeCalledWith("No role ID was provided");
     expect(next).not.toHaveBeenCalled();
+  });
+
+  it("should call next() if the request method is OPTIONS", () => {
+    const req = { method: "OPTIONS" };
+    const res = {};
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkCaretaker(req, res, next);
+
+    expect(next).toHaveBeenCalled();
   });
 });
 
@@ -549,5 +573,17 @@ describe("The user administrator role checking middleware", () => {
     expect(res.status).toBeCalledWith(401);
     expect(res.send).toBeCalledWith("No role ID was provided");
     expect(next).not.toHaveBeenCalled();
+  });
+
+  it("should call next() when the request method is OPTIONS", () => {
+    const req = { method: "OPTIONS" };
+    const res = {};
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkAdministrator(req, res, next);
+
+    expect(next).toHaveBeenCalled();
   });
 });
