@@ -466,6 +466,23 @@ describe("The user caretaker role checking middleware", () => {
     expect(res.send).toBeCalledWith("Insufficient account role");
     expect(next).not.toBeCalled();
   });
+
+  it("should return an error if no role ID is provided", () => {
+    const req = { body: {} };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkCaretaker(req, res, next);
+
+    expect(res.status).toBeCalledWith(401);
+    expect(res.send).toBeCalledWith("No role ID was provided");
+    expect(next).not.toHaveBeenCalled();
+  });
 });
 
 const checkAdministrator = require("../middleware/checkAdministrator");
