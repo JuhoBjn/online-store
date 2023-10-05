@@ -23,6 +23,6 @@ Accept: application/json
 }
 
 ###
-@token = {{ login.response.body.token }}
-###
-@user_id = {{ login.response.body.id }}
+@token = {{login.response.body.token}}
+@user_id = {{login.response.body.id}}
+
