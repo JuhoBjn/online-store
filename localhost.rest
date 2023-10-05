@@ -26,3 +26,22 @@ Accept: application/json
 @token = {{login.response.body.token}}
 @user_id = {{login.response.body.id}}
 
+### Send password reset link - success
+
+POST http://localhost:5000/api/password-reset/send-reset-email
+Content-Type: application/json
+
+{
+    "email": "timothy@tester.com"
+}
+
+### Send password reset link - email not found
+
+POST http://localhost:5000/api/password-reset/send-reset-email
+Content-Type: application/json
+
+{
+    "email": "does.not.exist@test.example.com"
+}
+
+### Reset password - invalid token
