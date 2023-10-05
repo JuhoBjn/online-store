@@ -46,7 +46,7 @@ jobs:
         env:
           TEST_DATABASE_URL: "mysql://root:pass@127.0.0.1:3306/test"
         run: |
-          npx -y dbmate -e TEST_DATABASE_URL --no-dump-schema up
+          npx dbmate -e TEST_DATABASE_URL --no-dump-schema up
           # insert test data
           mysql -h 127.0.0.1 -u root -ppass test < ./db/testdata/file.sql
 

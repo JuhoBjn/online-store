@@ -47,7 +47,7 @@ jobs:
         env:
           TEST_DATABASE_URL: "mysql://root:pass@127.0.0.1:3306/test"
         run: |
-          npx -y dbmate -e TEST_DATABASE_URL --no-dump-schema up
+          npx dbmate -e TEST_DATABASE_URL --no-dump-schema up
           # insert test data
           mysql -h 127.0.0.1 -u root -ppass test < ./db/testdata/file.sql
 
@@ -78,9 +78,22 @@ jobs:
       DATABASE_URL_STAGING: ${{ secrets.DATABASE_URL_STAGING }}
       BACKEND_DEPLOY_STAGING_WEBHOOK: ${{ secrets.BACKEND_DEPLOY_STAGING_WEBHOOK }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
       - name: Run DB migration
         working-directory: backend
-        run: npx -y dbmate -e DATABASE_URL_STAGING --no-dump-schema up
+        run: npx dbmate -e DATABASE_URL_STAGING --no-dump-schema up
+
       - name: Trigger deploy to staging
         run: curl -s "$BACKEND_DEPLOY_STAGING_WEBHOOK"
 
@@ -92,8 +105,21 @@ jobs:
       DATABASE_URL_PRODUCTION: ${{ secrets.DATABASE_URL_PRODUCTION }}
       BACKEND_DEPLOY_PRODUCTION_WEBHOOK: ${{ secrets.BACKEND_DEPLOY_PRODUCTION_WEBHOOK }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
       - name: Run DB migration
         working-directory: backend
-        run: npx -y dbmate -e DATABASE_URL_PRODUCTION --no-dump-schema up
+        run: npx dbmate -e DATABASE_URL_PRODUCTION --no-dump-schema up
+
       - name: Trigger deploy to production
         run: curl -s "$BACKEND_DEPLOY_PRODUCTION_WEBHOOK"
