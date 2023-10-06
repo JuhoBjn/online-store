@@ -47,6 +47,77 @@ const resetPasswordEmail = async (req, res) => {
     .json({ message: "Reset password email sent" });
 };
 
+const setNewPassword = async (req, res) => {
+  const schema = Joi.object({
+    password: Joi.string()
+      .min(8)
+      .max(72)
+      .pattern(
+        // Password must be at least 8 characters long,
+        // contain at least one upper case letter, one lower case letter and one number.
+        new RegExp("^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z].{8,}$")
+      )
+      .required(),
+    token: Joi.string().required()
+  });
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send({ error: error.details[0].message });
+  }
+
+  const { password, token } = req.body;
+
+  let decodedToken; // declare variable outside try-catch block
+
+  try {
+    // verify token
+    decodedToken = jwt.verify(token, process.env.JWT_KEY);
+    if (!decodedToken) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .send({ error: "Unauthorized" });
+    }
+  } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .send({ error: "Token expired" });
+    }
+    return res.status(StatusCodes.UNAUTHORIZED).send({ error: "Unauthorized" });
+  }
+
+  // get user id from decoded token
+  const { id: userId } = decodedToken;
+
+  try {
+    // check if user exists
+    const foundUser = await users.findById(userId);
+    if (!foundUser) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .send({ error: "Unauthorized" });
+    }
+
+    // bcrypt new password
+    const password_hash = await bcrypt.hash(password, 12);
+
+    // update password
+    await users.update(userId, {
+      password: password_hash
+    });
+
+    return res.status(StatusCodes.NO_CONTENT).send();
+  } catch (error) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   resetPasswordEmail,
+  setNewPassword
 };
