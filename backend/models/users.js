@@ -8,7 +8,7 @@ const users = {
    */
   findByEmail: async (email) => {
     const queryString = `
-      SELECT users.id, roles.name AS role, users.first_name, users.last_name, users.email, users.postal_code, users.city, users.country, users.phone, users.premium, users.password
+      SELECT users.id, users.role_id, roles.name AS role, users.first_name, users.last_name, users.email, users.postal_code, users.city, users.country, users.phone, users.premium, users.password
       FROM users
       LEFT JOIN roles ON users.role_id = roles.id
       WHERE email = ?;`;
@@ -30,9 +30,13 @@ const users = {
       [user.id, user.email, user.password]
     ]);
 
-    const fetchString = "SELECT id, email FROM users WHERE id = ?;";
+    const fetchString = `
+      SELECT id, email, role_id 
+      FROM users
+      WHERE id = ?;
+      `;
     const [createdUser] = await promisePool.query(fetchString, [user.id]);
-    return createdUser;
+    return createdUser[0];
   }
 };
 

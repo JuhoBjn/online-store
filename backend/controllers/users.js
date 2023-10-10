@@ -45,12 +45,25 @@ const signup = async (req, res) => {
 
   try {
     const createdUser = await userModels.create(newUser);
-    if (createdUser.length === 0) throw new Error("Failed to create new user");
-    jwt.sign(createdUser[0], process.env.JWT_KEY, (err, token) => {
-      if (err) throw err;
-      createdUser[0].token = token;
-      res.status(201).send(createdUser[0]);
-    });
+    if (!createdUser) throw new Error("Failed to create new user");
+
+    const tokenPayload = {
+      id: createdUser.id,
+      role_id: createdUser.role_id
+    };
+
+    jwt.sign(
+      tokenPayload,
+      process.env.JWT_KEY,
+      { expiresIn: "7d" },
+      (err, token) => {
+        if (err) throw err;
+        createdUser.token = token;
+        // role_id is returned only as part of the JSON Web Token.
+        delete createdUser.role_id;
+        res.status(201).send(createdUser);
+      }
+    );
   } catch (error) {
     return res.status(500).send(error.message);
   }
@@ -117,12 +130,22 @@ const login = async (req, res) => {
     premium: user.premium
   };
 
+  const tokenPayload = {
+    id: user.id,
+    role_id: user.role_id
+  };
+
   try {
-    jwt.sign(authenticatedUser, process.env.JWT_KEY, (error, token) => {
-      if (error) throw error;
-      authenticatedUser.token = token;
-      res.send(authenticatedUser);
-    });
+    jwt.sign(
+      tokenPayload,
+      process.env.JWT_KEY,
+      { expiresIn: "7d" },
+      (error, token) => {
+        if (error) throw error;
+        authenticatedUser.token = token;
+        res.send(authenticatedUser);
+      }
+    );
   } catch (error) {
     return res.status(500).send(error.message);
   }
