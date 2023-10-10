@@ -587,3 +587,56 @@ describe("The user administrator role checking middleware", () => {
     expect(next).toHaveBeenCalled();
   });
 });
+
+const checkPremium = require("../middleware/checkPremium");
+
+describe("The user premium account checking middleware", () => {
+  it("should call next if the user has a premium account", () => {
+    const req = { body: { premium: 1 } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkPremium(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+  });
+
+  it("should call next if the request method is OPTIONS", () => {
+    const req = { method: "OPTIONS" };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkPremium(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+  });
+
+  it("should return an error if the user does not have a premium account", () => {
+    const req = { body: { premium: 0 } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkPremium(req, res, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(res.status).toBeCalledWith(403);
+    expect(res.send).toBeCalledWith(
+      "This functionality is reserved for premium users"
+    );
+  });
+});
