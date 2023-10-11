@@ -12,7 +12,9 @@ const checkPremium = (req, res, next) => {
   }
 
   if (req.body.premium === 0) {
-    return res.status(403).send("This functionality is reserved for premium users");
+    return res
+      .status(403)
+      .send("This functionality is reserved for premium users");
   }
   next();
 };
