@@ -639,4 +639,21 @@ describe("The user premium account checking middleware", () => {
       "This functionality is reserved for premium users"
     );
   });
+
+  it("should return an error if no premium field is provided in request", () => {
+    const req = { body: {} };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkPremium(req, res, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(res.status).toBeCalledWith(400);
+    expect(res.send).toBeCalledWith("No premium was provided");
+  });
 });
