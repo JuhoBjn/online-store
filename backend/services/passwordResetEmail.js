@@ -32,8 +32,7 @@ const sendPasswordResetEmail = async (user, resetToken) => {
         <p>If you did not request this password reset, please ignore this email and your password will remain unchanged.</p>`
   };
 
-  const info = await transporter.sendMail(mailOptions);
-  console.log("Password reset email sent: %s", info.messageId);
+  await transporter.sendMail(mailOptions);
 };
 
 module.exports = { sendPasswordResetEmail };
