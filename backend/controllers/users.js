@@ -151,4 +151,83 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+const updateUser = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.string().uuid(),
+    firstname: Joi.string(),
+    lastname: Joi.string(),
+    postalcode: Joi.string(),
+    city: Joi.string(),
+    country: Joi.string(),
+    phone: Joi.string(),
+    premium: Joi.boolean()
+  });
+
+  const providedUserDetails = {
+    id: req.body.id,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    postalcode: req.body.postalcode,
+    city: req.body.city,
+    country: req.body.country,
+    phone: req.body.phone,
+    premium: req.body.premium
+  };
+
+  try {
+    const { error } = schema.validate(providedUserDetails);
+    if (error) throw error;
+  } catch (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
+  const user = {
+    id: providedUserDetails.id,
+    first_name: providedUserDetails.firstname,
+    last_name: providedUserDetails.lastname,
+    postal_code: providedUserDetails.postalcode,
+    city: providedUserDetails.city,
+    country: providedUserDetails.country,
+    phone: providedUserDetails.phone,
+    premium: providedUserDetails.premium
+  };
+
+  try {
+    const updatedUser = await userModels.update(user);
+    if (!updatedUser) throw new Error("Failed to update user");
+
+    const authenticatedUser = {
+      id: updatedUser.id,
+      role: updatedUser.role,
+      firstname: updatedUser.first_name,
+      lastname: updatedUser.last_name,
+      email: updatedUser.email,
+      postalcode: updatedUser.postal_code,
+      city: updatedUser.city,
+      country: updatedUser.country,
+      phone: updatedUser.phone,
+      premium: updatedUser.premium
+    };
+
+    const tokenPayload = {
+      id: updatedUser.id,
+      role_id: updatedUser.role_id
+    };
+
+    jwt.sign(
+      tokenPayload,
+      process.env.JWT_KEY,
+      { expiresIn: "7d" },
+      (error, token) => {
+        if (error) throw error;
+        authenticatedUser.token = token;
+        res.send(authenticatedUser);
+      }
+    );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
+
+module.exports = { signup, login, updateUser };

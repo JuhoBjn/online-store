@@ -37,7 +37,30 @@ const users = {
       `;
     const [createdUser] = await promisePool.query(fetchString, [user.id]);
     return createdUser[0];
-  }
+  },
+  update: async (user) => {
+    const updateString = `
+      UPDATE users
+      SET first_name = ?, last_name = ?, postal_code = ?, city = ?, country = ?, phone = ?, premium = ?
+      WHERE id = ?;`;
+    await promisePool.query(updateString, [
+      user.first_name,
+      user.last_name,
+      user.postal_code,
+      user.city,
+      user.country,
+      user.phone,
+      user.premium,
+      user.id
+    ]);
+
+    const fetchString = `
+      SELECT id, email, role_id, first_name, last_name, postal_code, city, country, phone, premium
+      FROM users
+      WHERE id = ?;`;
+    const [updatedUser] = await promisePool.query(fetchString, [user.id]);
+    return updatedUser[0];
+  },
 };
 
 module.exports = users;
