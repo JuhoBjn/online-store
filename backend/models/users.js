@@ -60,7 +60,7 @@ const users = {
       WHERE id = ?;`;
     const [updatedUser] = await promisePool.query(fetchString, [user.id]);
     return updatedUser[0];
-  },
+  }
 };
 
 module.exports = users;
