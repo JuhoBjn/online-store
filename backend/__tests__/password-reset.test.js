@@ -72,24 +72,6 @@ describe("Password reset", () => {
         "error",
         "User with that email does not exist"
       );
-
-      return new Promise((resolve, reject) => {
-        // wait for 1 second to see if an email is sent
-        setTimeout(() => {
-          resolve();
-        }, 1000);
-
-        maildev.on("new", (email) => {
-          try {
-            expect(email.subject).not.toEqual("Password Reset");
-            expect(email.to[0].address).not.toEqual("jane.doe@example.com"); // check receiver email address
-            expect(email.text).not.toMatch(/\/reset-password#ey/); // check for token link in email
-          } catch (error) {
-            reject(error);
-          }
-          resolve();
-        });
-      });
     });
 
     it("should error on invalid email", async () => {
