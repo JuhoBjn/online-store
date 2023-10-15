@@ -31,7 +31,7 @@ const users = {
     ]);
 
     const fetchString = `
-      SELECT id, email, role_id 
+      SELECT id, email, role_id, premium
       FROM users
       WHERE id = ?;
       `;
