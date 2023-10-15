@@ -588,7 +588,7 @@ describe("The user administrator role checking middleware", () => {
   });
 });
 
-describe("User creating point", () => {
+describe("User login endpoint", () => {
   const testUser = {
     id: "7997f9f8-b006-4cde-a1b1-18dcb4aafea9",
     role_id: 1,
@@ -604,6 +604,8 @@ describe("User creating point", () => {
     password: "Tommy@test123",
     premium: 1
   };
+  const testUserRole = "user";
+  const testUserPassword = "Tommy@test123";
 
   beforeAll(() => {
     return new Promise((resolve, reject) => {
@@ -623,10 +625,29 @@ describe("User creating point", () => {
       });
     });
   });
+
+  afterAll(() => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((error, connection) => {
+        if (error) return reject(error);
+        const deleteQuery = "DELETE FROM users WHERE id = ?;";
+        connection.query(
+          deleteQuery,
+          ["7997f9f8-b006-4cde-a1b1-18dcb4aafea9"],
+          (error, result) => {
+            connection.release();
+            if (error) return reject(error);
+            resolve(result);
+          }
+        );
+      });
+    });
+  });
+
   it("should allow a user to log in with valid credentials", async () => {
     const testCredentials = {
       email: testUser.email,
-      password: testUser.password
+      password: testUserPassword
     };
 
     const response = await supertest(app)
