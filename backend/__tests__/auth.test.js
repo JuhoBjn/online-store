@@ -592,7 +592,13 @@ const checkPremium = require("../middleware/checkPremium");
 
 describe("The user premium account checking middleware", () => {
   it("should call next if the user has a premium account", () => {
-    const req = { body: { premium: 1 } };
+    const payload = {
+      id: "d03ffbe3-8cae-4788-90ce-8f622a5ca0de",
+      role_id: 1,
+      premium: true
+    };
+    const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: "7d" });
+    const req = { headers: { authorization: `Bearer ${token}` } };
     const res = {
       status: jest.fn().mockReturnThis(),
       send: jest.fn().mockReturnThis()
@@ -622,7 +628,13 @@ describe("The user premium account checking middleware", () => {
   });
 
   it("should return an error if the user does not have a premium account", () => {
-    const req = { body: { premium: 0 } };
+    const payload = {
+      id: "d03ffbe3-8cae-4788-90ce-8f622a5ca0de",
+      role_id: 1,
+      premium: false
+    };
+    const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: "7d" });
+    const req = { headers: { authorization: `Bearer ${token}` } };
     const res = {
       status: jest.fn().mockReturnThis(),
       send: jest.fn().mockReturnThis()
@@ -638,22 +650,5 @@ describe("The user premium account checking middleware", () => {
     expect(res.send).toBeCalledWith(
       "This functionality is reserved for premium users"
     );
-  });
-
-  it("should return an error if no premium field is provided in request", () => {
-    const req = { body: {} };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn().mockReturnThis()
-    };
-    const next = jest.fn(() => {
-      return true;
-    });
-
-    checkPremium(req, res, next);
-
-    expect(next).not.toHaveBeenCalled();
-    expect(res.status).toBeCalledWith(400);
-    expect(res.send).toBeCalledWith("No premium was provided");
   });
 });
