@@ -91,101 +91,100 @@ describe("Password reset", () => {
         });
       });
     });
+  });
+  describe("POST set-new-password", () => {
+    let user = {
+      id: "41284e8d-ee2b-4e15-b9af-296de2a9af8a" // Adam Administrator (test data)
+    };
+    let token = jwt.sign(
+      { id: user.id },
+      process.env.JWT_KEY,
+      { expiresIn: "30m" } // token expires in 30 minutes
+    );
 
-    describe("POST set-new-password", () => {
-      let user = {
-        id: "41284e8d-ee2b-4e15-b9af-296de2a9af8a" // Adam Administrator (test data)
-      };
-      let token = jwt.sign(
-        { id: user.id },
-        process.env.JWT_KEY,
-        { expiresIn: "30m" } // token expires in 30 minutes
+    it("should let you set a new password with a valid password reset token", async () => {
+      const passwordHashBefore = await users
+        .findById(user.id)
+        .then((user) => user.password);
+
+      const res = await request(app)
+        .post("/api/password-reset/set-new-password")
+        .send({
+          token: token,
+          password: "testPassw0rd" // new password (same as old password for testing)
+        });
+
+      expect(res.statusCode).toEqual(204);
+      expect(res.body).toEqual({});
+
+      const passwordHashAfter = await users
+        .findById(user.id)
+        .then((user) => user.password);
+
+      expect(passwordHashBefore).not.toEqual(passwordHashAfter);
+    });
+
+    it("should not let you set a new password with an invalid password reset token", async () => {
+      const res = await request(app)
+        .post("/api/password-reset/set-new-password")
+        .send({
+          token: "invalid-token",
+          password: "testPassw0rd" // new password (same as old password for testing)
+        });
+
+      expect(res.statusCode).toEqual(401);
+      expect(res.body).toHaveProperty("error", "Unauthorized");
+    });
+
+    it("should not let you set a new password with an expired password reset token", async () => {
+      // generate token with a expiration date in the past.
+      const oldToken = jwt.sign(
+        {
+          id: "8ebf4f42-27f7-4669-ba49-a6c64bd1889f",
+          exp: 10
+        },
+        process.env.JWT_KEY
       );
 
-      it("should let you set a new password with a valid password reset token", async () => {
-        const passwordHashBefore = await users
-          .findById(user.id)
-          .then((user) => user.password);
+      const res = await request(app)
+        .post("/api/password-reset/set-new-password")
+        .send({
+          token: oldToken, // expired token
+          password: "testPassw0rd" // new password (same as old password for testing)
+        });
 
-        const res = await request(app)
-          .post("/api/password-reset/set-new-password")
-          .send({
-            token: token,
-            password: "testPassw0rd" // new password (same as old password for testing)
-          });
+      expect(res.statusCode).toEqual(401);
+      expect(res.body).toHaveProperty("error", "Token expired");
+    });
 
-        expect(res.statusCode).toEqual(204);
-        expect(res.body).toEqual({});
+    it("should not let you set a new password with an empty password", async () => {
+      const res = await request(app)
+        .post("/api/password-reset/set-new-password")
+        .send({
+          token: token,
+          password: ""
+        });
 
-        const passwordHashAfter = await users
-          .findById(user.id)
-          .then((user) => user.password);
+      expect(res.statusCode).toEqual(400);
+      expect(res.body).toHaveProperty(
+        "error",
+        '"password" is not allowed to be empty'
+      );
+    });
 
-        expect(passwordHashBefore).not.toEqual(passwordHashAfter);
-      });
+    it("should not let you set a new password with a password that is too short", async () => {
+      const res = await request(app)
+        .post("/api/password-reset/set-new-password")
+        .send({
+          token: token,
+          password: "short" // minimum password length is 8 characters
+        });
 
-      it("should not let you set a new password with an invalid password reset token", async () => {
-        const res = await request(app)
-          .post("/api/password-reset/set-new-password")
-          .send({
-            token: "invalid-token",
-            password: "testPassw0rd" // new password (same as old password for testing)
-          });
-
-        expect(res.statusCode).toEqual(401);
-        expect(res.body).toHaveProperty("error", "Unauthorized");
-      });
-
-      it("should not let you set a new password with an expired password reset token", async () => {
-        // generate token with a expiration date in the past.
-        const oldToken = jwt.sign(
-          {
-            id: "8ebf4f42-27f7-4669-ba49-a6c64bd1889f",
-            exp: 10
-          },
-          process.env.JWT_KEY
-        );
-
-        const res = await request(app)
-          .post("/api/password-reset/set-new-password")
-          .send({
-            token: oldToken, // expired token
-            password: "testPassw0rd" // new password (same as old password for testing)
-          });
-
-        expect(res.statusCode).toEqual(401);
-        expect(res.body).toHaveProperty("error", "Token expired");
-      });
-
-      it("should not let you set a new password with an empty password", async () => {
-        const res = await request(app)
-          .post("/api/password-reset/set-new-password")
-          .send({
-            token: token,
-            password: ""
-          });
-
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toHaveProperty(
-          "error",
-          '"password" is not allowed to be empty'
-        );
-      });
-
-      it("should not let you set a new password with a password that is too short", async () => {
-        const res = await request(app)
-          .post("/api/password-reset/set-new-password")
-          .send({
-            token: token,
-            password: "short" // minimum password length is 8 characters
-          });
-
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toHaveProperty(
-          "error",
-          '"password" length must be at least 8 characters long'
-        );
-      });
+      expect(res.statusCode).toEqual(400);
+      expect(res.body).toHaveProperty(
+        "error",
+        '"password" length must be at least 8 characters long'
+      );
     });
   });
 });
