@@ -1,4 +1,4 @@
-const { describe, it, expect,afterEach,beforeAll,afterAll } = require("@jest/globals");
+const { describe, it, expect,beforeAll } = require("@jest/globals");
 const supertest = require("supertest");
 const express = require("express");
 const app = express();
