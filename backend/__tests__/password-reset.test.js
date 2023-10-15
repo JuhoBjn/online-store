@@ -90,11 +90,9 @@ describe("Password reset", () => {
     let user = {
       id: "41284e8d-ee2b-4e15-b9af-296de2a9af8a" // Adam Administrator (test data)
     };
-    let token = jwt.sign(
-      { id: user.id },
-      process.env.JWT_KEY,
-      { expiresIn: "30m" }
-    );
+    let token = jwt.sign({ id: user.id }, process.env.JWT_KEY, {
+      expiresIn: "30m"
+    });
 
     it("should let you set a new password with a valid password reset token", async () => {
       const passwordHashBefore = await users

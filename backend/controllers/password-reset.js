@@ -26,11 +26,9 @@ const resetPasswordEmail = async (req, res) => {
       .json({ error: "User with that email does not exist" });
   }
 
-  const token = jwt.sign(
-    { id: user.id },
-    process.env.JWT_KEY,
-    { expiresIn: "30m" }
-  );
+  const token = jwt.sign({ id: user.id }, process.env.JWT_KEY, {
+    expiresIn: "30m"
+  });
 
   try {
     await sendPasswordResetEmail(user, token);
