@@ -91,7 +91,19 @@ describe("Password reset", () => {
         });
       });
     });
+
+    it("should error on invalid email", async () => {
+      const res = await request(app)
+        .post("/api/password-reset/send-reset-email")
+        .send({
+          email: "example.com" // missing at-sign
+        });
+
+      expect(res.statusCode).toEqual(400);
+      expect(res.body).toHaveProperty("error", '"email" must be a valid email');
+    });
   });
+
   describe("POST set-new-password", () => {
     let user = {
       id: "41284e8d-ee2b-4e15-b9af-296de2a9af8a" // Adam Administrator (test data)
