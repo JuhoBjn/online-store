@@ -49,7 +49,8 @@ const signup = async (req, res) => {
 
     const tokenPayload = {
       id: createdUser.id,
-      role_id: createdUser.role_id
+      role_id: createdUser.role_id,
+      premium: createdUser.premium
     };
 
     jwt.sign(
@@ -132,7 +133,8 @@ const login = async (req, res) => {
 
   const tokenPayload = {
     id: user.id,
-    role_id: user.role_id
+    role_id: user.role_id,
+    premium: user.premium
   };
 
   try {
