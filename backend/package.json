@@ -43,6 +43,7 @@
   "jest": {
     "setupFilesAfterEnv": [
       "./jestSetup.js"
-    ]
+    ],
+    "injectGlobals": false
   }
 }
