@@ -3,7 +3,6 @@ const supertest = require("supertest");
 const express = require("express");
 const app = express();
 const bcrypt = require("bcryptjs");
-const app = require("../app");
 const { pool } = require("../db/pool");
 
 describe("User creating point", () => {
