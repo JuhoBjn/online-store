@@ -196,34 +196,8 @@ const updateUser = async (req, res) => {
     const updatedUser = await userModels.update(user);
     if (!updatedUser) throw new Error("Failed to update user");
 
-    const authenticatedUser = {
-      id: updatedUser.id,
-      role: updatedUser.role,
-      firstname: updatedUser.first_name,
-      lastname: updatedUser.last_name,
-      email: updatedUser.email,
-      postalcode: updatedUser.postal_code,
-      city: updatedUser.city,
-      country: updatedUser.country,
-      phone: updatedUser.phone,
-      premium: updatedUser.premium
-    };
 
-    const tokenPayload = {
-      id: updatedUser.id,
-      role_id: updatedUser.role_id
-    };
-
-    jwt.sign(
-      tokenPayload,
-      process.env.JWT_KEY,
-      { expiresIn: "7d" },
-      (error, token) => {
-        if (error) throw error;
-        authenticatedUser.token = token;
-        res.send(authenticatedUser);
-      }
-    );
+   
   } catch (error) {
     return res.status(500).send(error.message);
   }

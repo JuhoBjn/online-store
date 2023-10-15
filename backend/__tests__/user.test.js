@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const app = require("../app");
 const { pool } = require("../db/pool");
 
-describe("User login endpoint", () => {
+describe("User creating point", () => {
     const testUser = {
       id: "7997f9f8-b006-4cde-a1b1-18dcb4aafea9",
       role_id: 1,
@@ -22,8 +22,7 @@ describe("User login endpoint", () => {
       password: "Tommy@test123",
       premium: 1
     };
-    const testUserRole = "user";
-    const testUserPassword = "Tommy@test123";
+
   
     beforeAll(() => {
       return new Promise((resolve, reject) => {
@@ -47,7 +46,7 @@ describe("User login endpoint", () => {
   it("should allow a user to log in with valid credentials", async () => {
     const testCredentials = {
       email: testUser.email,
-      password: testUserPassword
+      password: testUser.password
     };
 
     const response = await supertest(app)
