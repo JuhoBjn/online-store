@@ -153,7 +153,7 @@ const login = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const schema = Joi.object({
-    id: Joi.string().uuid(),
+    id: Joi.string().uuid().required(),
     firstname: Joi.string(),
     lastname: Joi.string(),
     postalcode: Joi.string(),
