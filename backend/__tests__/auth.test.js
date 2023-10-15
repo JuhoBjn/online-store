@@ -604,7 +604,6 @@ describe("User login endpoint", () => {
     password: "Tommy@test123",
     premium: 1
   };
-  const testUserPassword = "Tommy@test123";
 
   beforeAll(() => {
     return new Promise((resolve, reject) => {
