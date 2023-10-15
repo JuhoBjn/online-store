@@ -21,7 +21,6 @@ const resetPasswordEmail = async (req, res) => {
 
   const user = await users.findByEmail(email);
   if (user === null) {
-    // user does not exist
     return res
       .status(StatusCodes.NOT_FOUND)
       .json({ error: "User with that email does not exist" });
@@ -30,11 +29,11 @@ const resetPasswordEmail = async (req, res) => {
   const token = jwt.sign(
     { id: user.id },
     process.env.JWT_KEY,
-    { expiresIn: "30m" } // token expires in 30 minutes
+    { expiresIn: "30m" }
   );
 
   try {
-    await sendPasswordResetEmail(user, token); // send email
+    await sendPasswordResetEmail(user, token);
   } catch (err) {
     console.error(err);
     return res
@@ -70,10 +69,9 @@ const setNewPassword = async (req, res) => {
 
   const { password, token } = req.body;
 
-  let decodedToken; // declare variable outside try-catch block
+  let decodedToken;
 
   try {
-    // verify token
     decodedToken = jwt.verify(token, process.env.JWT_KEY);
     if (!decodedToken) {
       return res
@@ -104,7 +102,6 @@ const setNewPassword = async (req, res) => {
     // bcrypt new password
     const password_hash = await bcrypt.hash(password, 12);
 
-    // update password
     await users.update(userId, {
       password: password_hash
     });

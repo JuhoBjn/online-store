@@ -93,7 +93,7 @@ describe("Password reset", () => {
     let token = jwt.sign(
       { id: user.id },
       process.env.JWT_KEY,
-      { expiresIn: "30m" } // token expires in 30 minutes
+      { expiresIn: "30m" }
     );
 
     it("should let you set a new password with a valid password reset token", async () => {
