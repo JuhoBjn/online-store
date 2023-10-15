@@ -1,20 +1,18 @@
+const jwt = require("jsonwebtoken");
+
 const checkPremium = (req, res, next) => {
   if (req.method === "OPTIONS") {
     return next();
   }
 
   try {
-    if (req.body.premium === undefined) {
-      throw new Error("No premium was provided");
+    const token = req.headers.authorization.split(" ")[1];
+    const payload = jwt.verify(token, process.env.JWT_KEY, { maxAge: "7d" });
+    if (!payload.premium) {
+      throw new Error("This functionality is reserved for premium users");
     }
   } catch (error) {
-    return res.status(400).send("No premium was provided");
-  }
-
-  if (req.body.premium === 0) {
-    return res
-      .status(403)
-      .send("This functionality is reserved for premium users");
+    return res.status(403).send(error.message);
   }
   next();
 };
