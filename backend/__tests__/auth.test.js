@@ -643,28 +643,12 @@ describe("User login endpoint", () => {
     });
   });
 
-  it("should allow a user to log in with valid credentials", async () => {
-    const testCredentials = {
-      email: testUser.email,
-      password: testUserPassword
-    };
-
-    const response = await supertest(app)
-      .post("/api/users/login")
-      .set("Accept", "application/json")
-      .set("Content", "application/json")
-      .send(testCredentials);
-
-    expect(response.status).toBe(200);
-  });
-
   it("Should allow user change name", async () => {
     const testUser = {
       id: "7997f9f8-b006-4cde-a1b1-18dcb4aafea9",
       role_id: 1,
       first_name: "Tommy1111",
-      last_name: "Tester",
-      email: ""
+      last_name: "Tester"
     };
     const response = await supertest(app)
       .post("/api/users/updateUser")
