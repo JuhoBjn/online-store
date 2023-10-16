@@ -38,6 +38,7 @@ const users = {
     const [createdUser] = await promisePool.query(fetchString, [user.id]);
     return createdUser[0];
   },
+
   update: async (user) => {
     const updateString = `
       UPDATE users

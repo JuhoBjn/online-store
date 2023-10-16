@@ -7,6 +7,6 @@ router.post("/signup", signup);
 
 router.post("/login", login);
 
-router.post("/updateUser", updateUser);
+router.patch("/updateuser", updateUser);
 
 module.exports = router;

@@ -195,6 +195,7 @@ const updateUser = async (req, res) => {
   try {
     const updatedUser = await userModels.update(user);
     if (!updatedUser) throw new Error("Failed to update user");
+    return res.send("OK");
   } catch (error) {
     return res.status(500).send(error.message);
   }
