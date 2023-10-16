@@ -1,0 +1,36 @@
+.button-container {
+  height: fit-content;
+  width: fit-content;
+}
+
+.button {
+  padding: 0.75rem;
+  color: var(--main-text-color);
+  border-style: none;
+  border-width: 1px;
+  border-radius: 5px;
+}
+
+.button-container button:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  box-shadow: 1px 1px 5px black;
+}
+
+.button-container button:active {
+  box-shadow: 0px 0px 3px black;
+  filter: brightness(85%);
+}
+
+.action {
+  background-color: var(--dark-brown);
+  color: var(--light-brown);
+}
+
+.confirm {
+  background-color: var(--bright-green);
+}
+
+.danger {
+  background-color: var(--red);
+}
