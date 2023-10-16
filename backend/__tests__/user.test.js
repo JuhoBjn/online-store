@@ -1,12 +1,5 @@
 const supertest = require("supertest");
-const {
-  describe,
-  it,
-  expect,
-  afterEach,
-  beforeAll,
-  afterAll
-} = require("@jest/globals");
+const { describe, it, expect, beforeAll, afterAll } = require("@jest/globals");
 const bcrypt = require("bcryptjs");
 
 const app = require("../app");
