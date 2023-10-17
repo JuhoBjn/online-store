@@ -1,7 +1,9 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import GoldenageLogo from "../../assets/Goldenage_logo.png";
 import Button from "../../components/button/Button";
+import { AuthContext } from "../../utils/AuthContext";
 
 import "./Authorization.css";
 
@@ -17,12 +19,41 @@ const Authorization = () => {
     setLoginMode(!loginMode);
   };
 
-  const login = (event) => {
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const loginHandler = async (event) => {
     event.preventDefault();
+    setLoginFailed(false);
+
+    try {
+      await authContext.login(
+        emailRef.current.value,
+        passwordRef.current.value
+      );
+      console.log("Login successful");
+      navigate("/");
+    } catch (error) {
+      setLoginFailed(true);
+      console.log(`Error while loggin in: ${error.message}`);
+    }
   };
 
-  const signup = (event) => {
+  const signupHandler = async (event) => {
     event.preventDefault();
+
+    try {
+      console.log(
+        `Email: ${emailRef.current.value}, Password: ${passwordRef.current.value}`
+      );
+      await authContext.signup(
+        emailRef.current.value,
+        passwordRef.current.value
+      );
+      navigate("/edit-profile");
+    } catch (error) {
+      console.log(`Error while signing up: ${error.message}`);
+    }
   };
 
   return (
@@ -50,7 +81,7 @@ const Authorization = () => {
           )}
           <form
             className="auth-page_login-form"
-            onSubmit={loginMode ? login : signup}
+            onSubmit={loginMode ? loginHandler : signupHandler}
           >
             <label htmlFor="email">Enter email</label>
             <input
