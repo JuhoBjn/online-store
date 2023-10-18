@@ -75,7 +75,9 @@ describe("User signup endpoint", () => {
 
     expect(response.status).toEqual(201);
     expect(response2.status).toEqual(400);
-    expect(response2.text).toEqual("A user with this email already exists");
+    expect(response2.body.message).toEqual(
+      "A user with this email already exists"
+    );
     createdTestAccount = response.body.id;
   });
 
@@ -92,7 +94,7 @@ describe("User signup endpoint", () => {
       .send(testUser);
 
     expect(response.status).toEqual(400);
-    expect(response.text).toEqual('"email" is not allowed to be empty');
+    expect(response.body.message).toEqual('"email" is not allowed to be empty');
   });
 
   it("should not accept request without email field", async () => {
@@ -107,7 +109,7 @@ describe("User signup endpoint", () => {
       .send(testUser);
 
     expect(response.status).toEqual(400);
-    expect(response.text).toEqual('"email" is required');
+    expect(response.body.message).toEqual('"email" is required');
   });
 
   it("should not allow a user to sign up without a password", async () => {
@@ -123,7 +125,9 @@ describe("User signup endpoint", () => {
       .send(testUser);
 
     expect(response.status).toEqual(400);
-    expect(response.text).toEqual('"password" is not allowed to be empty');
+    expect(response.body.message).toEqual(
+      '"password" is not allowed to be empty'
+    );
   });
 
   it("should not accept request without password field", async () => {
@@ -138,7 +142,7 @@ describe("User signup endpoint", () => {
       .send(testUser);
 
     expect(response.status).toEqual(400);
-    expect(response.text).toEqual('"password" is required');
+    expect(response.body.message).toEqual('"password" is required');
   });
 });
 
@@ -238,7 +242,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toBe(401);
-    expect(response.text).toBe(
+    expect(response.body.message).toBe(
       "Invalid credentials. Please check email and password and try again."
     );
   });
@@ -256,7 +260,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toEqual(401);
-    expect(response.text).toBe("No user exists for given email");
+    expect(response.body.message).toBe("No user exists for given email");
   });
 
   it("should not allow a user to login with empty email address", async () => {
@@ -272,7 +276,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toBe(400);
-    expect(response.text).toBe('"email" is not allowed to be empty');
+    expect(response.body.message).toBe('"email" is not allowed to be empty');
   });
 
   it("should not accept a request with no email field", async () => {
@@ -287,7 +291,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toBe(400);
-    expect(response.text).toEqual('"email" is required');
+    expect(response.body.message).toEqual('"email" is required');
   });
 
   it("should not allow a user to log in with empty password", async () => {
@@ -303,7 +307,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toBe(400);
-    expect(response.text).toBe('"password" is not allowed to be empty');
+    expect(response.body.message).toBe('"password" is not allowed to be empty');
   });
 
   it("should not accept a request with no password field", async () => {
@@ -318,7 +322,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toBe(400);
-    expect(response.text).toEqual('"password" is required');
+    expect(response.body.message).toEqual('"password" is required');
   });
 });
 
@@ -386,7 +390,7 @@ describe("Verify token middleware", () => {
     verifyToken(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Authentication failed");
+    expect(res.send).toBeCalledWith({ message: "Authentication failed" });
   });
 
   it("should return an error when token provided in the request is empty", () => {
@@ -403,7 +407,7 @@ describe("Verify token middleware", () => {
     verifyToken(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Authentication failed");
+    expect(res.send).toBeCalledWith({ message: "Authentication failed" });
   });
 
   it("should return an error when no token is provided in the request", () => {
@@ -419,7 +423,7 @@ describe("Verify token middleware", () => {
     verifyToken(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Authentication failed");
+    expect(res.send).toBeCalledWith({ message: "Authentication failed" });
   });
 
   it("should call next() if the request method is OPTIONS", () => {
@@ -475,7 +479,7 @@ describe("The user caretaker role checking middleware", () => {
     checkCaretaker(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Insufficient account role");
+    expect(res.send).toBeCalledWith({ message: "Insufficient account role" });
     expect(next).not.toBeCalled();
   });
 
@@ -492,7 +496,7 @@ describe("The user caretaker role checking middleware", () => {
     checkCaretaker(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("No role ID was provided");
+    expect(res.send).toBeCalledWith({ message: "No role ID was provided" });
     expect(next).not.toHaveBeenCalled();
   });
 
@@ -537,7 +541,7 @@ describe("The user administrator role checking middleware", () => {
     checkAdministrator(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Insufficient account role");
+    expect(res.send).toBeCalledWith({ message: "Insufficient account role" });
     expect(next).not.toHaveBeenCalled();
   });
 
@@ -554,7 +558,7 @@ describe("The user administrator role checking middleware", () => {
     checkAdministrator(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Insufficient account role");
+    expect(res.send).toBeCalledWith({ message: "Insufficient account role" });
     expect(next).not.toHaveBeenCalled();
   });
 
@@ -571,7 +575,7 @@ describe("The user administrator role checking middleware", () => {
     checkAdministrator(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("No role ID was provided");
+    expect(res.send).toBeCalledWith({ message: "No role ID was provided" });
     expect(next).not.toHaveBeenCalled();
   });
 
@@ -647,8 +651,8 @@ describe("The user premium account checking middleware", () => {
 
     expect(next).not.toHaveBeenCalled();
     expect(res.status).toBeCalledWith(403);
-    expect(res.send).toBeCalledWith(
-      "This functionality is reserved for premium users"
-    );
+    expect(res.send).toBeCalledWith({
+      message: "This functionality is reserved for premium users"
+    });
   });
 });
