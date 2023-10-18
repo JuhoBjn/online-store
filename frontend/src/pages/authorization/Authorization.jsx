@@ -43,9 +43,6 @@ const Authorization = () => {
     event.preventDefault();
 
     try {
-      console.log(
-        `Email: ${emailRef.current.value}, Password: ${passwordRef.current.value}`
-      );
       await authContext.signup(
         emailRef.current.value,
         passwordRef.current.value
