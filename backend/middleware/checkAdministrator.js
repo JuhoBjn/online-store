@@ -9,11 +9,11 @@ const checkAdministrator = (req, res, next) => {
       throw new Error("No role ID was provided");
     }
   } catch (error) {
-    return res.status(401).send("No role ID was provided");
+    return res.status(401).send({ message: "No role ID was provided" });
   }
 
   if (req.body.role_id < 3) {
-    return res.status(401).send("Insufficient account role");
+    return res.status(401).send({ message: "Insufficient account role" });
   }
   next();
 };
