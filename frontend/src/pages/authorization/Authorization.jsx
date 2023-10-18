@@ -77,7 +77,10 @@ const Authorization = () => {
             {loginMode ? "Log in" : "Sign up"}
           </h1>
           {loginFailed && (
-            <div className="auth-form_error-container">
+            <div
+              className="auth-form_error-container"
+              data-testid="error-container"
+            >
               <p>
                 Invalid credentials. Please check check email and re-enter
                 password and try again.
@@ -85,6 +88,7 @@ const Authorization = () => {
             </div>
           )}
           <form
+            data-testid="login-form"
             className="auth-page_login-form"
             onSubmit={loginMode ? loginHandler : signupHandler}
           >
@@ -118,11 +122,12 @@ const Authorization = () => {
           </form>
           <div className="auth-page_login-form-footer">
             <Button
+              data-testid="toggle-login-mode"
               className="center"
               type={"action"}
               onClick={toggleLoginMode}
             >
-              Switch login/signup
+              {loginMode ? "Sign up" : "Log in"} instead
             </Button>
           </div>
         </div>
