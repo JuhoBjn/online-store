@@ -9,8 +9,31 @@
 // ***********************************************
 //
 //
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
+Cypress.Commands.add("signup", (email, password) => {
+  cy.visit("/auth");
+  cy.url().should("be.equal", `${Cypress.config("baseUrl")}/auth`);
+
+  cy.contains("Sign up instead").click();
+
+  cy.get("#auth-page_login-form-title").should("contain", "Sign up");
+  cy.get('[data-testid="email-input"]').type(email);
+  cy.get('[data-testid="password-input"]').type(password);
+  cy.get('[data-testid="submit-button"]').click();
+
+  cy.url().should("be.equal", `${Cypress.config("baseUrl")}/`);
+});
+
+Cypress.Commands.add("login", (email, password) => {
+  cy.visit("/auth");
+  cy.url().should("be.equal", `${Cypress.config("baseUrl")}/auth`);
+
+  cy.get("#auth-page_login-form-title").should("contain", "Log in");
+  cy.get('[data-testid="email-input"]').type(email);
+  cy.get('[data-testid="password-input"]').type(password);
+  cy.get('[data-testid="submit-button"]').click();
+
+  cy.url().should("be.equal", `${Cypress.config("baseUrl")}/`);
+});
 //
 //
 // -- This is a child command --
