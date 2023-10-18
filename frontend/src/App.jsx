@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   createBrowserRouter,
   Navigate,
@@ -27,6 +27,8 @@ const router = createBrowserRouter([
   }
 ]);
 
+let logoutTimer;
+
 function App() {
   const [currentUser, setCurrentUser] = useState({
     id: "",
@@ -41,12 +43,17 @@ function App() {
     premium: "",
     token: ""
   });
+  const [tokenExpiration, setTokenExpiration] = useState(null);
 
   const signupUser = async (email, password) => {
     try {
       const response = await signup(email, password);
-      localStorage.setItem("currentUser", JSON.stringify(response));
       setCurrentUser({ ...response });
+      // Set token expiration time to two hours.
+      const expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
+      setTokenExpiration(expiration);
+      response.tokenExpiration = expiration;
+      localStorage.setItem("currentUser", JSON.stringify(response));
     } catch (error) {
       console.log(`Signup failed: ${error.message}`);
       throw error;
@@ -56,8 +63,12 @@ function App() {
   const loginUser = async (email, password) => {
     try {
       const response = await login(email, password);
-      localStorage.setItem("currentUser", JSON.stringify(response));
       setCurrentUser({ ...response });
+      // Set token expiration time to two hours.
+      const expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
+      setTokenExpiration(expiration);
+      response.tokenExpiration = expiration;
+      localStorage.setItem("currentUser", JSON.stringify(response));
     } catch (error) {
       console.log(`Login failed: ${error.message}`);
       throw error;
@@ -79,7 +90,37 @@ function App() {
       premium: "",
       token: ""
     });
+    setTokenExpiration(null);
+    if (logoutTimer) {
+      clearTimeout(logoutTimer);
+    }
+    console.log("User logged out");
   };
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (
+      storedUser &&
+      storedUser.token &&
+      new Date(storedUser.tokenExpiration) > new Date()
+    ) {
+      const newTokenExpiration = new Date(
+        new Date().getTime() + 1000 * 60 * 60 * 2
+      );
+      setTokenExpiration(newTokenExpiration);
+      storedUser.tokenExpiration = newTokenExpiration;
+      localStorage.setItem("currentUser", JSON.stringify(storedUser));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (currentUser.token && tokenExpiration) {
+      const remaining = tokenExpiration.getTime() - new Date().getTime();
+      logoutTimer = setTimeout(logoutUser, remaining);
+    } else {
+      clearTimeout(logoutTimer);
+    }
+  }, [currentUser, tokenExpiration]);
 
   return (
     <AuthContext.Provider

@@ -56,7 +56,7 @@ const Authorization = () => {
   useEffect(() => {
     // Navigate to the home page if the user is already logged in.
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (currentUser.token) {
+    if (currentUser?.token) {
       navigate("/");
     }
   }, [navigate]);
