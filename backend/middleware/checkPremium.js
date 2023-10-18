@@ -12,7 +12,7 @@ const checkPremium = (req, res, next) => {
       throw new Error("This functionality is reserved for premium users");
     }
   } catch (error) {
-    return res.status(403).send(error.message);
+    return res.status(403).send({ message: error.message });
   }
   next();
 };
