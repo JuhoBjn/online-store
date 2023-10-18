@@ -1,6 +1,6 @@
 const signup = async (email, password) => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/api/users/signup`,
+    `${import.meta.env.VITE_BACKEND_API}/api/users/signup`,
     {
       method: "POST",
       headers: {
@@ -19,7 +19,7 @@ const signup = async (email, password) => {
 
 const login = async (email, password) => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/api/users/login`,
+    `${import.meta.env.VITE_BACKEND_API}/api/users/login`,
     {
       method: "POST",
       headers: {
