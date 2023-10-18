@@ -97,7 +97,7 @@ const Authorization = () => {
               id="email"
               className="auth-page_input"
               data-testid="email-input"
-              type="text"
+              type="email"
               placeholder="email"
               ref={emailRef}
               required
