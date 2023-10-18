@@ -115,6 +115,18 @@ const Authorization = () => {
               ref={emailRef}
               required
             />
+            {!loginMode && (
+              <div
+                className="auth-page_password-instructions"
+                data-testid="password-instructions"
+              >
+                <p>Password must be:</p>
+                <p>• Eight characters long</p>
+                <p>• Include one capital letter</p>
+                <p>• Include one lower case letter</p>
+                <p>• Include one number</p>
+              </div>
+            )}
             <label htmlFor="password">Enter password</label>
             <input
               id="password"

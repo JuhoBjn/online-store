@@ -101,6 +101,25 @@
   filter: brightness(85%);
 }
 
+.auth-page_password-instructions {
+  height: min-content;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  background-color: var(--main-background-color);
+  filter: brightness(95%);
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--dark-brown);
+  border-radius: 5px;
+}
+
+.auth-page_password-instructions p {
+  margin: 2px;
+}
+
 .auth-page_login-form-footer {
   width: 100%;
   height: fit-content;
