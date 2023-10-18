@@ -12,6 +12,7 @@ const app = express();
 
 const corsOptions = {
   origin: [
+    "http://127.0.0.1:5173",
     "http://localhost:5173",
     "https://onlinestore-frontend-stg.onrender.com",
     "https://onlinestore-frontend-prod.onrender.com"
@@ -19,8 +20,8 @@ const corsOptions = {
   optionsSuccessStatus: 200
 };
 
-app.use(express.json());
 app.use(cors(corsOptions));
+app.use(express.json());
 
 app.get("/healthz", (req, res) => {
   res.send("ok");
