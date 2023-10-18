@@ -10,10 +10,11 @@ const signup = async (email, password) => {
       body: JSON.stringify({ email, password })
     }
   );
+  const responseMessage = await response.json();
   if (response.status != 201) {
-    throw new Error(`Failed to sign up user: ${response.text}`);
+    throw new Error(`Failed to sign up: ${responseMessage.message}`);
   }
-  return response.json();
+  return responseMessage;
 };
 
 const login = async (email, password) => {
@@ -28,10 +29,11 @@ const login = async (email, password) => {
       body: JSON.stringify({ email, password })
     }
   );
+  const responseMessage = await response.json();
   if (response.status != 200) {
-    throw new Error("Login failed.");
+    throw new Error(`Login failed: ${responseMessage.message}`);
   }
-  return response.json();
+  return responseMessage;
 };
 
 export { signup, login };

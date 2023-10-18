@@ -55,7 +55,7 @@ function App() {
       response.tokenExpiration = expiration;
       localStorage.setItem("currentUser", JSON.stringify(response));
     } catch (error) {
-      console.log(`Signup failed: ${error.message}`);
+      console.log(error.message);
       throw error;
     }
   };
@@ -70,7 +70,7 @@ function App() {
       response.tokenExpiration = expiration;
       localStorage.setItem("currentUser", JSON.stringify(response));
     } catch (error) {
-      console.log(`Login failed: ${error.message}`);
+      console.log(error.message);
       throw error;
     }
   };

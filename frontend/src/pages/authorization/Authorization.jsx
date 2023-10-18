@@ -9,13 +9,15 @@ import "./Authorization.css";
 
 const Authorization = () => {
   const [loginMode, setLoginMode] = useState(true);
-  const [loginFailed, setLoginFailed] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const emailRef = useRef("");
   const passwordRef = useRef("");
 
   const toggleLoginMode = () => {
-    if (loginMode) setLoginFailed(false);
+    setShowErrorMessage(false);
+    setErrorMessage("");
     setLoginMode(!loginMode);
   };
 
@@ -24,7 +26,10 @@ const Authorization = () => {
 
   const loginHandler = async (event) => {
     event.preventDefault();
-    setLoginFailed(false);
+    if (showErrorMessage) {
+      setShowErrorMessage(false);
+      setErrorMessage("");
+    }
 
     try {
       await authContext.login(
@@ -34,8 +39,11 @@ const Authorization = () => {
       console.log("Login successful");
       navigate("/");
     } catch (error) {
-      setLoginFailed(true);
-      console.log(`Error while loggin in: ${error.message}`);
+      setShowErrorMessage(true);
+      setErrorMessage(
+        "Login failed. Please check email and re-enter password and try again."
+      );
+      console.log(error.message);
     }
   };
 
@@ -49,7 +57,15 @@ const Authorization = () => {
       );
       navigate("/edit-profile");
     } catch (error) {
-      console.log(`Error while signing up: ${error.message}`);
+      setShowErrorMessage(true);
+      if (error.message.includes("password")) {
+        setErrorMessage(
+          "Signup failed. Password must be eight characters long, have at least one capital letter, one lower case letter and a number"
+        );
+      } else {
+        setErrorMessage(error.message);
+      }
+      console.log(error.message);
     }
   };
 
@@ -76,15 +92,12 @@ const Authorization = () => {
           <h1 id="auth-page_login-form-title">
             {loginMode ? "Log in" : "Sign up"}
           </h1>
-          {loginFailed && (
+          {showErrorMessage && (
             <div
               className="auth-form_error-container"
               data-testid="error-container"
             >
-              <p>
-                Invalid credentials. Please check check email and re-enter
-                password and try again.
-              </p>
+              <p>{errorMessage}</p>
             </div>
           )}
           <form
