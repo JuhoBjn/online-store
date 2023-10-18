@@ -1,4 +1,4 @@
-import { useRef, useState, useContext } from "react";
+import { useRef, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import GoldenageLogo from "../../assets/Goldenage_logo.png";
@@ -52,6 +52,14 @@ const Authorization = () => {
       console.log(`Error while signing up: ${error.message}`);
     }
   };
+
+  useEffect(() => {
+    // Navigate to the home page if the user is already logged in.
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser.token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   return (
     <div className="auth-page center" data-testid="auth-page_background">
