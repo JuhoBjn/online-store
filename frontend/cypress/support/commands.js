@@ -9,7 +9,9 @@
 // ***********************************************
 //
 //
-Cypress.Commands.add("signup", (email, password) => {
+
+// Optional parameter for test cases where signup is supposed to fail.
+Cypress.Commands.add("signup", (email, password, supposedToFail = false) => {
   cy.visit("/auth");
   cy.url().should("be.equal", `${Cypress.config("baseUrl")}/auth`);
 
@@ -20,10 +22,13 @@ Cypress.Commands.add("signup", (email, password) => {
   cy.get('[data-testid="password-input"]').type(password);
   cy.get('[data-testid="submit-button"]').click();
 
-  cy.url().should("be.equal", `${Cypress.config("baseUrl")}/`);
+  if (!supposedToFail) {
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/`);
+  }
 });
 
-Cypress.Commands.add("login", (email, password) => {
+// Optional parameter for test cases where login is supposed to fail.
+Cypress.Commands.add("login", (email, password, supposedToFail = false) => {
   cy.visit("/auth");
   cy.url().should("be.equal", `${Cypress.config("baseUrl")}/auth`);
 
@@ -32,7 +37,9 @@ Cypress.Commands.add("login", (email, password) => {
   cy.get('[data-testid="password-input"]').type(password);
   cy.get('[data-testid="submit-button"]').click();
 
-  cy.url().should("be.equal", `${Cypress.config("baseUrl")}/`);
+  if (!supposedToFail) {
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/`);
+  }
 });
 //
 //
