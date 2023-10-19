@@ -60,7 +60,7 @@ const Authorization = () => {
       setShowErrorMessage(true);
       if (error.message.includes("password")) {
         setErrorMessage(
-          "Signup failed. Password must be eight characters long, have at least one capital letter, one lower case letter and a number"
+          "Signup failed. Password must be at least eight characters long, have at least one capital letter, one lower case letter and a number"
         );
       } else {
         setErrorMessage(error.message);
