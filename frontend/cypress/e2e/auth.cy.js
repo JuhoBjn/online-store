@@ -123,7 +123,7 @@ describe("The authentication page", () => {
     );
   });
 
-  it("should not allow two users to be created with the same password", () => {
+  it("should not allow two users to be created with the same email", () => {
     // Sign up first user. Should succeed.
     cy.visit("/auth");
     cy.url().should("be.equal", `${Cypress.config("baseUrl")}/auth`);
