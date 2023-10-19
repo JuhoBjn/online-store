@@ -120,11 +120,11 @@ const Authorization = () => {
                 className="auth-page_password-instructions"
                 data-testid="password-instructions"
               >
-                <p>Password must be:</p>
-                <p>• Eight characters long</p>
-                <p>• Include one capital letter</p>
-                <p>• Include one lower case letter</p>
-                <p>• Include one number</p>
+                <p>Password must have:</p>
+                <p>• At least eight characters</p>
+                <p>• Include at least one capital letter</p>
+                <p>• Include at least one lowercase letter</p>
+                <p>• Include at least one number</p>
               </div>
             )}
             <label htmlFor="password">Enter password</label>
