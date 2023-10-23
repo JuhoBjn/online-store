@@ -2,6 +2,20 @@ const { promisePool } = require("../db/pool");
 
 const users = {
   /**
+   * Find users based on id.
+   * @param {string} id The user's id
+   * @returns User account found with id
+   */
+  findById: async (id) => {
+    const queryString = `
+      SELECT users.id, users.first_name, users.last_name, users.email, users.postal_code, users.city, users.country, users.phone, users.premium, users.password
+      FROM users
+      WHERE users.id = ?;`;
+    const [rows] = await promisePool.query(queryString, [id]);
+    return rows[0] === undefined ? null : rows[0];
+  },
+
+  /**
    * Find users based on email.
    * @param {string} email The user's email address
    * @returns User account found with email
@@ -39,28 +53,17 @@ const users = {
     return createdUser[0];
   },
 
-  update: async (user) => {
-    const updateString = `
-      UPDATE users
-      SET first_name = ?, last_name = ?, postal_code = ?, city = ?, country = ?, phone = ?, premium = ?
-      WHERE id = ?;`;
-    await promisePool.query(updateString, [
-      user.first_name,
-      user.last_name,
-      user.postal_code,
-      user.city,
-      user.country,
-      user.phone,
-      user.premium,
-      user.id
+  /**
+   * Update DB fields for a user
+   * @param {string} userId - The user ID
+   * @param {Object} userData - object containing key value pairs to update
+   * @example await update("123-456-789", {"first_name": "Mike", "last_name": "Smith"})
+   */
+  update: async (userId, userData) => {
+    return promisePool.query("UPDATE users SET ? WHERE id = ?", [
+      userData,
+      userId
     ]);
-
-    const fetchString = `
-      SELECT id, email, role_id, first_name, last_name, postal_code, city, country, phone, premium
-      FROM users
-      WHERE id = ?;`;
-    const [updatedUser] = await promisePool.query(fetchString, [user.id]);
-    return updatedUser[0];
   }
 };
 

@@ -4,10 +4,11 @@ const bcrypt = require("bcryptjs");
 
 const app = require("../app");
 const { pool } = require("../db/pool");
+const { get } = require("http");
 
-describe("User login endpoint", () => {
+describe("profile editing endpoint", () => {
   const testUser = {
-    id: "7997f9f8-b006-4cde-a1b1-18dcb4aafea8",
+    id: "10",
     role_id: 1,
     first_name: "Tommy1",
     last_name: "Tester1",
@@ -21,6 +22,7 @@ describe("User login endpoint", () => {
     password: "Tommy@test1234",
     premium: 1
   };
+  console.log(testUser);
 
   beforeAll(() => {
     return new Promise((resolve, reject) => {
@@ -46,32 +48,40 @@ describe("User login endpoint", () => {
       pool.getConnection((error, connection) => {
         if (error) return reject(error);
         const deleteQuery = "DELETE FROM users WHERE id = ?;";
-        connection.query(
-          deleteQuery,
-          ["7997f9f8-b006-4cde-a1b1-18dcb4aafea8"],
-          (error, result) => {
-            connection.release();
-            if (error) return reject(error);
-            resolve(result);
-          }
-        );
+        connection.query(deleteQuery, ["10"], (error, result) => {
+          connection.release();
+          if (error) return reject(error);
+          resolve(result);
+        });
       });
     });
   });
 
   it("Should allow user change name", async () => {
-    const testUser = {
-      id: "7997f9f8-b006-4cde-a1b1-18dcb4aafea8",
-      role_id: 1,
+    const testUser1 = {
       first_name: "Tommy1111",
       last_name: "Tester"
     };
     const response = await supertest(app)
-      .patch("/api/users/updateuser")
+      .patch("/api/users/10")
       .set("Accept", "application/json")
       .set("Content", "application/json")
-      .send(testUser);
+      .send(testUser1);
 
     expect(response.status).toBe(200);
-  }, 1000000000);
+  });
+
+  it("Should not update, because no user exist", async () => {
+    const testUser1 = {
+      first_name: "Tommy1111",
+      last_name: "Tester"
+    };
+    const response = await supertest(app)
+      .patch("/api/users/8")
+      .set("Accept", "application/json")
+      .set("Content", "application/json")
+      .send(testUser1);
+
+    expect(response.status).toBe(401);
+  });
 });

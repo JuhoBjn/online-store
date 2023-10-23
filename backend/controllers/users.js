@@ -153,10 +153,10 @@ const login = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const schema = Joi.object({
-    id: Joi.string().uuid().required(),
-    firstname: Joi.string(),
-    lastname: Joi.string(),
-    postalcode: Joi.string(),
+    id: Joi.string().required(),
+    first_name: Joi.string(),
+    last_name: Joi.string(),
+    postal_code: Joi.string(),
     city: Joi.string(),
     country: Joi.string(),
     phone: Joi.string(),
@@ -164,39 +164,53 @@ const updateUser = async (req, res) => {
   });
 
   const providedUserDetails = {
-    id: req.body.id,
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    postalcode: req.body.postalcode,
+    id: req.params.userid,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    postal_code: req.body.postal_code,
     city: req.body.city,
     country: req.body.country,
     phone: req.body.phone,
     premium: req.body.premium
   };
+  console.log(providedUserDetails);
+
+  const filteredUserDetails = {};
+
+  for (const key in providedUserDetails) {
+    if (providedUserDetails[key] !== undefined) {
+      filteredUserDetails[key] = providedUserDetails[key];
+    }
+  }
+  console.log(filteredUserDetails);
 
   try {
-    const { error } = schema.validate(providedUserDetails);
+    let user = await userModels.findById(filteredUserDetails.id);
+    if (!user) {
+      console.log("No user exists for given id");
+      throw new Error("No user exists for given id");
+    }
+  } catch (error) {
+    console.log(error.message);
+    return res.status(401).send(error.message);
+  }
+
+  try {
+    const { error } = schema.validate(filteredUserDetails);
     if (error) throw error;
   } catch (error) {
     return res.status(400).send(error.details[0].message);
   }
 
-  const user = {
-    id: providedUserDetails.id,
-    first_name: providedUserDetails.firstname,
-    last_name: providedUserDetails.lastname,
-    postal_code: providedUserDetails.postalcode,
-    city: providedUserDetails.city,
-    country: providedUserDetails.country,
-    phone: providedUserDetails.phone,
-    premium: providedUserDetails.premium
-  };
-
   try {
-    const updatedUser = await userModels.update(user);
+    const updatedUser = await userModels.update(
+      filteredUserDetails.id,
+      filteredUserDetails
+    );
     if (!updatedUser) throw new Error("Failed to update user");
-    return res.send("OK");
+    return res.status(200).send(updatedUser);
   } catch (error) {
+    console.log(error.message);
     return res.status(500).send(error.message);
   }
 };
