@@ -8,7 +8,7 @@ router.post("/signup", signup);
 
 router.post("/login", login);
 
-//router.use(checkToken);
+router.use(checkToken);
 
 router.patch("/:userid", updateUser);
 

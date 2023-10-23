@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 
 const app = require("../app");
 const { pool } = require("../db/pool");
-const { get } = require("http");
 
 describe("profile editing endpoint", () => {
   const testUser = {
