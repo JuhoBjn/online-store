@@ -11,9 +11,7 @@ const signup = async (req, res) => {
   const schema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string()
-      .pattern(
-        new RegExp("^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z].{8,}$")
-      )
+      .pattern(new RegExp("^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,}$"))
       .required()
   });
 
@@ -49,7 +47,8 @@ const signup = async (req, res) => {
 
     const tokenPayload = {
       id: createdUser.id,
-      role_id: createdUser.role_id
+      role_id: createdUser.role_id,
+      premium: createdUser.premium
     };
 
     jwt.sign(
@@ -76,7 +75,7 @@ const login = async (req, res) => {
       .pattern(
         // Password must be at least 8 characters long,
         // contain at least one upper case letter, one lower case letter and one number.
-        new RegExp("^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z].{8,}$")
+        new RegExp("^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,}$")
       )
       .required()
   });
@@ -132,7 +131,8 @@ const login = async (req, res) => {
 
   const tokenPayload = {
     id: user.id,
-    role_id: user.role_id
+    role_id: user.role_id,
+    premium: user.premium
   };
 
   try {
