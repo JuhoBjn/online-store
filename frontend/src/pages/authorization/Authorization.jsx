@@ -121,10 +121,12 @@ const Authorization = () => {
                 data-testid="password-instructions"
               >
                 <p>Password must have:</p>
-                <p>• At least eight characters</p>
-                <p>• Include at least one capital letter</p>
-                <p>• Include at least one lowercase letter</p>
-                <p>• Include at least one number</p>
+                <ul>
+                  <li>At least eight characters</li>
+                  <li>Include at least one capital letter</li>
+                  <li>Include at least one lowercase letter</li>
+                  <li>Include at least one number</li>
+                </ul>
               </div>
             )}
             <label htmlFor="password">Enter password</label>
