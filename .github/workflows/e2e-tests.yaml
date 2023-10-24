@@ -74,3 +74,12 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           base-path: ./frontend/cypress-coverage
+          parallel: true
+  finish:
+    needs: e2e-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close parallel build
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true

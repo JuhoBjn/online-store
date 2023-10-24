@@ -64,6 +64,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           base-path: ./frontend/coverage
+          parallel: true
 
   e2e-tests:
     uses: ./.github/workflows/e2e-tests.yaml
