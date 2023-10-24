@@ -10,6 +10,25 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `friend_requests`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `friend_requests` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `requester_user_id` varchar(36) NOT NULL,
+  `requested_friend_user_id` varchar(36) NOT NULL,
+  `is_accepted` tinyint(1) NOT NULL DEFAULT '0',
+  `is_rejected` tinyint(1) NOT NULL DEFAULT '0',
+  `request_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `requested_friend_user_id` (`requested_friend_user_id`),
+  KEY `requester_user_id` (`requester_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `roles`
 --
 
@@ -85,5 +104,6 @@ LOCK TABLES `schema_migrations` WRITE;
 INSERT INTO `schema_migrations` (version) VALUES
   ('20230925220224'),
   ('20230926173433'),
-  ('20231004182642');
+  ('20231004182642'),
+  ('20231024203602');
 UNLOCK TABLES;
