@@ -186,14 +186,6 @@ const updateUser = async (req, res) => {
     premium: req.body.premium
   };
 
-  // remove undefined values from providedUserDetails, so that
-  // userModels.update() doesn't try to set null values in the database.
-  Object.keys(providedUserDetails).forEach((key) => {
-    if (providedUserDetails[key] === undefined) {
-      delete providedUserDetails[key];
-    }
-  });
-
   try {
     let user = await userModels.findById(providedUserDetails.id);
     if (!user) {
@@ -202,6 +194,14 @@ const updateUser = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: "Internal error" });
   }
+
+  // remove undefined values from providedUserDetails, so that
+  // userModels.update() doesn't try to set null values in the database.
+  Object.keys(providedUserDetails).forEach((key) => {
+    if (providedUserDetails[key] === undefined) {
+      delete providedUserDetails[key];
+    }
+  });
 
   try {
     const updatedUser = await userModels.update(
