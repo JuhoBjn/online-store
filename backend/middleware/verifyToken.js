@@ -11,7 +11,7 @@ const verifyToken = (req, res, next) => {
     req.body.role_id = payload.role_id;
     next();
   } catch (error) {
-    res.status(401).send("Authentication failed");
+    res.status(401).send({ message: "Authentication failed" });
   }
 };
 
