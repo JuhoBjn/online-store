@@ -364,7 +364,7 @@ describe("Verify token middleware", () => {
     verifyToken(req, res, next);
 
     expect(next).toHaveBeenCalled();
-    expect(req.body.role_id).toEqual(1);
+    expect(req.user?.role_id).toEqual(1);
   });
 
   it("should return an error if the request has invalid token", () => {
@@ -439,7 +439,7 @@ const checkCaretaker = require("../middleware/checkCaretaker");
 
 describe("The user caretaker role checking middleware", () => {
   it("should call next if the user is a caretaker", () => {
-    const req = { body: { role_id: 2 } };
+    const req = { user: { role_id: 2 } };
     const res = {};
     const next = jest.fn(() => {
       return true;
@@ -451,7 +451,7 @@ describe("The user caretaker role checking middleware", () => {
   });
 
   it("should call next if the user is an administrator", () => {
-    const req = { body: { role_id: 3 } };
+    const req = { user: { role_id: 3 } };
     const res = {};
     const next = jest.fn(() => {
       return true;
@@ -463,7 +463,7 @@ describe("The user caretaker role checking middleware", () => {
   });
 
   it("shoud return an error if the user is not a caretaker", () => {
-    const req = { body: { role_id: 1 } };
+    const req = { user: { role_id: 1 } };
     const res = {
       status: jest.fn().mockReturnThis(),
       send: jest.fn().mockReturnThis()
@@ -513,7 +513,7 @@ const checkAdministrator = require("../middleware/checkAdministrator");
 
 describe("The user administrator role checking middleware", () => {
   it("should call next if the user is an administrator", () => {
-    const req = { body: { role_id: 3 } };
+    const req = { user: { role_id: 3 } };
     const res = {};
     const next = jest.fn(() => {
       return true;
@@ -525,7 +525,7 @@ describe("The user administrator role checking middleware", () => {
   });
 
   it("should return an error if the user is a caretaker", () => {
-    const req = { body: { role_id: 2 } };
+    const req = { user: { role_id: 2 } };
     const res = {
       status: jest.fn().mockReturnThis(),
       send: jest.fn().mockReturnThis()
@@ -542,7 +542,7 @@ describe("The user administrator role checking middleware", () => {
   });
 
   it("should return an error if the user is a normal user", () => {
-    const req = { body: { role_id: 1 } };
+    const req = { user: { role_id: 1 } };
     const res = {
       status: jest.fn().mockReturnThis(),
       send: jest.fn().mockReturnThis()
