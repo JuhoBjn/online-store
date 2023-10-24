@@ -26,4 +26,3 @@ dist-ssr
 # Cypress specific
 cypress/videos
 cypress/screenshots
-cypress-coverage
