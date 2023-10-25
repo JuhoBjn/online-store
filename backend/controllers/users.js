@@ -152,8 +152,11 @@ const login = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const schema = Joi.object({
-    id: Joi.string().required(),
+  const paramSchema = Joi.object({
+    userid: Joi.string().required()
+  });
+
+  const bodySchema = Joi.object({
     first_name: Joi.string(),
     last_name: Joi.string(),
     postal_code: Joi.string(),
@@ -162,6 +165,15 @@ const updateUser = async (req, res) => {
     phone: Joi.string(),
     premium: Joi.boolean()
   });
+
+  try {
+    const { error: paramError } = paramSchema.validate(req.params);
+    const { error: bodyError } = bodySchema.validate(req.body);
+    if (paramError) throw paramError;
+    if (bodyError) throw bodyError;
+  } catch (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
 
   const providedUserDetails = {
     id: req.params.userid,
@@ -173,45 +185,34 @@ const updateUser = async (req, res) => {
     phone: req.body.phone,
     premium: req.body.premium
   };
-  console.log(providedUserDetails);
-
-  const filteredUserDetails = {};
-
-  for (const key in providedUserDetails) {
-    if (providedUserDetails[key] !== undefined) {
-      filteredUserDetails[key] = providedUserDetails[key];
-    }
-  }
-  console.log(filteredUserDetails);
 
   try {
-    let user = await userModels.findById(filteredUserDetails.id);
+    let user = await userModels.findById(providedUserDetails.id);
     if (!user) {
-      console.log("No user exists for given id");
-      throw new Error("No user exists for given id");
+      return res.status(404).json({ message: "No user exists for given id" });
     }
   } catch (error) {
-    console.log(error.message);
-    return res.status(401).send(error.message);
+    return res.status(500).json({ message: "Internal error" });
   }
 
-  try {
-    const { error } = schema.validate(filteredUserDetails);
-    if (error) throw error;
-  } catch (error) {
-    return res.status(400).send(error.details[0].message);
-  }
+  // remove undefined values from providedUserDetails, so that
+  // userModels.update() doesn't try to set null values in the database.
+  Object.keys(providedUserDetails).forEach((key) => {
+    if (providedUserDetails[key] === undefined) {
+      delete providedUserDetails[key];
+    }
+  });
 
   try {
     const updatedUser = await userModels.update(
-      filteredUserDetails.id,
-      filteredUserDetails
+      providedUserDetails.id,
+      providedUserDetails
     );
     if (!updatedUser) throw new Error("Failed to update user");
     return res.status(200).send(updatedUser);
   } catch (error) {
     console.log(error.message);
-    return res.status(500).send(error.message);
+    return res.status(500).json({ message: error.message });
   }
 };
 
