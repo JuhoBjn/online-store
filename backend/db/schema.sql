@@ -23,8 +23,10 @@ CREATE TABLE `friend_requests` (
   `is_rejected` tinyint(1) NOT NULL DEFAULT '0',
   `request_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `requester_user_id` (`requester_user_id`),
   KEY `requested_friend_user_id` (`requested_friend_user_id`),
-  KEY `requester_user_id` (`requester_user_id`)
+  CONSTRAINT `friend_requests_ibfk_1` FOREIGN KEY (`requester_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `friend_requests_ibfk_2` FOREIGN KEY (`requested_friend_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
