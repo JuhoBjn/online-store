@@ -31,6 +31,26 @@ CREATE TABLE `friend_requests` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `friends`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `friends` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(36) NOT NULL,
+  `friend_user_id` varchar(36) NOT NULL,
+  `became_friends_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `is_unfriended` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id_friend_user_id` (`user_id`,`friend_user_id`),
+  KEY `friend_user_id` (`friend_user_id`),
+  CONSTRAINT `friends_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `friends_ibfk_2` FOREIGN KEY (`friend_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `roles`
 --
 
@@ -107,5 +127,6 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20230925220224'),
   ('20230926173433'),
   ('20231004182642'),
-  ('20231024203602');
+  ('20231024203602'),
+  ('20231025202701');
 UNLOCK TABLES;
