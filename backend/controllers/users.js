@@ -151,4 +151,25 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+// const sendFriendRequest = async (req, res) => {};
+
+// const cancelFriendRequest = async (req, res) => {};
+
+// const getFriendRequests = async (req, res) => {};
+
+// const acceptOrDenyFriendRequest = async (req, res) => {};
+
+// const getFriends = async (req, res) => {};
+
+// const unFriend = async (req, res) => {};
+
+module.exports = {
+  signup,
+  login
+  // sendFriendRequest,
+  // cancelFriendRequest,
+  // getFriendRequests,
+  // acceptOrDenyFriendRequest,
+  // getFriends,
+  // unFriend
+};
