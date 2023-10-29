@@ -40,4 +40,12 @@ const users = {
   }
 };
 
+users.addFriendRequest = async (senderUserId, receiverUserId) => {
+  const queryString = `
+    INSERT INTO friend_requests (requester_user_id, requested_friend_user_id)
+    VALUES (?, ?);
+    `;
+  return await promisePool.query(queryString, [senderUserId, receiverUserId]);
+};
+
 module.exports = users;

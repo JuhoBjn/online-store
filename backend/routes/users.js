@@ -3,8 +3,8 @@ const router = express.Router();
 
 const {
   signup,
-  login
-  //   sendFriendRequest
+  login,
+  sendFriendRequest
   //   cancelFriendRequest,
   //   getFriendRequests,
   //   acceptOrDenyFriendRequest,
@@ -16,10 +16,10 @@ router.post("/signup", signup);
 
 router.post("/login", login);
 
-// router.post(
-//   "/:senderUserId/friend-requests/:receiverUserId",
-//   sendFriendRequest
-// );
+router.post(
+  "/:senderUserId/friend-requests/:receiverUserId",
+  sendFriendRequest
+);
 
 // router.delete(
 //   "/:senderUserId/friend-requests/:receiverUserId",

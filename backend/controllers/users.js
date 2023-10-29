@@ -151,7 +151,52 @@ const login = async (req, res) => {
   }
 };
 
-// const sendFriendRequest = async (req, res) => {};
+const sendFriendRequest = async (req, res) => {
+  const schema = Joi.object({
+    senderUserId: Joi.string().uuid().required(),
+    receiverUserId: Joi.string().uuid().required()
+  });
+
+  const { error } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const { senderUserId, receiverUserId } = req.params;
+
+  // Check that the sender matches the authenticated user.
+  if (senderUser.id !== req.user.id) {
+    return res.status(401).send({ message: "Unauthorized" });
+  }
+
+  // Check that the sender and receiver are not the same user.
+  if (senderUserId === receiverUserId) {
+    return res
+      .status(400)
+      .send({ message: "Sender and receiver cannot be the same user" });
+  }
+
+  // Check that both users exist.
+  let senderUser;
+  try {
+    senderUser = await userModels.findById(senderUserId);
+    if (!senderUser) {
+      throw new Error("No user exists with given senderUserId");
+    }
+  } catch (error) {
+    return res.status(400).send({ message: error.message });
+  }
+
+  let receiverUser;
+  try {
+    receiverUser = await userModels.findById(receiverUserId);
+    if (!receiverUser) {
+      throw new Error("No user exists with given receiverUserId");
+    }
+  } catch (error) {
+    return res.status(400).send({ message: error.message });
+  }
+};
 
 // const cancelFriendRequest = async (req, res) => {};
 
@@ -165,8 +210,8 @@ const login = async (req, res) => {
 
 module.exports = {
   signup,
-  login
-  // sendFriendRequest,
+  login,
+  sendFriendRequest
   // cancelFriendRequest,
   // getFriendRequests,
   // acceptOrDenyFriendRequest,
