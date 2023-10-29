@@ -42,6 +42,7 @@ CREATE TABLE `friends` (
   `friend_user_id` varchar(36) NOT NULL,
   `became_friends_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `is_unfriended` tinyint(1) NOT NULL DEFAULT '0',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id_friend_user_id` (`user_id`,`friend_user_id`),
   KEY `friend_user_id` (`friend_user_id`),
@@ -128,5 +129,6 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20230926173433'),
   ('20231004182642'),
   ('20231024203602'),
-  ('20231025202701');
+  ('20231025202701'),
+  ('20231029153934');
 UNLOCK TABLES;
