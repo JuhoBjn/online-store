@@ -3,8 +3,8 @@ CREATE TABLE `chats` (
   `chat_id` INT NOT NULL AUTO_INCREMENT,
   `type` ENUM('direct', 'group') NOT NULL,
   `name` VARCHAR(32) NOT NULL DEFAULT 'New chat',
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `last_message_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_message_at` TIMESTAMP DEFAULT NULL,
   PRIMARY KEY (`chat_id`)
 );
 
@@ -13,7 +13,7 @@ CREATE TABLE `messages` (
   `chat_id` INT NOT NULL,
   `sender` VARCHAR(36) NOT NULL,
   `message` TEXT NOT NULL,
-  `sent_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `sent_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`chat_id`) REFERENCES `chats`(`chat_id`) ON DELETE CASCADE
 );
