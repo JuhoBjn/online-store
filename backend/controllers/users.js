@@ -2,8 +2,38 @@ const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: genUuid } = require("uuid");
-
 const userModels = require("../models/users");
+const { parse } = require("path");
+
+const user = async (req, res) => {
+  const id = parseInt(req.params.id);
+  console.log("Here user");
+  const response = await userModels.findById(id);
+  if (response) {
+    res.status(200).json(response);
+  } else {
+    res.status(404).json({ message: "No user found with given id" });
+  }
+};
+
+const allUsers = async (req, res) => {
+  console.log("Here users");
+  const response = await userModels.findAll();
+  if (response) {
+    res.status(200).json(response);
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const id = req.params.id;
+  console.log("Here delete");
+  const response = await userModels.delete(id);
+  if (response) {
+    res.status(200);
+  } else {
+    res.status(404).json({ message: "No user found with given id" });
+  }
+};
 
 const signup = async (req, res) => {
   // Password must be at least 8 characters long,
@@ -150,4 +180,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+module.exports = { signup, login, user, allUsers, deleteUser };
