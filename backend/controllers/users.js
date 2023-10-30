@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: genUuid } = require("uuid");
 const userModels = require("../models/users");
-const { parse } = require("path");
 
 const user = async (req, res) => {
   const id = parseInt(req.params.id);
@@ -16,7 +15,7 @@ const user = async (req, res) => {
   }
 };
 
-const allUsers = async (req, res) => {
+const allUsers = async (res) => {
   console.log("Here users");
   const response = await userModels.findAll();
   if (response) {
