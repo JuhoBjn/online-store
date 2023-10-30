@@ -15,11 +15,14 @@ const user = async (req, res) => {
   }
 };
 
-const allUsers = async (res) => {
+const allUsers = async (req, res) => {
   console.log("Here users");
+  console.log(req.params);
   const response = await userModels.findAll();
   if (response) {
     res.status(200).json(response);
+  } else {
+    res.status(404).json({ message: "No users found" });
   }
 };
 
