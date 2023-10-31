@@ -6,7 +6,8 @@ const {
   expect,
   afterEach,
   beforeAll,
-  afterAll
+  afterAll,
+  jest
 } = require("@jest/globals");
 const bcrypt = require("bcryptjs");
 
