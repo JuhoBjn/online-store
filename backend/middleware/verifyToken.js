@@ -11,7 +11,7 @@ const verifyToken = (req, res, next) => {
     req.user = { role_id: payload.role_id, ...req.user }; // add user info to req, keeping the original req.user info if any
     next();
   } catch (error) {
-    res.status(401).send("Authentication failed");
+    res.status(401).send({ message: "Authentication failed" });
   }
 };
 

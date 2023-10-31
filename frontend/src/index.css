@@ -1,0 +1,34 @@
+:root {
+  --main-text-color: #141204;
+  --main-background-color: #fcf2e1;
+  --dark-brown: #7d4230;
+  --light-brown: #edd892;
+  --light-green: #d8e4cf;
+  --bright-green: #5dcd08;
+  --dark-bright-green: #52b407;
+  --red: #d60e0e;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Lilita One", sans-serif;
+  color: var(--main-text-color);
+}
+
+p,
+label,
+li,
+button {
+  font-family: "Tenor Sans", sans-serif;
+  font-size: large;
+  color: var(--main-text-color);
+}
+
+.center {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
