@@ -26,10 +26,10 @@ const users = {
   /**
    * Find users based on id and delete it.
    * @param {string} id The user's id
-   * @returns User account found with id
+   * @returns User account deleted
    */
   delete: async (id) => {
-    const deleteQuery = "DELETE FROM users WHERE id=?;";
+    const deleteQuery = `DELETE FROM users WHERE id=?;`;
     await promisePool.query(deleteQuery, [id], (err) => {
       if (err) throw err;
     });
