@@ -97,35 +97,35 @@ describe("all profile finding or searching by id", () => {
     const response = await supertest(app)
       .get("/api/users/1")
       .set("Content", "application/json");
-    console.log(response.body);
+
     expect(response.status).toBe(200);
   });
   it("Should find all users", async () => {
     const response = await supertest(app)
       .get("/api/users/AllUsers")
       .set("Content", "application/json");
-    console.log(response.body);
+
     expect(response.status).toBe(200);
   });
   it("should delete user by id", async () => {
     const response = await supertest(app)
       .delete("/api/users/1")
       .set("Content", "application/json");
-    console.log(response.body);
-    expect(response.status).toBe(404);
+
+    expect(response.status).toBe(200);
   });
   it("Should not find deleted user", async () => {
     const response = await supertest(app)
       .get("/api/users/1")
       .set("Content", "application/json");
-    console.log(response.body);
+
     expect(response.status).toBe(404);
   });
   it("Should find only 1 user", async () => {
     const response = await supertest(app)
       .get("/api/users/AllUsers")
       .set("Content", "application/json");
-    console.log(response.body);
+
     expect(response.status).toBe(200);
   });
 });

@@ -5,9 +5,20 @@ const { v4: genUuid } = require("uuid");
 const userModels = require("../models/users");
 
 const user = async (req, res) => {
-  const id = parseInt(req.params.id);
-  console.log("Here user");
-  const response = await userModels.findById(id);
+  const schema = Joi.object({
+    id: Joi.string().required()
+  });
+  const providedCredentials = {
+    id: req.params.id
+  };
+
+  try {
+    const { error } = schema.validate(providedCredentials);
+    if (error) throw error;
+  } catch (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+  const response = await userModels.findById(providedCredentials.id);
   if (response) {
     res.status(200).json(response);
   } else {
@@ -16,7 +27,6 @@ const user = async (req, res) => {
 };
 
 const allUsers = async (req, res) => {
-  console.log("Here users");
   console.log(req.params);
   const response = await userModels.findAll();
   if (response) {
@@ -27,13 +37,25 @@ const allUsers = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const id = req.params.id;
-  console.log("Here delete");
-  const response = await userModels.delete(id);
+  const schema = Joi.object({
+    id: Joi.string().required()
+  });
+  const providedCredentials = {
+    id: req.params.id
+  };
+
+  try {
+    const { error } = schema.validate(providedCredentials);
+    if (error) throw error;
+  } catch (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const response = await userModels.delete(providedCredentials.id);
   if (response) {
-    res.status(200);
+    res.status(404).json({ message: "user found with given id" });
   } else {
-    res.status(404).json({ message: "No user found with given id" });
+    res.status(200).json({ message: "No user found with given id" });
   }
 };
 

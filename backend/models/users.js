@@ -29,11 +29,9 @@ const users = {
    * @returns User account found with id
    */
   delete: async (id) => {
-    console.log("poistettava id", id);
     const deleteQuery = "DELETE FROM users WHERE id=?;";
     await promisePool.query(deleteQuery, [id], (err) => {
       if (err) throw err;
-      console.log("User deleted");
     });
   },
   /**
