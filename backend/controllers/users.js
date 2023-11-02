@@ -19,19 +19,17 @@ const getUser = async (req, res) => {
   }
   const response = await userModels.findById(providedCredentials.id);
   if (response) {
-    res
-      .status(200)
-      .json({
-        id: response.id,
-        first_name: response.first_name,
-        last_name: response.last_name,
-        email: response.email,
-        postal_code: response.postal_code,
-        city: response.city,
-        country: response.country,
-        phone: response.phone,
-        premium: response.premium
-      });
+    res.status(200).json({
+      id: response.id,
+      first_name: response.first_name,
+      last_name: response.last_name,
+      email: response.email,
+      postal_code: response.postal_code,
+      city: response.city,
+      country: response.country,
+      phone: response.phone,
+      premium: response.premium
+    });
   } else {
     res.status(404).json({ message: "No user found with given id" });
   }
@@ -41,19 +39,17 @@ const getAllUsers = async (req, res) => {
   console.log(req.params);
   const response = await userModels.findAll();
   if (response) {
-    res
-      .status(200)
-      .json({
-        id: response.id,
-        first_name: response.first_name,
-        last_name: response.last_name,
-        email: response.email,
-        postal_code: response.postal_code,
-        city: response.city,
-        country: response.country,
-        phone: response.phone,
-        premium: response.premium
-      });
+    res.status(200).json({
+      id: response.id,
+      first_name: response.first_name,
+      last_name: response.last_name,
+      email: response.email,
+      postal_code: response.postal_code,
+      city: response.city,
+      country: response.country,
+      phone: response.phone,
+      premium: response.premium
+    });
   } else {
     res.status(404).json({ message: "No users found" });
   }
@@ -85,11 +81,9 @@ const deleteUser = async (req, res) => {
     await userModels.delete(userToDelete.id);
     res.status(200).json({ message: "User deleted successfully" });
   } else {
-    res
-      .status(403)
-      .json({
-        message: "Unauthorized: You do not have permission to delete this user"
-      });
+    res.status(403).json({
+      message: "Unauthorized: You do not have permission to delete this user"
+    });
   }
 };
 
