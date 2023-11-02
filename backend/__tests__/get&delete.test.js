@@ -7,7 +7,7 @@ const { pool } = require("../db/pool");
 
 describe("all profile finding or searching by id", () => {
   const testUser1 = {
-    id: "1",
+    id: "e07689a6-e43b-4f07-9331-782fa4f5decf",
     role_id: 1,
     first_name: "Tommy1",
     last_name: "Tester1",
@@ -22,7 +22,7 @@ describe("all profile finding or searching by id", () => {
     premium: 1
   };
   const testUser2 = {
-    id: "2",
+    id: "ae6c9a1d-5dd7-440f-ac4e-c7c43806c879",
     role_id: 1,
     first_name: "Tomi",
     last_name: "Testaaja",
@@ -95,35 +95,35 @@ describe("all profile finding or searching by id", () => {
 
   it("Should find user by id", async () => {
     const response = await supertest(app)
-      .get("/api/users/1")
+      .get("/api/users/e07689a6-e43b-4f07-9331-782fa4f5decf")
       .set("Content", "application/json");
 
     expect(response.status).toBe(200);
   });
   it("Should find all users", async () => {
     const response = await supertest(app)
-      .get("/api/users/AllUsers")
+      .get("/api/users/")
       .set("Content", "application/json");
 
     expect(response.status).toBe(200);
   });
   it("should delete user by id", async () => {
     const response = await supertest(app)
-      .delete("/api/users/1")
+      .delete("/api/users/e07689a6-e43b-4f07-9331-782fa4f5decf")
       .set("Content", "application/json");
 
     expect(response.status).toBe(200);
   });
   it("Should not find deleted user", async () => {
     const response = await supertest(app)
-      .get("/api/users/1")
+      .get("/api/users/e07689a6-e43b-4f07-9331-782fa4f5decf")
       .set("Content", "application/json");
 
     expect(response.status).toBe(404);
   });
   it("Should find only 1 user", async () => {
     const response = await supertest(app)
-      .get("/api/users/AllUsers")
+      .get("/api/users/")
       .set("Content", "application/json");
 
     expect(response.status).toBe(200);

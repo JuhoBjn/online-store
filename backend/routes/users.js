@@ -4,8 +4,8 @@ const router = express.Router();
 const {
   signup,
   login,
-  user,
-  allUsers,
+  getUser,
+  getAllUsers,
   deleteUser
 } = require("../controllers/users");
 
@@ -13,9 +13,9 @@ router.post("/signup", signup);
 
 router.post("/login", login);
 
-router.get("/AllUsers", allUsers);
+router.get("/", getAllUsers);
 
-router.get("/:id", user);
+router.get("/:id", getUser);
 
 router.delete("/:id", deleteUser);
 

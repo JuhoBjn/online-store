@@ -4,14 +4,13 @@ const jwt = require("jsonwebtoken");
 const { v4: genUuid } = require("uuid");
 const userModels = require("../models/users");
 
-const user = async (req, res) => {
+const getUser = async (req, res) => {
   const schema = Joi.object({
-    id: Joi.string().required()
+    id: Joi.string().uuid().required()
   });
   const providedCredentials = {
     id: req.params.id
   };
-
   try {
     const { error } = schema.validate(providedCredentials);
     if (error) throw error;
@@ -20,17 +19,41 @@ const user = async (req, res) => {
   }
   const response = await userModels.findById(providedCredentials.id);
   if (response) {
-    res.status(200).json(response);
+    res
+      .status(200)
+      .json({
+        id: response.id,
+        first_name: response.first_name,
+        last_name: response.last_name,
+        email: response.email,
+        postal_code: response.postal_code,
+        city: response.city,
+        country: response.country,
+        phone: response.phone,
+        premium: response.premium
+      });
   } else {
     res.status(404).json({ message: "No user found with given id" });
   }
 };
 
-const allUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
   console.log(req.params);
   const response = await userModels.findAll();
   if (response) {
-    res.status(200).json(response);
+    res
+      .status(200)
+      .json({
+        id: response.id,
+        first_name: response.first_name,
+        last_name: response.last_name,
+        email: response.email,
+        postal_code: response.postal_code,
+        city: response.city,
+        country: response.country,
+        phone: response.phone,
+        premium: response.premium
+      });
   } else {
     res.status(404).json({ message: "No users found" });
   }
@@ -38,11 +61,12 @@ const allUsers = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const schema = Joi.object({
-    id: Joi.string().required()
+    id: Joi.string().uuid().required()
   });
   const providedCredentials = {
     id: req.params.id
   };
+  const authenticatedUserId = providedCredentials.id;
 
   try {
     const { error } = schema.validate(providedCredentials);
@@ -51,11 +75,21 @@ const deleteUser = async (req, res) => {
     return res.status(400).send({ message: error.details[0].message });
   }
 
-  const response = await userModels.delete(providedCredentials.id);
-  if (response) {
-    res.status(404).json({ message: "user found with given id" });
+  const userToDelete = await userModels.findById(providedCredentials.id);
+
+  if (!userToDelete) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  if (userToDelete.id === authenticatedUserId) {
+    await userModels.delete(userToDelete.id);
+    res.status(200).json({ message: "User deleted successfully" });
   } else {
-    res.status(200).json({ message: "No user found with given id" });
+    res
+      .status(403)
+      .json({
+        message: "Unauthorized: You do not have permission to delete this user"
+      });
   }
 };
 
@@ -204,4 +238,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, user, allUsers, deleteUser };
+module.exports = { signup, login, getUser, getAllUsers, deleteUser };

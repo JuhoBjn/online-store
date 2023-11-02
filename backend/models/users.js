@@ -8,7 +8,7 @@ const users = {
    */
   findById: async (id) => {
     const queryString = `
-    SELECT users.id, users.first_name, users.last_name, users.email, users.postal_code, users.city, users.country, users.phone, users.premium, users.password
+    SELECT users.id, users.first_name, users.last_name, users.email, users.postal_code, users.city, users.country, users.phone, users.premium
     FROM users
     WHERE users.id = ?;`;
     const [rows] = await promisePool.query(queryString, [id]);
@@ -30,9 +30,7 @@ const users = {
    */
   delete: async (id) => {
     const deleteQuery = `DELETE FROM users WHERE id=?;`;
-    await promisePool.query(deleteQuery, [id], (err) => {
-      if (err) throw err;
-    });
+    return await promisePool.query(deleteQuery, [id]);
   },
   /**
    * Find users based on email.
