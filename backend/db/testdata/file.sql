@@ -3,8 +3,9 @@
 -- Users table
 -- Creates five test users, two regular user, one caretaker and one admin.
 -- Regular premium user.
+-- Password: Lotta12345
 INSERT INTO `users`(`id`,`first_name`,`last_name`,`email`,`postal_code`,`city`,`country`,`phone`,`password`,`premium`,`role_id`)
-SELECT '858560f9-fc03-43b0-b931-01213e4787ce','Lotta','Schmiedmann','lottas@test.com','65300','Vaasa','fi','2589631470','$2y$12$Z1PD1PxuAyVn0IgKp.hOMu1C/iPLiGmVB0rcljJYVPPIST9sf/Ql.',1,id FROM `roles` WHERE `name`='user';
+SELECT '858560f9-fc03-43b0-b931-01213e4787ce','Lotta','Schmiedmann','lottas@test.com','65300','Vaasa','fi','2589631470','$2a$12$tThwx9lUgUY3o0Bu7rZfv.LK9h/WfJLoh7NTatNnHK/qjAgFVou52',1,id FROM `roles` WHERE `name`='user';
 
 -- Regular non-premium user
 INSERT INTO `users`(`id`,`first_name`,`last_name`,`email`,`postal_code`,`city`,`country`,`phone`,`password`,`premium`,`role_id`)
@@ -21,3 +22,12 @@ SELECT '239aec9f-066e-4e6a-88d7-9cdccd43445b', 'Larry', 'Smith', 'larrys@test.co
 -- Admin, premium user
 INSERT INTO `users`(`id`,`first_name`,`last_name`,`email`,`postal_code`,`city`,`country`,`phone`,`password`,`premium`,`role_id`)
 SELECT 'e16a6eac-9993-4137-9221-7c879337bbe4','Anthony','Administrator','anthonya@test.com','20500','Turku','fi','1397824650','$2y$12$X0ByuB55Ca.59od3gFL2/eSZs5Zx9ZWmFGtq0cIIJKpNwYWYYi5Jy',1,id FROM `roles` WHERE `name`='admin';
+
+-- Add a friendship between Lotta Schmiedmann and Larry Smith.
+INSERT INTO `friends`(`user_id`, `friend_user_id`) VALUES ('858560f9-fc03-43b0-b931-01213e4787ce', '239aec9f-066e-4e6a-88d7-9cdccd43445b');
+INSERT INTO `friends`(`user_id`, `friend_user_id`) VALUES ('239aec9f-066e-4e6a-88d7-9cdccd43445b', '858560f9-fc03-43b0-b931-01213e4787ce');
+
+-- Create direct chat between Lotta Schmiedmann and Larry Smith.
+INSERT INTO `chats`(`chat_id`, `type`) VALUES ('c67f0e6a-f841-46b2-b13b-f403550c00e9', 'direct');
+UPDATE `friends` SET `chat_id` = 'c67f0e6a-f841-46b2-b13b-f403550c00e9' WHERE user_id = '858560f9-fc03-43b0-b931-01213e4787ce' AND friend_user_id = '239aec9f-066e-4e6a-88d7-9cdccd43445b' 
+OR user_id = '239aec9f-066e-4e6a-88d7-9cdccd43445b' AND friend_user_id = '858560f9-fc03-43b0-b931-01213e4787ce';
