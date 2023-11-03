@@ -1,5 +1,7 @@
 const express = require("express");
+const { createServer } = require("http");
 const cors = require("cors");
+const { Server } = require("socket.io");
 
 // Load test environment variables when running tests
 if (process.env.NODE_ENV === "test") {
@@ -31,4 +33,38 @@ app.get("/healthz", (req, res) => {
 const users = require("./routes/users");
 app.use("/api/users", users);
 
-module.exports = app;
+const httpServer = createServer(app);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: [
+      "http://127.0.0.1:5173",
+      "http://localhost:5173",
+      "https://onlinestore-frontend-stg.onrender.com",
+      "https://onlinestore-frontend-prod.onrender.com",
+      `http://localhost:${process.env.PORT || 5000}`
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200
+  }
+});
+
+const registerChatHandlers = require("./chat/chatHandlers");
+
+io.on("connection", (socket) => {
+  registerChatHandlers(io, socket);
+
+  socket.on("disconnect", () => {
+    if (socket.data.roomId) {
+      io.broadcast.to(socket.data.roomId).emit("room-notification", {
+        message: `${socket.data.user.firstname} ${socket.data.user.lastname} left the chat`
+      });
+    }
+  });
+
+  socket.on("connect_error", (error) => {
+    console.log(error.message);
+  });
+});
+
+module.exports = { httpServer };
