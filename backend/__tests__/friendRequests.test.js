@@ -110,7 +110,7 @@ describe("getSentFriendRequests", () => {
   beforeEach(async () => {
     user = await createUser("example-user@example.com", "Password123!");
     receiverUser = await createUser(
-      "example-reciever-user@example.com",
+      "example-receiver-user@example.com",
       "Password123!"
     );
   });
