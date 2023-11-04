@@ -5,9 +5,9 @@ const verifyToken = require("../middleware/verifyToken");
 const {
   signup,
   login,
-  sendFriendRequest
+  sendFriendRequest,
   //   cancelFriendRequest,
-  //   getFriendRequests,
+  getSentFriendRequests
   //   acceptOrDenyFriendRequest,
   //   getFriends,
   //   unFriend
@@ -29,7 +29,7 @@ router.post(
 //   cancelFriendRequest
 // );
 
-// router.get("/:userid/friend-requests", getFriendRequests); // get all pending friend requests
+router.get("/:userid/friend-requests/sent", getSentFriendRequests);
 
 // router.put(
 //   "/:userid/friend-requests/:friendRequestId",

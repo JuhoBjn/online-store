@@ -90,3 +90,9 @@ Content-Type: application/json
 POST http://localhost:5000/api/users/{{user_id}}/friend-requests/{{reciever_user_id}}
 Accept: application/json
 Authorization: Bearer {{token}}
+
+### Get list of sent friend requests
+
+GET http://localhost:5000/api/users/{{user_id}}/friend-requests/sent
+Accept: application/json
+Authorization: Bearer {{token}}

@@ -136,6 +136,37 @@ const users = {
       userId1
     ]);
     return rows[0].count > 0;
+  },
+  /**
+   * Get all sent friend requests for a user.
+   * @param {string} userId - The sender user ID
+   * @returns Array of friend requests
+   */
+  getSentFriendRequests: async (userId) => {
+    const queryString = `
+    SELECT 
+      fr.id,
+      fr.requester_user_id,
+      fr.requested_friend_user_id,
+      requestedFriend.first_name AS requested_friend_first_name,
+      requestedFriend.last_name AS requested_friend_last_name,
+      fr.is_rejected,
+      fr.is_accepted,
+      (
+          CASE
+              WHEN is_accepted = 0
+              AND is_rejected = 0 THEN 1
+              ELSE 0
+          END
+      ) as is_request_pending
+    FROM friend_requests AS fr
+      JOIN users AS requestedFriend ON fr.requested_friend_user_id = requestedFriend.id
+    WHERE (
+        requester_user_id = ?
+      )
+    `;
+    const [rows] = await promisePool.query(queryString, [userId]);
+    return rows;
   }
 };
 
