@@ -5,6 +5,9 @@ const bcrypt = require("bcryptjs");
 const app = require("../app");
 const { pool } = require("../db/pool");
 
+const jwt = require("jsonwebtoken");
+const verifyToken = require("../middleware/verifyToken");
+
 describe("all profile finding or searching by id", () => {
   const testUser1 = {
     id: "e07689a6-e43b-4f07-9331-782fa4f5decf",
@@ -96,13 +99,14 @@ describe("all profile finding or searching by id", () => {
   it("Should find user by id", async () => {
     const response = await supertest(app)
       .get("/api/users/e07689a6-e43b-4f07-9331-782fa4f5decf")
-      .set("Content", "application/json");
-
+      .set("Accept", "application/json")
+      .set("Content-Type", "application/json");
     expect(response.status).toBe(200);
   });
   it("Should find all users", async () => {
     const response = await supertest(app)
       .get("/api/users/")
+      .set("Accept", "application/json")
       .set("Content", "application/json");
 
     expect(response.status).toBe(200);
@@ -110,6 +114,7 @@ describe("all profile finding or searching by id", () => {
   it("should delete user by id", async () => {
     const response = await supertest(app)
       .delete("/api/users/e07689a6-e43b-4f07-9331-782fa4f5decf")
+      .set("Accept", "application/json")
       .set("Content", "application/json");
 
     expect(response.status).toBe(200);
@@ -117,6 +122,7 @@ describe("all profile finding or searching by id", () => {
   it("Should not find deleted user", async () => {
     const response = await supertest(app)
       .get("/api/users/e07689a6-e43b-4f07-9331-782fa4f5decf")
+      .set("Accept", "application/json")
       .set("Content", "application/json");
 
     expect(response.status).toBe(404);
@@ -124,6 +130,7 @@ describe("all profile finding or searching by id", () => {
   it("Should find only 1 user", async () => {
     const response = await supertest(app)
       .get("/api/users/")
+      .set("Accept", "application/json")
       .set("Content", "application/json");
 
     expect(response.status).toBe(200);

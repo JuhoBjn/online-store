@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: genUuid } = require("uuid");
 const userModels = require("../models/users");
+const verifyToken = require("../middleware/verifyToken");
 
 const getUser = async (req, res) => {
   const schema = Joi.object({
@@ -63,7 +64,7 @@ const deleteUser = async (req, res) => {
     id: req.params.id
   };
   const authenticatedUserId = providedCredentials.id;
-
+  console.log(req.body)
   try {
     const { error } = schema.validate(providedCredentials);
     if (error) throw error;
