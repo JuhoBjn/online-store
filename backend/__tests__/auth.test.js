@@ -6,7 +6,8 @@ const {
   expect,
   afterEach,
   beforeAll,
-  afterAll
+  afterAll,
+  jest
 } = require("@jest/globals");
 const bcrypt = require("bcryptjs");
 
@@ -75,7 +76,9 @@ describe("User signup endpoint", () => {
 
     expect(response.status).toEqual(201);
     expect(response2.status).toEqual(400);
-    expect(response2.text).toEqual("A user with this email already exists");
+    expect(response2.body.message).toEqual(
+      "A user with this email already exists"
+    );
     createdTestAccount = response.body.id;
   });
 
@@ -92,7 +95,7 @@ describe("User signup endpoint", () => {
       .send(testUser);
 
     expect(response.status).toEqual(400);
-    expect(response.text).toEqual('"email" is not allowed to be empty');
+    expect(response.body.message).toEqual('"email" is not allowed to be empty');
   });
 
   it("should not accept request without email field", async () => {
@@ -107,7 +110,7 @@ describe("User signup endpoint", () => {
       .send(testUser);
 
     expect(response.status).toEqual(400);
-    expect(response.text).toEqual('"email" is required');
+    expect(response.body.message).toEqual('"email" is required');
   });
 
   it("should not allow a user to sign up without a password", async () => {
@@ -123,7 +126,9 @@ describe("User signup endpoint", () => {
       .send(testUser);
 
     expect(response.status).toEqual(400);
-    expect(response.text).toEqual('"password" is not allowed to be empty');
+    expect(response.body.message).toEqual(
+      '"password" is not allowed to be empty'
+    );
   });
 
   it("should not accept request without password field", async () => {
@@ -138,7 +143,7 @@ describe("User signup endpoint", () => {
       .send(testUser);
 
     expect(response.status).toEqual(400);
-    expect(response.text).toEqual('"password" is required');
+    expect(response.body.message).toEqual('"password" is required');
   });
 });
 
@@ -238,7 +243,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toBe(401);
-    expect(response.text).toBe(
+    expect(response.body.message).toBe(
       "Invalid credentials. Please check email and password and try again."
     );
   });
@@ -256,7 +261,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toEqual(401);
-    expect(response.text).toBe("No user exists for given email");
+    expect(response.body.message).toBe("No user exists for given email");
   });
 
   it("should not allow a user to login with empty email address", async () => {
@@ -272,7 +277,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toBe(400);
-    expect(response.text).toBe('"email" is not allowed to be empty');
+    expect(response.body.message).toBe('"email" is not allowed to be empty');
   });
 
   it("should not accept a request with no email field", async () => {
@@ -287,7 +292,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toBe(400);
-    expect(response.text).toEqual('"email" is required');
+    expect(response.body.message).toEqual('"email" is required');
   });
 
   it("should not allow a user to log in with empty password", async () => {
@@ -303,7 +308,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toBe(400);
-    expect(response.text).toBe('"password" is not allowed to be empty');
+    expect(response.body.message).toBe('"password" is not allowed to be empty');
   });
 
   it("should not accept a request with no password field", async () => {
@@ -318,7 +323,7 @@ describe("User login endpoint", () => {
       .send(testCredentials);
 
     expect(response.status).toBe(400);
-    expect(response.text).toEqual('"password" is required');
+    expect(response.body.message).toEqual('"password" is required');
   });
 });
 
@@ -364,7 +369,7 @@ describe("Verify token middleware", () => {
     verifyToken(req, res, next);
 
     expect(next).toHaveBeenCalled();
-    expect(req.body.role_id).toEqual(1);
+    expect(req.user?.role_id).toEqual(1);
   });
 
   it("should return an error if the request has invalid token", () => {
@@ -386,7 +391,7 @@ describe("Verify token middleware", () => {
     verifyToken(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Authentication failed");
+    expect(res.send).toBeCalledWith({ message: "Authentication failed" });
   });
 
   it("should return an error when token provided in the request is empty", () => {
@@ -403,7 +408,7 @@ describe("Verify token middleware", () => {
     verifyToken(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Authentication failed");
+    expect(res.send).toBeCalledWith({ message: "Authentication failed" });
   });
 
   it("should return an error when no token is provided in the request", () => {
@@ -419,7 +424,7 @@ describe("Verify token middleware", () => {
     verifyToken(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Authentication failed");
+    expect(res.send).toBeCalledWith({ message: "Authentication failed" });
   });
 
   it("should call next() if the request method is OPTIONS", () => {
@@ -439,7 +444,7 @@ const checkCaretaker = require("../middleware/checkCaretaker");
 
 describe("The user caretaker role checking middleware", () => {
   it("should call next if the user is a caretaker", () => {
-    const req = { body: { role_id: 2 } };
+    const req = { user: { role_id: 2 } };
     const res = {};
     const next = jest.fn(() => {
       return true;
@@ -451,7 +456,7 @@ describe("The user caretaker role checking middleware", () => {
   });
 
   it("should call next if the user is an administrator", () => {
-    const req = { body: { role_id: 3 } };
+    const req = { user: { role_id: 3 } };
     const res = {};
     const next = jest.fn(() => {
       return true;
@@ -463,7 +468,7 @@ describe("The user caretaker role checking middleware", () => {
   });
 
   it("shoud return an error if the user is not a caretaker", () => {
-    const req = { body: { role_id: 1 } };
+    const req = { user: { role_id: 1 } };
     const res = {
       status: jest.fn().mockReturnThis(),
       send: jest.fn().mockReturnThis()
@@ -475,7 +480,7 @@ describe("The user caretaker role checking middleware", () => {
     checkCaretaker(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Insufficient account role");
+    expect(res.send).toBeCalledWith({ message: "Insufficient account role" });
     expect(next).not.toBeCalled();
   });
 
@@ -492,7 +497,7 @@ describe("The user caretaker role checking middleware", () => {
     checkCaretaker(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("No role ID was provided");
+    expect(res.send).toBeCalledWith({ message: "No role ID was provided" });
     expect(next).not.toHaveBeenCalled();
   });
 
@@ -513,7 +518,7 @@ const checkAdministrator = require("../middleware/checkAdministrator");
 
 describe("The user administrator role checking middleware", () => {
   it("should call next if the user is an administrator", () => {
-    const req = { body: { role_id: 3 } };
+    const req = { user: { role_id: 3 } };
     const res = {};
     const next = jest.fn(() => {
       return true;
@@ -525,7 +530,7 @@ describe("The user administrator role checking middleware", () => {
   });
 
   it("should return an error if the user is a caretaker", () => {
-    const req = { body: { role_id: 2 } };
+    const req = { user: { role_id: 2 } };
     const res = {
       status: jest.fn().mockReturnThis(),
       send: jest.fn().mockReturnThis()
@@ -537,12 +542,12 @@ describe("The user administrator role checking middleware", () => {
     checkAdministrator(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Insufficient account role");
+    expect(res.send).toBeCalledWith({ message: "Insufficient account role" });
     expect(next).not.toHaveBeenCalled();
   });
 
   it("should return an error if the user is a normal user", () => {
-    const req = { body: { role_id: 1 } };
+    const req = { user: { role_id: 1 } };
     const res = {
       status: jest.fn().mockReturnThis(),
       send: jest.fn().mockReturnThis()
@@ -554,7 +559,7 @@ describe("The user administrator role checking middleware", () => {
     checkAdministrator(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("Insufficient account role");
+    expect(res.send).toBeCalledWith({ message: "Insufficient account role" });
     expect(next).not.toHaveBeenCalled();
   });
 
@@ -571,7 +576,7 @@ describe("The user administrator role checking middleware", () => {
     checkAdministrator(req, res, next);
 
     expect(res.status).toBeCalledWith(401);
-    expect(res.send).toBeCalledWith("No role ID was provided");
+    expect(res.send).toBeCalledWith({ message: "No role ID was provided" });
     expect(next).not.toHaveBeenCalled();
   });
 
@@ -585,5 +590,70 @@ describe("The user administrator role checking middleware", () => {
     checkAdministrator(req, res, next);
 
     expect(next).toHaveBeenCalled();
+  });
+});
+
+const checkPremium = require("../middleware/checkPremium");
+
+describe("The user premium account checking middleware", () => {
+  it("should call next if the user has a premium account", () => {
+    const payload = {
+      id: "d03ffbe3-8cae-4788-90ce-8f622a5ca0de",
+      role_id: 1,
+      premium: true
+    };
+    const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: "7d" });
+    const req = { headers: { authorization: `Bearer ${token}` } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkPremium(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+  });
+
+  it("should call next if the request method is OPTIONS", () => {
+    const req = { method: "OPTIONS" };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkPremium(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+  });
+
+  it("should return an error if the user does not have a premium account", () => {
+    const payload = {
+      id: "d03ffbe3-8cae-4788-90ce-8f622a5ca0de",
+      role_id: 1,
+      premium: false
+    };
+    const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: "7d" });
+    const req = { headers: { authorization: `Bearer ${token}` } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis()
+    };
+    const next = jest.fn(() => {
+      return true;
+    });
+
+    checkPremium(req, res, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(res.status).toBeCalledWith(403);
+    expect(res.send).toBeCalledWith({
+      message: "This functionality is reserved for premium users"
+    });
   });
 });

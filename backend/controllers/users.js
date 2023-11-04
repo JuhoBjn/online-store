@@ -11,9 +11,7 @@ const signup = async (req, res) => {
   const schema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string()
-      .pattern(
-        new RegExp("^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z].{8,}$")
-      )
+      .pattern(new RegExp("^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,}$"))
       .required()
   });
 
@@ -26,7 +24,7 @@ const signup = async (req, res) => {
     const { error } = schema.validate(providedCredentials);
     if (error) throw error;
   } catch (error) {
-    return res.status(400).send(error.details[0].message);
+    return res.status(400).send({ message: error.details[0].message });
   }
 
   // Make sure no duplicate users are created.
@@ -34,7 +32,7 @@ const signup = async (req, res) => {
     const user = await userModels.findByEmail(providedCredentials.email);
     if (user) throw new Error("A user with this email already exists");
   } catch (error) {
-    return res.status(400).send(error.message);
+    return res.status(400).send({ message: error.message });
   }
 
   const newUser = {
@@ -49,7 +47,8 @@ const signup = async (req, res) => {
 
     const tokenPayload = {
       id: createdUser.id,
-      role_id: createdUser.role_id
+      role_id: createdUser.role_id,
+      premium: createdUser.premium
     };
 
     jwt.sign(
@@ -65,7 +64,7 @@ const signup = async (req, res) => {
       }
     );
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send({ message: error.message });
   }
 };
 
@@ -76,7 +75,7 @@ const login = async (req, res) => {
       .pattern(
         // Password must be at least 8 characters long,
         // contain at least one upper case letter, one lower case letter and one number.
-        new RegExp("^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z].{8,}$")
+        new RegExp("^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,}$")
       )
       .required()
   });
@@ -90,7 +89,7 @@ const login = async (req, res) => {
     const { error } = schema.validate(providedCredentials);
     if (error) throw error;
   } catch (error) {
-    return res.status(400).send(error.details[0].message);
+    return res.status(400).send({ message: error.details[0].message });
   }
 
   // Check that a user with the email exists.
@@ -101,7 +100,7 @@ const login = async (req, res) => {
       throw new Error("No user exists for given email");
     }
   } catch (error) {
-    return res.status(401).send(error.message);
+    return res.status(401).send({ message: error.message });
   }
 
   const passwordsMatch = await bcrypt.compare(
@@ -110,11 +109,10 @@ const login = async (req, res) => {
   );
 
   if (!passwordsMatch) {
-    return res
-      .status(401)
-      .send(
+    return res.status(401).send({
+      message:
         "Invalid credentials. Please check email and password and try again."
-      );
+    });
   }
 
   const authenticatedUser = {
@@ -132,7 +130,8 @@ const login = async (req, res) => {
 
   const tokenPayload = {
     id: user.id,
-    role_id: user.role_id
+    role_id: user.role_id,
+    premium: user.premium
   };
 
   try {
@@ -147,7 +146,7 @@ const login = async (req, res) => {
       }
     );
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send({ message: error.message });
   }
 };
 

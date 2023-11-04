@@ -15,6 +15,7 @@ Software development team:
 - NodeJS v20
 - Docker
 - Git
+- MySQL CLI tools `mysql` and `mysqldump`[^1]
 
 ### Run commands
 
@@ -30,4 +31,6 @@ Software development team:
 
 #### Backend
 
-- `npm run test` to run backend unit tests
+- `npm run test` or `npm run test:clean` to run backend tests
+
+[^1]: `mysql` is used as part of [inserting test data when running backend tests locally using `npm run test:clean`](backend/localtestrun.sh) and [`mysqldump` is used for exporting the database schema](https://github.com/amacneil/dbmate#exporting-schema-file).
