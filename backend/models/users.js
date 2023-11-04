@@ -2,6 +2,24 @@ const { promisePool } = require("../db/pool");
 
 const users = {
   /**
+   * Find all users.
+   * @returns all users
+   */
+  findAll: async () => {
+    const queryString = `SELECT * FROM users`;
+    const [rows] = await promisePool.query(queryString);
+    return rows === undefined ? null : rows;
+  },
+  /**
+   * Find users based on id and delete it.
+   * @param {string} id The user's id
+   * @returns User account deleted
+   */
+  delete: async (id) => {
+    const deleteQuery = `DELETE FROM users WHERE id=?;`;
+    return await promisePool.query(deleteQuery, [id]);
+  },
+  /**
    * Find users based on email.
    * @param {string} email The user's email address
    * @returns User account found with email
@@ -29,6 +47,8 @@ const users = {
     const [rows] = await promisePool.query(queryString, [id]);
     return rows[0] === undefined ? null : rows[0];
   },
+
+  },
   /**
    * Create a new user entry.
    * @param {Object} user - The user object containing user details.
@@ -45,7 +65,7 @@ const users = {
     ]);
 
     const fetchString = `
-      SELECT id, email, role_id, premium
+      SELECT id, email, role_id 
       FROM users
       WHERE id = ?;
       `;

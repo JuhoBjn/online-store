@@ -2,8 +2,88 @@ const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: genUuid } = require("uuid");
-
 const userModels = require("../models/users");
+
+const getUser = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.string().uuid().required()
+  });
+  const providedCredentials = {
+    id: req.params.id
+  };
+  try {
+    const { error } = schema.validate(providedCredentials);
+    if (error) throw error;
+  } catch (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+  const response = await userModels.findById(providedCredentials.id);
+  if (response) {
+    res.status(200).json({
+      id: response.id,
+      first_name: response.first_name,
+      last_name: response.last_name,
+      email: response.email,
+      postal_code: response.postal_code,
+      city: response.city,
+      country: response.country,
+      phone: response.phone,
+      premium: response.premium
+    });
+  } else {
+    res.status(404).json({ message: "No user found with given id" });
+  }
+};
+
+const getAllUsers = async (req, res) => {
+  console.log(req.params);
+  const response = await userModels.findAll();
+  if (response) {
+    res.status(200).json({
+      id: response.id,
+      first_name: response.first_name,
+      last_name: response.last_name,
+      email: response.email,
+      postal_code: response.postal_code,
+      city: response.city,
+      country: response.country,
+      phone: response.phone,
+      premium: response.premium
+    });
+  } else {
+    res.status(404).json({ message: "No users found" });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.string().uuid().required()
+  });
+  const providedCredentials = {
+    id: req.params.id
+  };
+  const authenticatedUserId = req.user.id;
+  try {
+    const { error } = schema.validate(providedCredentials);
+    if (error) throw error;
+  } catch (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const userToDelete = await userModels.findById(providedCredentials.id);
+
+  if (!userToDelete) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  if (userToDelete.id === authenticatedUserId) {
+    await userModels.delete(userToDelete.id);
+    res.status(200).json({ message: "User deleted successfully" });
+  } else {
+    res.status(403).json({
+      message: "Unauthorized: You do not have permission to delete this user"
+    });
+  }
+};
 
 const signup = async (req, res) => {
   // Password must be at least 8 characters long,
@@ -224,9 +304,9 @@ const updateUser = async (req, res) => {
       }
     );
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send({ message: error.message });
   }
 }
 
 
-module.exports = { signup, login, updateUser };
+module.exports = { signup, login, getUser, getAllUsers, deleteUser, updateUser };
