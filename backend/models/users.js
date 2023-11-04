@@ -2,19 +2,6 @@ const { promisePool } = require("../db/pool");
 
 const users = {
   /**
-   * Find users based on id.
-   * @param {string} id The user's id
-   * @returns User account found with id
-   */
-  findById: async (id) => {
-    const queryString = `
-    SELECT users.id, users.first_name, users.last_name, users.email, users.postal_code, users.city, users.country, users.phone, users.premium
-    FROM users
-    WHERE users.id = ?;`;
-    const [rows] = await promisePool.query(queryString, [id]);
-    return rows[0] === undefined ? null : rows[0];
-  },
-  /**
    * Find all users.
    * @returns all users
    */

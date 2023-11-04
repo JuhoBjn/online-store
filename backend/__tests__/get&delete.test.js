@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 
 describe("all profile finding or searching by id", () => {
   let user = {
-    id: "e07689a6-e43b-4f07-9331-782fa4f5decf" 
+    id: "e07689a6-e43b-4f07-9331-782fa4f5decf"
   };
   let token = jwt.sign({ id: user.id }, process.env.JWT_KEY, {
     expiresIn: "30m"
@@ -106,7 +106,7 @@ describe("all profile finding or searching by id", () => {
       .get("/api/users/e07689a6-e43b-4f07-9331-782fa4f5decf")
       .set("Authorization", `Bearer ${token}`)
       .set("Accept", "application/json")
-      .set("Content-Type", "application/json")
+      .set("Content-Type", "application/json");
     expect(response.status).toBe(200);
   });
   it("Should find all users", async () => {
