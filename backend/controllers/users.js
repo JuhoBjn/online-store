@@ -64,7 +64,6 @@ const deleteUser = async (req, res) => {
     id: req.params.id
   };
   const authenticatedUserId = req.user.id;;
-  console.log(req.body)
   try {
     const { error } = schema.validate(providedCredentials);
     if (error) throw error;
@@ -77,7 +76,6 @@ const deleteUser = async (req, res) => {
   if (!userToDelete) {
     return res.status(404).json({ message: "User not found" });
   }
-
   if (userToDelete.id === authenticatedUserId) {
     await userModels.delete(userToDelete.id);
     res.status(200).json({ message: "User deleted successfully" });

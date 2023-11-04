@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const verifyToken = require('../middleware/verifyToken');
+const verifyTokenid = require('../middleware/verifyTokenid');
 
 const {
   signup,
@@ -14,7 +14,7 @@ router.post("/signup", signup);
 
 router.post("/login", login);
 
-router.use(verifyToken);
+router.use(verifyTokenid);
 
 router.get("/", getAllUsers);
 
