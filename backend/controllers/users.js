@@ -63,7 +63,7 @@ const deleteUser = async (req, res) => {
   const providedCredentials = {
     id: req.params.id
   };
-  const authenticatedUserId = providedCredentials.id;
+  const authenticatedUserId = req.user.id;;
   console.log(req.body)
   try {
     const { error } = schema.validate(providedCredentials);
