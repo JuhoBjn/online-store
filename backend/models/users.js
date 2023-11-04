@@ -48,7 +48,6 @@ const users = {
     return rows[0] === undefined ? null : rows[0];
   },
 
-  },
   /**
    * Create a new user entry.
    * @param {Object} user - The user object containing user details.
@@ -72,6 +71,7 @@ const users = {
     const [createdUser] = await promisePool.query(fetchString, [user.id]);
     return createdUser[0];
   },
+
   /**
    * Update DB fields for a user
    * @param {string} userId - The user ID
@@ -79,28 +79,67 @@ const users = {
    * @example await update("123-456-789", {"first_name": "Mike", "last_name": "Smith"})
    */
   update: async (user) => {
-    const updateString = `
-      UPDATE users
-      SET first_name = ?, last_name = ?, postal_code = ?, city = ?, country = ?, phone = ?, premium = ?
-      WHERE id = ?;`;
-    await promisePool.query(updateString, [
-      user.first_name,
-      user.last_name,
-      user.postal_code,
-      user.city,
-      user.country,
-      user.phone,
-      user.premium,
-      user.id
-    ]);
+    //Bit complicated way to do this, but it works
+    let updateString = `
+    UPDATE users
+    SET`;
 
+    const updateValues = [];
+
+    if (user.first_name) {
+      updateString += " first_name = ?,";
+      updateValues.push(user.first_name);
+    }
+
+    if (user.last_name) {
+      updateString += " last_name = ?,";
+      updateValues.push(user.last_name);
+    }
+    if (user.email) {
+      updateString += " email = ?,";
+      updateValues.push(user.email);
+    }
+
+    if (user.postal_code) {
+      updateString += " postal_code = ?,";
+      updateValues.push(user.postal_code);
+    }
+
+    if (user.city) {
+      updateString += " city = ?,";
+      updateValues.push(user.city);
+    }
+
+    if (user.country) {
+      updateString += " country = ?,";
+      updateValues.push(user.country);
+    }
+
+    if (user.phone) {
+      updateString += " phone = ?,";
+      updateValues.push(user.phone);
+    }
+
+    if (user.premium) {
+      updateString += " premium = ?,";
+      updateValues.push(user.premium);
+    }
+
+    if (updateValues.length > 0) {
+      updateString = updateString.slice(0, -1);
+    }
+
+    updateString += " WHERE id = ?";
+
+    updateValues.push(user.id);
+
+    await promisePool.query(updateString, updateValues);
     const fetchString = `
-      SELECT id, email, role_id, first_name, last_name, postal_code, city, country, phone, premium
+      SELECT id, email, role_id, first_name, last_name, email, postal_code, city, country, phone, premium
       FROM users
       WHERE id = ?;`;
     const [updatedUser] = await promisePool.query(fetchString, [user.id]);
     return updatedUser[0];
-  },
+  }
 };
-
 module.exports = users;

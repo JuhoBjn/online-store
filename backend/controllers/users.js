@@ -231,11 +231,15 @@ const login = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
+  if (req.user.id !== req.body.id) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
   const schema = Joi.object({
     id: Joi.string().uuid(),
-    firstname: Joi.string(),
-    lastname: Joi.string(),
-    postalcode: Joi.string(),
+    first_name: Joi.string(),
+    last_name: Joi.string(),
+    email: Joi.string().email(),
+    postal_code: Joi.string(),
     city: Joi.string(),
     country: Joi.string(),
     phone: Joi.string(),
@@ -244,9 +248,10 @@ const updateUser = async (req, res) => {
 
   const providedUserDetails = {
     id: req.body.id,
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    postalcode: req.body.postalcode,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    postal_code: req.body.postal_code,
     city: req.body.city,
     country: req.body.country,
     phone: req.body.phone,
@@ -262,51 +267,37 @@ const updateUser = async (req, res) => {
 
   const user = {
     id: providedUserDetails.id,
-    first_name: providedUserDetails.firstname,
-    last_name: providedUserDetails.lastname,
-    postal_code: providedUserDetails.postalcode,
+    first_name: providedUserDetails.first_name,
+    last_name: providedUserDetails.last_name,
+    email: providedUserDetails.email,
+    postal_code: providedUserDetails.postal_code,
     city: providedUserDetails.city,
     country: providedUserDetails.country,
     phone: providedUserDetails.phone,
     premium: providedUserDetails.premium
   };
 
+  const filteredUser = {};
+  for (const key in user) {
+    if (user[key] !== null && user[key] !== undefined) {
+      filteredUser[key] = user[key];
+    }
+  }
+
   try {
-    const updatedUser = await userModels.update(user);
+    const updatedUser = await userModels.update(filteredUser);
     if (!updatedUser) throw new Error("Failed to update user");
-
-    const authenticatedUser = {
-      id: updatedUser.id,
-      role: updatedUser.role,
-      firstname: updatedUser.first_name,
-      lastname: updatedUser.last_name,
-      email: updatedUser.email,
-      postalcode: updatedUser.postal_code,
-      city: updatedUser.city,
-      country: updatedUser.country,
-      phone: updatedUser.phone,
-      premium: updatedUser.premium
-    };
-
-    const tokenPayload = {
-      id: updatedUser.id,
-      role_id: updatedUser.role_id
-    };
-
-    jwt.sign(
-      tokenPayload,
-      process.env.JWT_KEY,
-      { expiresIn: "7d" },
-      (error, token) => {
-        if (error) throw error;
-        authenticatedUser.token = token;
-        res.send(authenticatedUser);
-      }
-    );
+    res.status(200).send(updatedUser);
   } catch (error) {
     return res.status(500).send({ message: error.message });
   }
-}
+};
 
-
-module.exports = { signup, login, getUser, getAllUsers, deleteUser, updateUser };
+module.exports = {
+  signup,
+  login,
+  getUser,
+  getAllUsers,
+  deleteUser,
+  updateUser
+};

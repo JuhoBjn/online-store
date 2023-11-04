@@ -17,11 +17,11 @@ router.post("/login", login);
 
 router.use(verifyTokenid);
 
-router.post("/updateUser", updateUser);
-
 router.get("/", getAllUsers);
 
 router.get("/:id", getUser);
+
+router.post("/updateUser", updateUser);
 
 router.delete("/:id", deleteUser);
 
