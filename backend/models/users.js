@@ -47,6 +47,20 @@ const users = {
     return rows[0] === undefined ? null : rows[0];
   },
   /**
+   * Find users based on user ID.
+   * @param {string} userId - The user ID
+   * @returns User account found with ID
+   */
+  findById: async (id) => {
+    const queryString = `
+      SELECT users.id, roles.name AS role, users.first_name, users.last_name, users.email, users.postal_code, users.city, users.country, users.phone, users.premium, users.password
+      FROM users
+      LEFT JOIN roles ON users.role_id = roles.id
+      WHERE users.id = ?;`;
+    const [rows] = await promisePool.query(queryString, [id]);
+    return rows[0] === undefined ? null : rows[0];
+  },
+  /**
    * Create a new user entry.
    * @param {Object} user - The user object containing user details.
    * @param {string} user.id - The user's ID.
@@ -68,6 +82,18 @@ const users = {
       `;
     const [createdUser] = await promisePool.query(fetchString, [user.id]);
     return createdUser[0];
+  },
+  /**
+   * Update DB fields for a user
+   * @param {string} userId - The user ID
+   * @param {Object} userData - object containing key value pairs to update
+   * @example await update("123-456-789", {"first_name": "Mike", "last_name": "Smith"})
+   */
+  update: async (userId, userData) => {
+    return promisePool.query("UPDATE users SET ? WHERE id = ?", [
+      userData,
+      userId
+    ]);
   }
 };
 

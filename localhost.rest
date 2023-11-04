@@ -23,6 +23,64 @@ Accept: application/json
 }
 
 ###
-@token = {{ login.response.body.token }}
-###
-@user_id = {{ login.response.body.id }}
+@token = {{login.response.body.token}}
+@user_id = {{login.response.body.id}}
+
+### Send password reset link - success
+
+POST http://localhost:5000/api/password-reset/send-reset-email
+Content-Type: application/json
+
+{
+    "email": "timothy@tester.com"
+}
+
+### Send password reset link - email not found
+
+POST http://localhost:5000/api/password-reset/send-reset-email
+Content-Type: application/json
+
+{
+    "email": "does.not.exist@test.example.com"
+}
+
+### Reset password - invalid token
+
+POST http://localhost:5000/api/password-reset/set-new-password
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFhYWFhYWFhLTA2MTUtNGQwNC1hNzk1LTljNTc1NmVmNWY0YyIsImlhdCI6MTY4MTI0NTEyMywiZXhwIjoxNjgxMjQ2MjIzfQ.oh9fSC9MHyk5iX3ZuFoPsd6WXGF5laNg_ysyAULZ1ws", 
+    "password": "newPassword1"
+}
+
+
+### Reset password - expired
+
+POST http://localhost:5000/api/password-reset/set-new-password
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFhYWFhYWFhLTA2MTUtNGQwNC1hNzk1LTljNTc1NmVmNWY0YyIsImlhdCI6MTY4MTI0NTEyMywiZXhwIjoxNjgxMjQ2MzIzfQ.7O80aKMcONZ7ulFZgfd4tBOB3md4vDg0zG-7A8zTa-U", 
+    "password": "newPassword1"
+}
+
+### Reset password - success
+
+POST http://localhost:5000/api/password-reset/set-new-password
+Content-Type: application/json
+
+{
+    "token": "{{token}}", 
+    "password": "newPassword1"
+}
+
+### Reset password - fail password checks
+
+POST http://localhost:5000/api/password-reset/set-new-password
+Content-Type: application/json
+
+{
+    "token": "{{token}}", 
+    "password": "newpassword"
+}

@@ -13,3 +13,9 @@ services:
     ports:
       - 8080:8080
     restart: unless-stopped
+  maildev:
+    image: maildev/maildev
+    ports:
+      - "1080:1080" # http
+      - "1025:1025" # smtp
+    restart: unless-stopped
