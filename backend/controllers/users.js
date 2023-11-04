@@ -24,7 +24,7 @@ const signup = async (req, res) => {
     const { error } = schema.validate(providedCredentials);
     if (error) throw error;
   } catch (error) {
-    return res.status(400).send(error.details[0].message);
+    return res.status(400).send({ message: error.details[0].message });
   }
 
   // Make sure no duplicate users are created.
@@ -32,7 +32,7 @@ const signup = async (req, res) => {
     const user = await userModels.findByEmail(providedCredentials.email);
     if (user) throw new Error("A user with this email already exists");
   } catch (error) {
-    return res.status(400).send(error.message);
+    return res.status(400).send({ message: error.message });
   }
 
   const newUser = {
@@ -64,7 +64,7 @@ const signup = async (req, res) => {
       }
     );
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send({ message: error.message });
   }
 };
 
@@ -89,7 +89,7 @@ const login = async (req, res) => {
     const { error } = schema.validate(providedCredentials);
     if (error) throw error;
   } catch (error) {
-    return res.status(400).send(error.details[0].message);
+    return res.status(400).send({ message: error.details[0].message });
   }
 
   // Check that a user with the email exists.
@@ -100,7 +100,7 @@ const login = async (req, res) => {
       throw new Error("No user exists for given email");
     }
   } catch (error) {
-    return res.status(401).send(error.message);
+    return res.status(401).send({ message: error.message });
   }
 
   const passwordsMatch = await bcrypt.compare(
@@ -109,11 +109,10 @@ const login = async (req, res) => {
   );
 
   if (!passwordsMatch) {
-    return res
-      .status(401)
-      .send(
+    return res.status(401).send({
+      message:
         "Invalid credentials. Please check email and password and try again."
-      );
+    });
   }
 
   const authenticatedUser = {
@@ -147,7 +146,7 @@ const login = async (req, res) => {
       }
     );
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send({ message: error.message });
   }
 };
 
