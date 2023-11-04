@@ -272,6 +272,43 @@ const getSentFriendRequests = async (req, res) => {
   }
 };
 
+const getReceivedFriendRequests = async (req, res) => {
+  const schema = Joi.object({
+    userid: Joi.string().uuid().required()
+  });
+
+  const { error } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const { userid } = req.params;
+
+  // Check that the userid matches the authenticated user.
+  if (userid !== req.user.id) {
+    return res.status(401).send({ message: "Unauthorized" });
+  }
+
+  // Check that the user exists.
+  let user;
+  try {
+    user = await userModels.findById(userid);
+    if (!user) {
+      res.status(400).send({ message: "No user exists with given userid" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Get all pending friend requests.
+  try {
+    const friendRequests = await userModels.getReceivedFriendRequests(userid);
+    res.send(friendRequests);
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+};
+
 // const acceptOrDenyFriendRequest = async (req, res) => {};
 
 // const getFriends = async (req, res) => {};
@@ -283,7 +320,8 @@ module.exports = {
   login,
   sendFriendRequest,
   // cancelFriendRequest,
-  getSentFriendRequests
+  getSentFriendRequests,
+  getReceivedFriendRequests
   // acceptOrDenyFriendRequest,
   // getFriends,
   // unFriend

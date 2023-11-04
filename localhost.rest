@@ -96,3 +96,9 @@ Authorization: Bearer {{token}}
 GET http://localhost:5000/api/users/{{user_id}}/friend-requests/sent
 Accept: application/json
 Authorization: Bearer {{token}}
+
+### Get list of received friend requests
+
+GET http://localhost:5000/api/users/{{user_id}}/friend-requests/received
+Accept: application/json
+Authorization: Bearer {{token}}

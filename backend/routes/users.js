@@ -7,7 +7,8 @@ const {
   login,
   sendFriendRequest,
   //   cancelFriendRequest,
-  getSentFriendRequests
+  getSentFriendRequests,
+  getReceivedFriendRequests
   //   acceptOrDenyFriendRequest,
   //   getFriends,
   //   unFriend
@@ -30,6 +31,8 @@ router.post(
 // );
 
 router.get("/:userid/friend-requests/sent", getSentFriendRequests);
+
+router.get("/:userid/friend-requests/received", getReceivedFriendRequests);
 
 // router.put(
 //   "/:userid/friend-requests/:friendRequestId",
