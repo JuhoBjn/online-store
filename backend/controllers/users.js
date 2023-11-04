@@ -164,7 +164,7 @@ const sendFriendRequest = async (req, res) => {
   const { senderUserId, receiverUserId } = req.params;
 
   // Check that the sender matches the authenticated user.
-  if (senderUser.id !== req.user.id) {
+  if (senderUserId !== req.user.id) {
     return res.status(401).send({ message: "Unauthorized" });
   }
 
@@ -194,6 +194,42 @@ const sendFriendRequest = async (req, res) => {
     }
   } catch (error) {
     return res.status(400).send({ message: error.message });
+  }
+
+  // Check that the users are not already friends.
+  try {
+    const areFriends = await userModels.friendshipExists(
+      senderUserId,
+      receiverUserId
+    );
+    if (areFriends) {
+      return res.status(400).send({ message: "Already friends" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Check that the users do not have a pending friend request.
+  try {
+    const arePendingFriends = await userModels.pendingFriendRequestExists(
+      senderUserId,
+      receiverUserId
+    );
+    if (arePendingFriends) {
+      return res
+        .status(400)
+        .send({ message: "Pending friend request already exists" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Create the friend request.
+  try {
+    await userModels.addFriendRequest(senderUserId, receiverUserId);
+    res.send({ message: "Friend request sent" });
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
   }
 };
 

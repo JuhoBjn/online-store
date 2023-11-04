@@ -63,15 +63,80 @@ const users = {
       userData,
       userId
     ]);
-  }
-};
-
-users.addFriendRequest = async (senderUserId, receiverUserId) => {
-  const queryString = `
+  },
+  /**
+   * Add a friend request to the database.
+   * @param {string} senderUserId - The sender's user ID
+   * @param {string} receiverUserId - The receiver's user ID
+   */
+  addFriendRequest: async (senderUserId, receiverUserId) => {
+    const queryString = `
     INSERT INTO friend_requests (requester_user_id, requested_friend_user_id)
     VALUES (?, ?);
     `;
-  return await promisePool.query(queryString, [senderUserId, receiverUserId]);
+    return await promisePool.query(queryString, [senderUserId, receiverUserId]);
+  },
+  /**
+   * Check if friendship exists between two users.
+   * @param {string} userId1 - The first user ID
+   * @param {string} userId2 - The second user ID
+   * @returns True if friendship exists, false otherwise
+   */
+  friendshipExists: async (userId1, userId2) => {
+    const queryString = `
+    SELECT COUNT(*) AS count
+    FROM friends
+    WHERE (
+            (
+                user_id = ?
+                AND friend_user_id = ?
+            )
+            OR (
+                user_id = ?
+                AND friend_user_id = ?
+            )
+        )
+        AND is_unfriended = 0;
+    `;
+    const [rows] = await promisePool.query(queryString, [
+      userId1,
+      userId2,
+      userId2,
+      userId1
+    ]);
+    return rows[0].count > 0;
+  },
+  /**
+   * Check if a pending friend request exists between two users.
+   * @param {string} userId1 - The first user ID
+   * @param {string} userId2 - The second user ID
+   * @returns True if pending friend request exists, false otherwise
+   */
+  pendingFriendRequestExists: async (userId1, userId2) => {
+    const queryString = `
+    SELECT COUNT(*) AS count
+    FROM friend_requests
+    WHERE (
+        (
+          requester_user_id = ?
+          AND requested_friend_user_id = ?
+        )
+        OR (
+          requester_user_id = ?
+          AND requested_friend_user_id = ?
+        )
+      )
+      AND is_accepted = 0
+      AND is_rejected = 0;
+    `;
+    const [rows] = await promisePool.query(queryString, [
+      userId1,
+      userId2,
+      userId2,
+      userId1
+    ]);
+    return rows[0].count > 0;
+  }
 };
 
 module.exports = users;
