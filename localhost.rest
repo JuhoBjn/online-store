@@ -85,9 +85,8 @@ Content-Type: application/json
     "password": "newpassword"
 }
 
-###
+### Send Friend Request
 @reciever_user_id = 239aec9f-066e-4e6a-88d7-9cdccd43445b
-
 POST http://localhost:5000/api/users/{{user_id}}/friend-requests/{{reciever_user_id}}
 Accept: application/json
 Authorization: Bearer {{token}}
