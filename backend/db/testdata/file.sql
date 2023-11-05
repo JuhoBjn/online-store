@@ -27,7 +27,22 @@ SELECT 'e16a6eac-9993-4137-9221-7c879337bbe4','Anthony','Administrator','anthony
 INSERT INTO `friends`(`user_id`, `friend_user_id`) VALUES ('858560f9-fc03-43b0-b931-01213e4787ce', '239aec9f-066e-4e6a-88d7-9cdccd43445b');
 INSERT INTO `friends`(`user_id`, `friend_user_id`) VALUES ('239aec9f-066e-4e6a-88d7-9cdccd43445b', '858560f9-fc03-43b0-b931-01213e4787ce');
 
+-- Add a friendship between Larry Smith and Bob Builder.
+INSERT INTO `friends`(`user_id`, `friend_user_id`) VALUES ('239aec9f-066e-4e6a-88d7-9cdccd43445b', '59158c35-8d77-43f1-bc63-3c5b4265b276');
+INSERT INTO `friends`(`user_id`, `friend_user_id`) VALUES ('59158c35-8d77-43f1-bc63-3c5b4265b276', '239aec9f-066e-4e6a-88d7-9cdccd43445b');
+
+-- Make Larry Smith and Thomas Tester friends that have unfriended each other.
+INSERT INTO `friends`(`user_id`, `friend_user_id`, `is_unfriended`) VALUES ('ddfffcd7-983c-4f83-b998-884c36bea194', '239aec9f-066e-4e6a-88d7-9cdccd43445b', true);
+INSERT INTO `friends`(`user_id`, `friend_user_id`, `is_unfriended`) VALUES ('239aec9f-066e-4e6a-88d7-9cdccd43445b', 'ddfffcd7-983c-4f83-b998-884c36bea194', true);
+
 -- Create direct chat between Lotta Schmiedmann and Larry Smith.
 INSERT INTO `chats`(`chat_id`, `type`) VALUES ('c67f0e6a-f841-46b2-b13b-f403550c00e9', 'direct');
-UPDATE `friends` SET `chat_id` = 'c67f0e6a-f841-46b2-b13b-f403550c00e9' WHERE user_id = '858560f9-fc03-43b0-b931-01213e4787ce' AND friend_user_id = '239aec9f-066e-4e6a-88d7-9cdccd43445b' 
-OR user_id = '239aec9f-066e-4e6a-88d7-9cdccd43445b' AND friend_user_id = '858560f9-fc03-43b0-b931-01213e4787ce';
+UPDATE `friends` SET `chat_id` = 'c67f0e6a-f841-46b2-b13b-f403550c00e9' WHERE `user_id` = '858560f9-fc03-43b0-b931-01213e4787ce' AND `friend_user_id` = '239aec9f-066e-4e6a-88d7-9cdccd43445b' 
+OR `user_id` = '239aec9f-066e-4e6a-88d7-9cdccd43445b' AND `friend_user_id` = '858560f9-fc03-43b0-b931-01213e4787ce';
+
+-- Insert direct messages sent between Lotta Schmiedmann and Larry Smith.
+INSERT INTO `messages`(`chat_id`, `sender`, `message`)
+VALUES ('c67f0e6a-f841-46b2-b13b-f403550c00e9', '239aec9f-066e-4e6a-88d7-9cdccd43445b', 'Hello!'),
+('c67f0e6a-f841-46b2-b13b-f403550c00e9', '858560f9-fc03-43b0-b931-01213e4787ce', 'Hi!'),
+('c67f0e6a-f841-46b2-b13b-f403550c00e9', '239aec9f-066e-4e6a-88d7-9cdccd43445b', 'How''s the weather over there?'),
+('c67f0e6a-f841-46b2-b13b-f403550c00e9', '858560f9-fc03-43b0-b931-01213e4787ce', 'It''s a bit cloudy, but otherwise alright.');
