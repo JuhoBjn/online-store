@@ -61,12 +61,15 @@ module.exports = (io, socket) => {
 
     const userId = socket.data.user?.id;
     if (chatDb.checkFriends(userId, friendUser.id)) {
-      const chatId = await chatDb.getDirectChatID(userId, friendUser.id);
+      let chatId = await chatDb.getDirectChatID(userId, friendUser.id);
       if (!chatId) {
-        callback(
-          `Failed to start direct chat with ${friendUser.firstname} ${friendUser.lastname}`
-        );
-        return socket.disconnect();
+        chatId = await chatDb.createDirectChat(userId, friendUser.id);
+        if (!chatId) {
+          callback(
+            `Failed to start direct chat with ${friendUser.firstname} ${friendUser.lastname}. Please try again.`
+          );
+          return socket.disconnect();
+        }
       }
       socket.join(chatId);
       socket.data.chatId = chatId;

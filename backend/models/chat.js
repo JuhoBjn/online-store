@@ -24,7 +24,6 @@ const models = {
     const queryString =
       "SELECT chat_id FROM friends WHERE user_id = ? AND friend_user_id = ?;";
     const [rows] = await promisePool.query(queryString, [user1, user2]);
-    console.log(rows[0]?.chat_id || null);
     return rows[0]?.chat_id || null;
   },
   /**
@@ -82,7 +81,6 @@ const models = {
       WHERE chat_id = ?
       ORDER BY sent_at;`;
     const [rows] = await promisePool.query(queryString, [chatId]);
-    console.log(rows);
     return rows;
   }
 };
