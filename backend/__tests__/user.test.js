@@ -9,13 +9,13 @@ const jwt = require("jsonwebtoken");
 
 describe("all profile updating", () => {
   let user = {
-    id: "e07689a6-e43b-4f07-9331-782fa4f5decf"
+    id: "197bdce9-f60b-4529-b781-a78fb54d7c51"
   };
   let token = jwt.sign({ id: user.id }, process.env.JWT_KEY, {
     expiresIn: "30m"
   });
   const testUser1 = {
-    id: "e07689a6-e43b-4f07-9331-782fa4f5decf",
+    id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
     role_id: 1,
     first_name: "Tommy",
     last_name: "Tester",
@@ -30,7 +30,7 @@ describe("all profile updating", () => {
     premium: 1
   };
   const testUser2 = {
-    id: "ae6c9a1d-5dd7-440f-ac4e-c7c43806c879",
+    id: "8b414dd1-f7cb-482c-9f4a-3cfdb998f948",
     role_id: 1,
     first_name: "Tomi",
     last_name: "Testaaja",
@@ -104,7 +104,7 @@ describe("all profile updating", () => {
     const response = await supertest(app)
       .post("/api/users/updateUser")
       .send({
-        id: "e07689a6-e43b-4f07-9331-782fa4f5decf",
+        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         first_name: "John"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -116,7 +116,7 @@ describe("all profile updating", () => {
     const response = await supertest(app)
       .post("/api/users/updateUser")
       .send({
-        id: "e07689a6-e43b-4f07-9331-782fa4f5decf",
+        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         last_name: "Jhonson"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -128,7 +128,7 @@ describe("all profile updating", () => {
     const response = await supertest(app)
       .post("/api/users/updateUser")
       .send({
-        id: "e07689a6-e43b-4f07-9331-782fa4f5decf",
+        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         email: "tommy1@tester1.com"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -140,7 +140,7 @@ describe("all profile updating", () => {
     const response = await supertest(app)
       .post("/api/users/updateUser")
       .send({
-        id: "e07689a6-e43b-4f07-9331-782fa4f5decf",
+        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         postal_code: "64958"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -152,7 +152,7 @@ describe("all profile updating", () => {
     const response = await supertest(app)
       .post("/api/users/updateUser")
       .send({
-        id: "e07689a6-e43b-4f07-9331-782fa4f5decf",
+        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         city: "Stockholm"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -164,7 +164,7 @@ describe("all profile updating", () => {
     const response = await supertest(app)
       .post("/api/users/updateUser")
       .send({
-        id: "e07689a6-e43b-4f07-9331-782fa4f5decf",
+        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         country: "S"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -176,13 +176,12 @@ describe("all profile updating", () => {
     const response = await supertest(app)
       .post("/api/users/updateUser")
       .send({
-        id: "e07689a6-e43b-4f07-9331-782fa4f5decf",
+        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         phone: "654987321"
       })
       .set("Authorization", `Bearer ${token}`)
       .set("Accept", "application/json")
       .set("Content-Type", "application/json");
-    console.log(response.body);
     expect(response.status).toEqual(200);
   });
 
@@ -190,7 +189,7 @@ describe("all profile updating", () => {
     const response = await supertest(app)
       .post("/api/users/updateUser")
       .send({
-        id: "ae6c9a1d-5dd7-440f-ac4e-c7c43806c879",
+        id: "8b414dd1-f7cb-482c-9f4a-3cfdb998f948",
         name: "Jorma"
       })
       .set("Authorization", `Bearer ${token}`)
