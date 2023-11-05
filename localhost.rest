@@ -102,3 +102,23 @@ Authorization: Bearer {{token}}
 GET http://localhost:5000/api/users/{{user_id}}/friend-requests/received
 Accept: application/json
 Authorization: Bearer {{token}}
+
+### Deny friend request
+# @prompt friend_request_id Enter friend request id
+PUT http://localhost:5000/api/users/{{user_id}}/friend-requests/{{friend_request_id}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "status": "denied"
+}
+
+### Accept friend request
+# @prompt friend_request_id Enter friend request id
+PUT http://localhost:5000/api/users/{{user_id}}/friend-requests/{{friend_request_id}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "status": "accepted"
+}

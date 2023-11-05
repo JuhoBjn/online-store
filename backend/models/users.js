@@ -198,6 +198,79 @@ const users = {
     `;
     const [rows] = await promisePool.query(queryString, [userId]);
     return rows;
+  },
+  /**
+   * Find single friend request by ID.
+   * @param {string} friendRequestId - The request ID
+   * @returns Friend request
+   */
+  findFriendRequestById: async (friendRequestId) => {
+    const queryString = `
+    SELECT fr.id,
+    fr.requester_user_id,
+    fr.requested_friend_user_id,
+    fr.is_rejected,
+    fr.is_accepted,
+    (
+        CASE
+            WHEN is_accepted = 0
+            AND is_rejected = 0 THEN 1
+            ELSE 0
+        END
+    ) as is_request_pending
+    FROM friend_requests AS fr
+    WHERE fr.id = ?
+    `;
+    const [rows] = await promisePool.query(queryString, [friendRequestId]);
+    return rows[0];
+  },
+  /**
+   * Update friend request.
+   * @param {string} friendRequestId - The request ID
+   * @param {Object} friendRequestData - The request data
+   */
+  updateFriendRequest: async (friendRequestId, friendRequestData) => {
+    return promisePool.query("UPDATE friend_requests SET ? WHERE id = ?;", [
+      friendRequestData,
+      friendRequestId
+    ]);
+  },
+  /**
+   * Accept friend request and add a friendship to the database.
+   * @param {string} friendRequestId - The request ID
+   * @param {string} userId1 - The first user ID
+   * @param {string} userId2 - The second user ID
+   */
+  acceptFriendRequest: async (friendRequestId, userId1, userId2) => {
+    let conn = null;
+    try {
+      conn = await promisePool.getConnection();
+      (await conn).beginTransaction();
+
+      await conn.query(
+        `
+        UPDATE friend_requests 
+        SET is_accepted = 1
+        WHERE id = ?;
+        `,
+        [friendRequestId]
+      );
+
+      const friendsInsertQuery = `
+        INSERT INTO friends (user_id, friend_user_id, is_unfriended)
+        VALUES (?, ?, 0) ON DUPLICATE KEY
+        UPDATE is_unfriended = 0;
+        `;
+
+      await conn.query(friendsInsertQuery, [userId1, userId2]);
+      await conn.query(friendsInsertQuery, [userId2, userId1]);
+      await conn.commit();
+    } catch (error) {
+      if (conn) await conn.rollback();
+      throw error;
+    } finally {
+      if (conn) conn.release();
+    }
   }
 };
 

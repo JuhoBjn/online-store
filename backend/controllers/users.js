@@ -309,7 +309,93 @@ const getReceivedFriendRequests = async (req, res) => {
   }
 };
 
-// const acceptOrDenyFriendRequest = async (req, res) => {};
+const acceptOrDenyFriendRequest = async (req, res) => {
+  const paramSchema = Joi.object({
+    userid: Joi.string().uuid().required(),
+    friendRequestId: Joi.number().required()
+  });
+
+  const bodySchema = Joi.object({
+    status: Joi.string().valid("accepted", "denied").required()
+  });
+
+  const { error: paramError } = paramSchema.validate(req.params);
+  if (paramError) {
+    return res.status(400).send({ message: paramError.details[0].message });
+  }
+
+  const { error: bodyError } = bodySchema.validate(req.body);
+  if (bodyError) {
+    return res.status(400).send({ message: bodyError.details[0].message });
+  }
+
+  const { userid, friendRequestId } = req.params;
+  const { status } = req.body;
+
+  // Check that the receiver is the authenticated user.
+  if (userid !== req.user.id) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+
+  // Check that the user exists.
+  let user;
+  try {
+    user = await userModels.findById(userid);
+    if (!user) {
+      res.status(400).send({ message: "No user exists with given userid" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Check that the friend request exists.
+  let friendRequest;
+  try {
+    friendRequest = await userModels.findFriendRequestById(friendRequestId);
+    if (!friendRequest) {
+      return res.status(400).send({
+        message: "No friend request exists with given friendRequestId"
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Check that the friend request is pending.
+  if (!friendRequest.is_request_pending) {
+    return res.status(400).send({ message: "Friend request is not pending" });
+  }
+
+  // Check that the friend request is for the user that should accept or deny it.
+  if (friendRequest.requested_friend_user_id !== userid) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+
+  // Accept or deny the friend request.
+  if (status === "accepted") {
+    try {
+      await userModels.acceptFriendRequest(
+        friendRequestId,
+        friendRequest.requester_user_id,
+        friendRequest.requested_friend_user_id
+      );
+      return res.status(201).send({
+        message: "Friend request accepted and friendship created"
+      });
+    } catch (error) {
+      return res.status(500).send({ message: "Internal error" });
+    }
+  } else if (status === "denied") {
+    try {
+      await userModels.updateFriendRequest(friendRequestId, {
+        is_rejected: true
+      });
+      return res.status(200).send({ message: "Friend request denied" });
+    } catch (error) {
+      return res.status(500).send({ message: "Internal error" });
+    }
+  }
+};
 
 // const getFriends = async (req, res) => {};
 
@@ -321,8 +407,8 @@ module.exports = {
   sendFriendRequest,
   // cancelFriendRequest,
   getSentFriendRequests,
-  getReceivedFriendRequests
-  // acceptOrDenyFriendRequest,
+  getReceivedFriendRequests,
+  acceptOrDenyFriendRequest
   // getFriends,
   // unFriend
 };

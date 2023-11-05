@@ -8,8 +8,8 @@ const {
   sendFriendRequest,
   //   cancelFriendRequest,
   getSentFriendRequests,
-  getReceivedFriendRequests
-  //   acceptOrDenyFriendRequest,
+  getReceivedFriendRequests,
+  acceptOrDenyFriendRequest
   //   getFriends,
   //   unFriend
 } = require("../controllers/users");
@@ -34,10 +34,10 @@ router.get("/:userid/friend-requests/sent", getSentFriendRequests);
 
 router.get("/:userid/friend-requests/received", getReceivedFriendRequests);
 
-// router.put(
-//   "/:userid/friend-requests/:friendRequestId",
-//   acceptOrDenyFriendRequest
-// );
+router.put(
+  "/:userid/friend-requests/:friendRequestId",
+  acceptOrDenyFriendRequest
+);
 
 // router.get("/:userid/friends", getFriends);
 
