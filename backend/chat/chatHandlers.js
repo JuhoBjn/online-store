@@ -1,7 +1,4 @@
 module.exports = (io, socket) => {
-  const socketVerifyToken = require("../middleware/socketVerifyToken");
-  io.use(socketVerifyToken);
-
   const Joi = require("joi");
 
   const chatDb = require("../models/chat");

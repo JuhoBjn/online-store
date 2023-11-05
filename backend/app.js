@@ -48,6 +48,9 @@ const io = new Server({
 });
 
 const registerChatHandlers = require("./chat/chatHandlers");
+const socketVerifyToken = require("./middleware/socketVerifyToken");
+
+io.use(socketVerifyToken);
 
 io.on("connection", (socket) => {
   registerChatHandlers(io, socket);
