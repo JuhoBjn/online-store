@@ -165,7 +165,7 @@ const sendFriendRequest = async (req, res) => {
 
   // Check that the sender matches the authenticated user.
   if (senderUserId !== req.user.id) {
-    return res.status(401).send({ message: "Unauthorized" });
+    return res.status(403).send({ message: "Unauthorized" });
   }
 
   // Check that the sender and receiver are not the same user.
@@ -249,7 +249,7 @@ const getSentFriendRequests = async (req, res) => {
 
   // Check that the userid matches the authenticated user.
   if (userid !== req.user.id) {
-    return res.status(401).send({ message: "Unauthorized" });
+    return res.status(403).send({ message: "Unauthorized" });
   }
 
   // Check that the user exists.
@@ -286,7 +286,7 @@ const getReceivedFriendRequests = async (req, res) => {
 
   // Check that the userid matches the authenticated user.
   if (userid !== req.user.id) {
-    return res.status(401).send({ message: "Unauthorized" });
+    return res.status(403).send({ message: "Unauthorized" });
   }
 
   // Check that the user exists.
