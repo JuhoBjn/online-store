@@ -1,7 +1,7 @@
-const { describe, it, expect } = require("@jest/globals");
+const { describe, it, expect, afterAll } = require("@jest/globals");
 const supertest = require("supertest");
 
-const app = require("../app");
+const { app } = require("../app");
 
 describe("The health check endpoint", () => {
   it("should return status code 200 when backend is running", async () => {

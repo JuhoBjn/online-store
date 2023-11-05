@@ -1,5 +1,4 @@
 const express = require("express");
-const { createServer } = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
 
@@ -33,9 +32,8 @@ app.get("/healthz", (req, res) => {
 const users = require("./routes/users");
 app.use("/api/users", users);
 
-const httpServer = createServer(app);
 
-const io = new Server(httpServer, {
+const io = new Server({
   cors: {
     origin: [
       "http://127.0.0.1:5173",
@@ -67,4 +65,4 @@ io.on("connection", (socket) => {
   });
 });
 
-module.exports = { httpServer };
+module.exports = { app, io };

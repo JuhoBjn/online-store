@@ -10,7 +10,7 @@ const {
 } = require("@jest/globals");
 const bcrypt = require("bcryptjs");
 
-const app = require("../app");
+const { app } = require("../app");
 const { pool } = require("../db/pool");
 
 describe("User signup endpoint", () => {

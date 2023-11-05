@@ -1,7 +1,9 @@
-const { httpServer } = require("./app");
+const { app, io } = require("./app");
 
 const port = process.env.PORT || 5000;
+const socketIoPort = process.env.SOCKET_IO_PORT || 5005;
 
-httpServer.listen(port, () => {
+app.listen(port, () => {
   console.log(`Backend is listening on port ${port}`);
+  io.listen(socketIoPort);
 });
