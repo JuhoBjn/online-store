@@ -6,7 +6,7 @@ const {
   it
 } = require("@jest/globals");
 const MailDev = require("maildev");
-const app = require("../app");
+const { app } = require("../app");
 const request = require("supertest");
 const jwt = require("jsonwebtoken");
 const users = require("../models/users");
