@@ -40,7 +40,7 @@ const models = {
       await promisePool.query(createChatString, [chatId]);
       const updateChatIDInFriendsString =
         "UPDATE friends SET chat_id = ? WHERE user_id = ? AND friend_user_id = ? OR user_id = ? AND friend_user_id = ?;";
-      await promisePool(updateChatIDInFriendsString, [
+      await promisePool.query(updateChatIDInFriendsString, [
         chatId,
         user1,
         user2,
@@ -49,7 +49,6 @@ const models = {
       ]);
       return chatId;
     } catch (error) {
-      console.log(`Failed to create direct chat: ${error.message}`);
       return false;
     }
   },
@@ -66,7 +65,13 @@ const models = {
     const [fields] = await promisePool.query(insertString, [
       [chat_id, sender, message]
     ]);
-    return fields.changedRows > 0 ? true : false;
+
+    // Update last_message_at field in table 'chats'.
+    const updateString =
+      "UPDATE chats SET last_message_at = CURRENT_TIMESTAMP WHERE chat_id = ?;";
+    await promisePool.query(updateString, [chat_id]);
+
+    return !!fields.insertId;
   },
   /**
    * Get message history from the database.

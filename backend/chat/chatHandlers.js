@@ -4,20 +4,20 @@ module.exports = (io, socket) => {
   const chatDb = require("../models/chat");
 
   const sendMessage = async (payload, callback) => {
+    if (callback && typeof callback !== "function") {
+      socket.disconnect();
+    }
+
     if (!socket.data.chatId) {
-      socket.emit("error", {
+      callback({
         status: "No room",
         message: "You must join a room before sending a message"
       });
       socket.disconnect();
     }
 
-    if (callback && typeof callback !== "function") {
-      socket.disconnect();
-    }
-
     const schema = Joi.object({
-      user: Joi.string().required(),
+      name: Joi.string().required(),
       message: Joi.string().required()
     });
 
@@ -57,7 +57,8 @@ module.exports = (io, socket) => {
     }
 
     const userId = socket.data.user?.id;
-    if (chatDb.checkFriends(userId, friendUser.id)) {
+    const usersAreFriends = await chatDb.checkFriends(userId, friendUser.id);
+    if (usersAreFriends) {
       let chatId = await chatDb.getDirectChatID(userId, friendUser.id);
       if (!chatId) {
         chatId = await chatDb.createDirectChat(userId, friendUser.id);
@@ -82,16 +83,16 @@ module.exports = (io, socket) => {
   };
 
   const getMessageHistory = async (friendUser, callback) => {
+    if (typeof callback !== "function") {
+      return socket.disconnect();
+    }
+
     if (!socket.data.chatId) {
-      socket.emit("error", {
+      callback({
         status: "No room",
         message: "You must join a room before you can fetch the message history"
       });
       socket.disconnect();
-    }
-
-    if (typeof callback !== "function") {
-      return socket.disconnect();
     }
 
     const schema = Joi.object({
@@ -114,12 +115,21 @@ module.exports = (io, socket) => {
       }
       const messageHistory = await chatDb.getMessageHistory(chatId);
       if (messageHistory) {
-        socket.emit("message-history", messageHistory);
+        const messages = [];
+        messageHistory.map((message) => {
+          const tempMessage = {
+            name: `${message.firstname} ${message.lastname}`,
+            message: message.message,
+            sentAt: message.sent_at
+          };
+          messages.push(tempMessage);
+        });
+        socket.emit("message-history", messages);
       }
     }
   };
 
   socket.on("join-direct-chat", joinDirectChat);
   socket.on("get-message-history", getMessageHistory);
-  socket.on("message", sendMessage);
+  socket.on("send-message", sendMessage);
 };
