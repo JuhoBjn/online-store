@@ -32,6 +32,9 @@ app.get("/healthz", (req, res) => {
 const users = require("./routes/users");
 app.use("/api/users", users);
 
+const passwordReset = require("./routes/password-reset");
+app.use("/api/password-reset", passwordReset);
+
 const io = new Server({
   cors: {
     origin: [

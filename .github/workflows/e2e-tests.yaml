@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Install DB
         uses: shogo82148/actions-setup-mysql@v1.23.0
@@ -69,7 +71,7 @@ jobs:
         with:
           name: e2e-test-videos
           path: ./frontend/cypress/videos
-      
+
       - name: Upload test coverage results to Coveralls
         uses: coverallsapp/github-action@v2
         with:
