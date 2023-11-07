@@ -125,6 +125,11 @@ const users = {
       updateValues.push(user.premium);
     }
 
+    if (user.password) {
+      updateString += " password = ?,";
+      updateValues.push(user.password);
+    }
+
     if (updateValues.length > 0) {
       updateString = updateString.slice(0, -1);
     }
