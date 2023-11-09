@@ -1,5 +1,5 @@
 import { useRef, useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import GoldenageLogo from "../../assets/Goldenage_logo.png";
 import Button from "../../components/button/Button";
@@ -9,6 +9,7 @@ import "./Authorization.css";
 
 const Authorization = () => {
   const [loginMode, setLoginMode] = useState(true);
+  const [loginFailed, setLoginFailed] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -19,6 +20,7 @@ const Authorization = () => {
     setShowErrorMessage(false);
     setErrorMessage("");
     setLoginMode(!loginMode);
+    setLoginFailed(false);
   };
 
   const authContext = useContext(AuthContext);
@@ -43,6 +45,7 @@ const Authorization = () => {
       setErrorMessage(
         "Login failed. Please check email and re-enter password and try again."
       );
+      setLoginFailed(true);
       console.log(error.message);
     }
   };
@@ -127,6 +130,11 @@ const Authorization = () => {
               ref={passwordRef}
               required
             />
+            {loginFailed && (
+              <Link data-testid="reset-password-link" to="/reset-password">
+                Reset password
+              </Link>
+            )}
             {!loginMode && (
               <div
                 className="auth-page_password-instructions"
