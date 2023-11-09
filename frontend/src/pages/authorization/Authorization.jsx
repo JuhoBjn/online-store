@@ -111,8 +111,20 @@ const Authorization = () => {
               className="auth-page_input"
               data-testid="email-input"
               type="email"
-              placeholder="email"
+              placeholder="Email"
               ref={emailRef}
+              required
+            />
+            <label htmlFor="password">
+              {loginMode ? "Enter" : "Create"} password
+            </label>
+            <input
+              id="password"
+              className="auth-page_input"
+              data-testid="password-input"
+              type="password"
+              placeholder="Password"
+              ref={passwordRef}
               required
             />
             {!loginMode && (
@@ -129,16 +141,6 @@ const Authorization = () => {
                 </ul>
               </div>
             )}
-            <label htmlFor="password">Enter password</label>
-            <input
-              id="password"
-              className="auth-page_input"
-              data-testid="password-input"
-              type="password"
-              placeholder="Password"
-              ref={passwordRef}
-              required
-            />
             <button
               className="auth-page_submit-button"
               data-testid="submit-button"
