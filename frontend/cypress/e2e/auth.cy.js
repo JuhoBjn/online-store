@@ -109,6 +109,23 @@ describe("The authentication page", () => {
     );
   });
 
+  it("should display a link to reset password upon wrong password", () => {
+    cy.login("larrys@test.com", "WrongP4ssword", true);
+
+    cy.get('[data-testid="reset-password-link"]').should("be.visible");
+    cy.get('[data-testid="reset-password-link"]').should(
+      "contain",
+      "Reset password"
+    );
+  });
+
+  it("should allow the user to navigate to the reset password page", () => {
+    cy.login("larrys@test.com", "WrongP4ssword", true);
+
+    cy.get('[data-testid="reset-password-link"]').click();
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/reset-password`);
+  });
+
   it("should not allow a user to log in without an account", () => {
     cy.login("does.not@exist.com", "Noexisto123", true);
 
