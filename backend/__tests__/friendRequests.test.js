@@ -104,6 +104,7 @@ describe("getSentFriendRequests", () => {
     const response = await request(app)
       .post("/api/users/signup")
       .send({ email, password });
+
     return { id: response.body.id, email, token: response.body.token };
   };
 
@@ -130,14 +131,15 @@ describe("getSentFriendRequests", () => {
     expect(response.body.message).toBe('"userid" must be a valid GUID');
   });
 
-  it("should return 401 if userid does not match authenticated user", async () => {
+  it("should return 403 if userid does not match authenticated user", async () => {
     const response = await request(app)
       .get(
         "/api/users/00000000-0000-0000-0000-000000000000/friend-requests/sent"
       )
       .auth(user.token, { type: "bearer" });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(403);
+    expect(response.body.message).toBe("Unauthorized");
   });
 
   it("should return 200 and the list of sent friend requests if request is valid", async () => {
@@ -205,14 +207,15 @@ describe("getReceivedFriendRequests", () => {
     expect(response.body.message).toBe('"userid" must be a valid GUID');
   });
 
-  it("should return 401 if userid does not match authenticated user", async () => {
+  it("should return 403 if userid does not match authenticated user", async () => {
     const response = await request(app)
       .get(
         "/api/users/00000000-0000-0000-0000-000000000000/friend-requests/received"
       )
       .auth(user.token, { type: "bearer" });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(403);
+    expect(response.body.message).toBe("Unauthorized");
   });
 
   it("should return 200 and the list of received friend requests if request is valid", async () => {
