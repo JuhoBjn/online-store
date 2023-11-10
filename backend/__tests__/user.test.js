@@ -2,7 +2,7 @@ const supertest = require("supertest");
 const { describe, it, expect, beforeAll, afterAll } = require("@jest/globals");
 const bcrypt = require("bcryptjs");
 
-const app = require("../app");
+const { app } = require("../app");
 const { pool } = require("../db/pool");
 
 const jwt = require("jsonwebtoken");
