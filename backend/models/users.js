@@ -2,6 +2,24 @@ const { promisePool } = require("../db/pool");
 
 const users = {
   /**
+   * Find all users.
+   * @returns all users
+   */
+  findAll: async () => {
+    const queryString = `SELECT * FROM users`;
+    const [rows] = await promisePool.query(queryString);
+    return rows === undefined ? null : rows;
+  },
+  /**
+   * Find users based on id and delete it.
+   * @param {string} id The user's id
+   * @returns User account deleted
+   */
+  delete: async (id) => {
+    const deleteQuery = `DELETE FROM users WHERE id=?;`;
+    return await promisePool.query(deleteQuery, [id]);
+  },
+  /**
    * Find users based on email.
    * @param {string} email The user's email address
    * @returns User account found with email
@@ -29,6 +47,7 @@ const users = {
     const [rows] = await promisePool.query(queryString, [id]);
     return rows[0] === undefined ? null : rows[0];
   },
+
   /**
    * Create a new user entry.
    * @param {Object} user - The user object containing user details.
@@ -45,25 +64,87 @@ const users = {
     ]);
 
     const fetchString = `
-      SELECT id, email, role_id, premium
+      SELECT id, email, role_id 
       FROM users
       WHERE id = ?;
       `;
     const [createdUser] = await promisePool.query(fetchString, [user.id]);
     return createdUser[0];
   },
+
   /**
    * Update DB fields for a user
    * @param {string} userId - The user ID
    * @param {Object} userData - object containing key value pairs to update
    * @example await update("123-456-789", {"first_name": "Mike", "last_name": "Smith"})
    */
-  update: async (userId, userData) => {
-    return promisePool.query("UPDATE users SET ? WHERE id = ?", [
-      userData,
-      userId
-    ]);
+  update: async (user) => {
+    //Bit complicated way to do this, but it works
+    let updateString = `
+    UPDATE users
+    SET`;
+
+    const updateValues = [];
+
+    if (user.first_name) {
+      updateString += " first_name = ?,";
+      updateValues.push(user.first_name);
+    }
+
+    if (user.last_name) {
+      updateString += " last_name = ?,";
+      updateValues.push(user.last_name);
+    }
+    if (user.email) {
+      updateString += " email = ?,";
+      updateValues.push(user.email);
+    }
+
+    if (user.postal_code) {
+      updateString += " postal_code = ?,";
+      updateValues.push(user.postal_code);
+    }
+
+    if (user.city) {
+      updateString += " city = ?,";
+      updateValues.push(user.city);
+    }
+
+    if (user.country) {
+      updateString += " country = ?,";
+      updateValues.push(user.country);
+    }
+
+    if (user.phone) {
+      updateString += " phone = ?,";
+      updateValues.push(user.phone);
+    }
+
+    if (user.premium) {
+      updateString += " premium = ?,";
+      updateValues.push(user.premium);
+    }
+
+    if (user.password) {
+      updateString += " password = ?,";
+      updateValues.push(user.password);
+    }
+
+    if (updateValues.length > 0) {
+      updateString = updateString.slice(0, -1);
+    }
+
+    updateString += " WHERE id = ?";
+
+    updateValues.push(user.id);
+
+    await promisePool.query(updateString, updateValues);
+    const fetchString = `
+      SELECT id, email, role_id, first_name, last_name, email, postal_code, city, country, phone, premium
+      FROM users
+      WHERE id = ?;`;
+    const [updatedUser] = await promisePool.query(fetchString, [user.id]);
+    return updatedUser[0];
   }
 };
-
 module.exports = users;
