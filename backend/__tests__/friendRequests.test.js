@@ -453,3 +453,71 @@ describe("acceptOrDenyFriendRequest", () => {
     expect(response.body.message).toBe("Friend request is not pending");
   });
 });
+
+describe("getFriends", () => {
+  let friendRequestId;
+  let token;
+  beforeEach(async () => {
+    // Create two users for testing.
+    await promisePool.query(
+      "INSERT INTO users (id, email, password, role_id) VALUES (?, ?, ?, ?), (?, ?, ?, ?)",
+      [
+        "F31FF197-88D3-4F45-A566-B8E7DC6BAF42",
+        "exampleuser132213@example.com",
+        "imagine a hashed password here",
+        1,
+        "7BB4A1C9-187B-4A68-885C-3BE6B1828B6B",
+        "exampleuser543534@example.com",
+        "imagine a hashed password here",
+        1
+      ]
+    );
+
+    const friendRequestQuery = await promisePool.query(
+      "INSERT INTO friend_requests (requester_user_id, requested_friend_user_id) VALUES (?, ?)",
+      [
+        "F31FF197-88D3-4F45-A566-B8E7DC6BAF42",
+        "7BB4A1C9-187B-4A68-885C-3BE6B1828B6B"
+      ]
+    );
+    friendRequestId = friendRequestQuery[0].insertId;
+
+    // Get the token for the requested user
+    token = await jwt.sign(
+      { id: "7BB4A1C9-187B-4A68-885C-3BE6B1828B6B", role_id: 1 },
+      process.env.JWT_KEY,
+      { expiresIn: "1h" }
+    );
+
+    await users.acceptFriendRequest(
+      friendRequestId,
+      "7BB4A1C9-187B-4A68-885C-3BE6B1828B6B",
+      "F31FF197-88D3-4F45-A566-B8E7DC6BAF42"
+    );
+  });
+
+  afterEach(async () => {
+    await promisePool.query("DELETE FROM users WHERE id IN (?)", [
+      [
+        "F31FF197-88D3-4F45-A566-B8E7DC6BAF42",
+        "7BB4A1C9-187B-4A68-885C-3BE6B1828B6B"
+      ]
+    ]);
+  });
+
+  it("should return 200 and a list of friends", async () => {
+    const response = await request(app)
+      .get(`/api/users/7BB4A1C9-187B-4A68-885C-3BE6B1828B6B/friends`)
+      .auth(token, { type: "bearer" });
+
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.length).toBe(1);
+    expect(response.body[0].user_id).toBe(
+      "7BB4A1C9-187B-4A68-885C-3BE6B1828B6B"
+    );
+    expect(response.body[0].friend_user_id).toBe(
+      "F31FF197-88D3-4F45-A566-B8E7DC6BAF42"
+    );
+  });
+});
