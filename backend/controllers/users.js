@@ -419,7 +419,9 @@ const getFriends = async (req, res) => {
   try {
     user = await userModels.findById(userid);
     if (!user) {
-      res.status(400).send({ message: "No user exists with given userid" });
+      return res
+        .status(400)
+        .send({ message: "No user exists with given userid" });
     }
   } catch (error) {
     return res.status(500).send({ message: "Internal error" });
