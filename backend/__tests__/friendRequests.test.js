@@ -520,4 +520,54 @@ describe("getFriends", () => {
       "F31FF197-88D3-4F45-A566-B8E7DC6BAF42"
     );
   });
+
+  it("should return 400 for invalid user ID", async () => {
+    const response = await request(app)
+      .get(`/api/users/invalid-user-id/friends`)
+      .auth(token, { type: "bearer" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('"userid" must be a valid GUID');
+  });
+
+  it("should return 403 for unauthorized user", async () => {
+    const response = await request(app)
+      .get(`/api/users/F31FF197-88D3-4F45-A566-B8E7DC6BAF42/friends`)
+      .auth(token, { type: "bearer" });
+
+    expect(response.status).toBe(403);
+    expect(response.body.message).toBe("Unauthorized");
+  });
+
+  it("should return 400 for non-existing user ID", async () => {
+    const validTokenForTheUserID = await jwt.sign(
+      { id: "00000000-0000-0000-0000-000000000000", role_id: 1 },
+      process.env.JWT_KEY,
+      { expiresIn: "1h" }
+    );
+
+    const response = await request(app)
+      .get(`/api/users/00000000-0000-0000-0000-000000000000/friends`)
+      .auth(validTokenForTheUserID, { type: "bearer" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("No user exists with given userid");
+  });
+
+  it("should return 500 for internal error during friend retrieval", async () => {
+    // Mock an internal error during friend retrieval
+    jest.spyOn(users, "findFriendsByUserId").mockImplementation(() => {
+      throw new Error("Internal error");
+    });
+
+    const response = await request(app)
+      .get(`/api/users/7BB4A1C9-187B-4A68-885C-3BE6B1828B6B/friends`)
+      .auth(token, { type: "bearer" });
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Internal error");
+
+    // Restore the original function to avoid side effects on other tests
+    jest.spyOn(users, "findFriendsByUserId").mockRestore();
+  });
 });
