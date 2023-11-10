@@ -122,3 +122,9 @@ Authorization: Bearer {{token}}
 {
     "status": "accepted"
 }
+
+### Get list of friends
+
+GET http://localhost:5000/api/users/{{user_id}}/friends
+Accept: application/json
+Authorization: Bearer {{token}}

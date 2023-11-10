@@ -271,6 +271,30 @@ const users = {
     } finally {
       if (conn) conn.release();
     }
+  },
+  /**
+   * Find all friends for a user.
+   * @param {string} userId - The user ID
+   * @returns Array of friends
+   */
+  findFriendsByUserId: async (userId) => {
+    const queryString = `
+    SELECT 
+      f.id,
+      f.user_id,
+      f.friend_user_id,
+      friend.first_name AS friend_first_name,
+      friend.last_name AS friend_last_name,
+      f.is_unfriended,
+      f.became_friends_at,
+      f.updated_at
+    FROM friends AS f
+      JOIN users AS friend ON f.friend_user_id = friend.id
+    WHERE
+      user_id = ?;
+    `;
+    const [rows] = await promisePool.query(queryString, [userId]);
+    return rows;
   }
 };
 

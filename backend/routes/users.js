@@ -9,8 +9,8 @@ const {
   //   cancelFriendRequest,
   getSentFriendRequests,
   getReceivedFriendRequests,
-  acceptOrDenyFriendRequest
-  //   getFriends,
+  acceptOrDenyFriendRequest,
+  getFriends
   //   unFriend
 } = require("../controllers/users");
 
@@ -39,7 +39,7 @@ router.put(
   acceptOrDenyFriendRequest
 );
 
-// router.get("/:userid/friends", getFriends);
+router.get("/:userid/friends", getFriends);
 
 // router.delete("/:userid/friends/:friendId", unFriend);
 
