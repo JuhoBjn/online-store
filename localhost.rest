@@ -84,3 +84,49 @@ Content-Type: application/json
     "token": "{{token}}", 
     "password": "newpassword"
 }
+
+### Update user example for name. 
+### You can update many values as same by changing the key
+### first-name
+### last_name
+### email
+### postal_code
+### city
+### country
+### phone
+
+POST http://localhost:5000/api/users/updateUser
+Content-Type: application/json
+
+{
+    "token": "{{token}}", 
+    "first_name": "Jorma",
+    "last_name": "Korhonen",
+}
+
+### Find user by id
+
+GET http://localhost:5000/api/users/{{user_id}}
+Content-Type: application/json
+
+{
+    "token": "{{token}}"
+}
+
+### find all users
+
+GET http://localhost:5000/api/users/
+Content-Type: application/json
+
+{
+    "token": "{{token}}"
+}
+
+### Delete user
+
+DELETE http://localhost:5000/api/users/{{user_id}}
+Content-Type: application/json
+
+{
+    "token": "{{token}}"
+}
