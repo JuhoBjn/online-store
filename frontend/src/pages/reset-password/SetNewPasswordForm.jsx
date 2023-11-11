@@ -35,11 +35,6 @@ const SetNewPasswordForm = ({ resetToken }) => {
 
   return (
     <div className="set-new-password-container">
-      {error && (
-        <div className="set-new-password-error-container">
-          <p>Failed to set new password. Please try again.</p>
-        </div>
-      )}
       {tokenExpired ? (
         <div className="token-expired-container">
           <p data-testid="token-expiry-message">
@@ -55,6 +50,13 @@ const SetNewPasswordForm = ({ resetToken }) => {
       ) : (
         <>
           <h2 id="set-new-password-title">Set a new password</h2>
+          {error && (
+            <div className="set-new-password-error-container">
+              <p data-testid="set-new-password-error-message">
+                Failed to set new password. Please try again.
+              </p>
+            </div>
+          )}
           <form
             className="set-new-password-form-container"
             onSubmit={setNewPasswordHandler}
