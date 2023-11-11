@@ -42,6 +42,7 @@ const RequestPasswordResetForm = () => {
             <label htmlFor="email-input">Enter your email</label>
             <input
               id="email-input"
+              data-testid="email-input"
               type="email"
               placeholder="Email"
               ref={emailRef}
