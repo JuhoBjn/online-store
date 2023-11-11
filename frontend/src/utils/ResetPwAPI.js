@@ -27,4 +27,34 @@ const sendResetPasswordLink = async (email) => {
   }
 };
 
-export { sendResetPasswordLink };
+/**
+ * Set a new password.
+ * @param {string} token JWT for authenticating the user.
+ * @param {string} password User's new password.
+ * @returns {boolean | string} True if password reset is successful, otherwise error message;
+ */
+const setNewPassword = async (token, password) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_API}/api/password-reset/set-new-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ token, password })
+      }
+    );
+    if (response.status === 204) {
+      return true;
+    }
+    const responseObject = await response.json();
+    return responseObject.error;
+  } catch (error) {
+    if (error && error.message) {
+      console.log(error.message);
+    }
+  }
+};
+
+export { sendResetPasswordLink, setNewPassword };
