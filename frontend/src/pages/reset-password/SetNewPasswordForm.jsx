@@ -42,7 +42,7 @@ const SetNewPasswordForm = ({ resetToken }) => {
       )}
       {tokenExpired ? (
         <div className="token-expired-container">
-          <p>
+          <p data-testid="token-expiry-message">
             The token to reset your password has expired. Please request a new
             one.
           </p>
@@ -62,6 +62,7 @@ const SetNewPasswordForm = ({ resetToken }) => {
             <label htmlFor="password-input">Enter your new password</label>
             <input
               id="password-input"
+              data-testid="password-input"
               type="password"
               placeholder="Password"
               ref={passwordRef}
