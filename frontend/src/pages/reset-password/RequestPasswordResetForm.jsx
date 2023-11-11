@@ -26,12 +26,14 @@ const RequestPasswordResetForm = () => {
       <h2 id="request-password-reset-title">Request password reset</h2>
       {error && (
         <div className="error-container">
-          <p>{error}</p>
+          <p data-testid="reset-password-error-message">{error}</p>
         </div>
       )}
       {emailSent ? (
         <div className="email-sent-container">
-          <p>&#x2714; Email with link to reset password sent</p>
+          <p data-testid="password-reset-email-sent-message">
+            &#x2714; Email with link to reset password sent
+          </p>
         </div>
       ) : (
         <div className="request-password-reset-form-container">

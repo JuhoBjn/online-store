@@ -150,4 +150,17 @@ describe("The authentication page", () => {
 
     cy.url().should("be.equal", `${Cypress.config("baseUrl")}/auth`);
   });
+
+  it("should display a link to reset password when the user enters the wrong password", () => {
+    cy.login("larrys@test.com", "WrongPassword123", true);
+
+    cy.get('[data-testid="reset-password-link').should("be.visible");
+  });
+
+  it("should let the user navigate to the reset password page", () => {
+    cy.login("larrys@test.com", "WrongPassword123", true);
+
+    cy.get('[data-testid="reset-password-link').click();
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/reset-password`);
+  });
 });
