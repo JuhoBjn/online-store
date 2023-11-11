@@ -100,9 +100,8 @@ const setNewPassword = async (req, res) => {
     // bcrypt new password
     const password_hash = await bcrypt.hash(password, 12);
 
-    await users.update(userId, {
-      password: password_hash
-    });
+    const updateUser = { id: userId, password: password_hash };
+    await users.update(updateUser);
 
     return res.status(StatusCodes.NO_CONTENT).send();
   } catch (error) {

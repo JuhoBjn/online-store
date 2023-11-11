@@ -5,6 +5,10 @@ const verifyToken = require("../middleware/verifyToken");
 const {
   signup,
   login,
+  getUser,
+  getAllUsers,
+  deleteUser,
+  updateUser,
   sendFriendRequest,
   //   cancelFriendRequest,
   getSentFriendRequests,
@@ -19,6 +23,14 @@ router.post("/signup", signup);
 router.post("/login", login);
 
 router.use(verifyToken);
+
+router.get("/", getAllUsers);
+
+router.get("/:id", getUser);
+
+router.post("/updateUser", updateUser);
+
+router.delete("/:id", deleteUser);
 
 router.post(
   "/:senderUserId/friend-requests/:receiverUserId",

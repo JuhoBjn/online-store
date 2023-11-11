@@ -2,7 +2,6 @@ const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: genUuid } = require("uuid");
-
 const userModels = require("../models/users");
 
 const signup = async (req, res) => {
@@ -145,6 +144,150 @@ const login = async (req, res) => {
         res.send(authenticatedUser);
       }
     );
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+};
+
+const getUser = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.string().uuid().required()
+  });
+  const providedCredentials = {
+    id: req.params.id
+  };
+  try {
+    const { error } = schema.validate(providedCredentials);
+    if (error) throw error;
+  } catch (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+  const response = await userModels.findById(providedCredentials.id);
+  if (response) {
+    res.status(200).json({
+      id: response.id,
+      first_name: response.first_name,
+      last_name: response.last_name,
+      email: response.email,
+      postal_code: response.postal_code,
+      city: response.city,
+      country: response.country,
+      phone: response.phone,
+      premium: response.premium
+    });
+  } else {
+    res.status(404).json({ message: "No user found with given id" });
+  }
+};
+
+const getAllUsers = async (req, res) => {
+  console.log(req.params);
+  const response = await userModels.findAll();
+  if (response) {
+    res.status(200).json({
+      id: response.id,
+      first_name: response.first_name,
+      last_name: response.last_name,
+      email: response.email,
+      postal_code: response.postal_code,
+      city: response.city,
+      country: response.country,
+      phone: response.phone,
+      premium: response.premium
+    });
+  } else {
+    res.status(404).json({ message: "No users found" });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.string().uuid().required()
+  });
+  const providedCredentials = {
+    id: req.params.id
+  };
+  const authenticatedUserId = req.user.id;
+  try {
+    const { error } = schema.validate(providedCredentials);
+    if (error) throw error;
+  } catch (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const userToDelete = await userModels.findById(providedCredentials.id);
+
+  if (!userToDelete) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  if (userToDelete.id === authenticatedUserId) {
+    await userModels.delete(userToDelete.id);
+    res.status(200).json({ message: "User deleted successfully" });
+  } else {
+    res.status(403).json({
+      message: "Unauthorized: You do not have permission to delete this user"
+    });
+  }
+};
+
+const updateUser = async (req, res) => {
+  if (req.user.id !== req.body.id) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+  const schema = Joi.object({
+    id: Joi.string().uuid(),
+    first_name: Joi.string(),
+    last_name: Joi.string(),
+    email: Joi.string().email(),
+    postal_code: Joi.string(),
+    city: Joi.string(),
+    country: Joi.string(),
+    phone: Joi.string(),
+    premium: Joi.boolean()
+  });
+
+  const providedUserDetails = {
+    id: req.body.id,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    postal_code: req.body.postal_code,
+    city: req.body.city,
+    country: req.body.country,
+    phone: req.body.phone,
+    premium: req.body.premium
+  };
+
+  try {
+    const { error } = schema.validate(providedUserDetails);
+    if (error) throw error;
+  } catch (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
+  const user = {
+    id: providedUserDetails.id,
+    first_name: providedUserDetails.first_name,
+    last_name: providedUserDetails.last_name,
+    email: providedUserDetails.email,
+    postal_code: providedUserDetails.postal_code,
+    city: providedUserDetails.city,
+    country: providedUserDetails.country,
+    phone: providedUserDetails.phone,
+    premium: providedUserDetails.premium
+  };
+
+  const filteredUser = {};
+  for (const key in user) {
+    if (user[key] !== null && user[key] !== undefined) {
+      filteredUser[key] = user[key];
+    }
+  }
+
+  try {
+    const updatedUser = await userModels.update(filteredUser);
+    if (!updatedUser) throw new Error("Failed to update user");
+    res.status(200).send(updatedUser);
   } catch (error) {
     return res.status(500).send({ message: error.message });
   }
@@ -502,6 +645,10 @@ const unFriend = async (req, res) => {
 module.exports = {
   signup,
   login,
+  getUser,
+  getAllUsers,
+  deleteUser,
+  updateUser,
   sendFriendRequest,
   // cancelFriendRequest,
   getSentFriendRequests,
