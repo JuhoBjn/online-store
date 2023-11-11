@@ -295,6 +295,47 @@ const users = {
     `;
     const [rows] = await promisePool.query(queryString, [userId]);
     return rows;
+  },
+  /**
+   * Unfriend a user.
+   * @param {string} userId1 - The first user ID
+   * @param {string} userId2 - The second user ID
+   */
+  unFriend: async (userId1, userId2) => {
+    let conn = null;
+    try {
+      conn = await promisePool.getConnection();
+      (await conn).beginTransaction();
+
+      const friendsUpdateQuery = `
+        UPDATE friends
+        SET is_unfriended = 1
+        WHERE (
+          (
+            user_id = ?
+            AND friend_user_id = ?
+          )
+          OR (
+            user_id = ?
+            AND friend_user_id = ?
+          )
+        )
+        AND is_unfriended = 0;
+        `;
+
+      await conn.query(friendsUpdateQuery, [
+        userId1,
+        userId2,
+        userId2,
+        userId1
+      ]);
+      await conn.commit();
+    } catch (error) {
+      if (conn) await conn.rollback();
+      throw error;
+    } finally {
+      if (conn) conn.release();
+    }
   }
 };
 

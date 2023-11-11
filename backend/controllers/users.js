@@ -436,7 +436,68 @@ const getFriends = async (req, res) => {
   }
 };
 
-// const unFriend = async (req, res) => {};
+const unFriend = async (req, res) => {
+  const schema = Joi.object({
+    userid: Joi.string().uuid().required(),
+    friendId: Joi.string().uuid().required()
+  });
+
+  const { error } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const { userid, friendId } = req.params;
+
+  // Check that the userid matches the authenticated user.
+  if (userid !== req.user.id) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+
+  // Check that the user exists.
+  let user;
+  try {
+    user = await userModels.findById(userid);
+    if (!user) {
+      return res
+        .status(404)
+        .send({ message: "No user exists with given userid" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Check that the friend user exists.
+  let friend;
+  try {
+    friend = await userModels.findById(friendId);
+    if (!friend) {
+      return res
+        .status(404)
+        .send({ message: "No user exists with given friendId" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Check that the users are friends.
+  try {
+    const areFriends = await userModels.friendshipExists(userid, friendId);
+    if (!areFriends) {
+      return res.status(404).send({ message: "Users are not friends" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Unfriend the users.
+  try {
+    await userModels.unFriend(userid, friendId);
+    res.status(200).send({ message: "Unfriended" });
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+};
 
 module.exports = {
   signup,
@@ -446,6 +507,6 @@ module.exports = {
   getSentFriendRequests,
   getReceivedFriendRequests,
   acceptOrDenyFriendRequest,
-  getFriends
-  // unFriend
+  getFriends,
+  unFriend
 };
