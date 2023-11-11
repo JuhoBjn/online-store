@@ -19,7 +19,6 @@ const SetNewPasswordForm = ({ resetToken }) => {
       passwordRef.current.value
     );
     if (response !== true) {
-      console.log(response);
       setError(response);
     } else {
       navigate("/auth");
