@@ -571,3 +571,164 @@ describe("getFriends", () => {
     jest.spyOn(users, "findFriendsByUserId").mockRestore();
   });
 });
+
+describe("unFriend", () => {
+  let friendRequestId;
+  let token;
+  beforeEach(async () => {
+    // Create 3 users for testing. First two will be friends, third will not.
+    await promisePool.query(
+      "INSERT INTO users (id, email, password, role_id) VALUES (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?)",
+      [
+        "70C2B79E-A6C3-42A3-9CF7-D09FEEF62268",
+        "exampleuser132213@example.com",
+        "imagine a hashed password here",
+        1,
+        "6FA3B831-7B92-4575-9BB5-C29A5E8E3FC9",
+        "exampleuser543534@example.com",
+        "imagine a hashed password here",
+        1,
+        "8AED864A-4C16-4F26-AE5B-7299CC051351",
+        "exampleuser543534@example.com",
+        "imagine a hashed password here",
+        1
+      ]
+    );
+
+    const friendRequestQuery = await promisePool.query(
+      "INSERT INTO friend_requests (requester_user_id, requested_friend_user_id) VALUES (?, ?)",
+      [
+        "70C2B79E-A6C3-42A3-9CF7-D09FEEF62268",
+        "6FA3B831-7B92-4575-9BB5-C29A5E8E3FC9"
+      ]
+    );
+    friendRequestId = friendRequestQuery[0].insertId;
+
+    // Get the token for the requested user
+    token = await jwt.sign(
+      { id: "6FA3B831-7B92-4575-9BB5-C29A5E8E3FC9", role_id: 1 },
+      process.env.JWT_KEY,
+      { expiresIn: "1h" }
+    );
+
+    // Only accept the friend request for the first two users
+    await users.acceptFriendRequest(
+      friendRequestId,
+      "6FA3B831-7B92-4575-9BB5-C29A5E8E3FC9",
+      "70C2B79E-A6C3-42A3-9CF7-D09FEEF62268"
+    );
+  });
+
+  afterEach(async () => {
+    // Delete the users created for testing.
+    await promisePool.query("DELETE FROM users WHERE id IN (?)", [
+      [
+        "70C2B79E-A6C3-42A3-9CF7-D09FEEF62268",
+        "6FA3B831-7B92-4575-9BB5-C29A5E8E3FC9",
+        "8AED864A-4C16-4F26-AE5B-7299CC051351"
+      ]
+    ]);
+  });
+
+  it("should return 200 and unfriend the users", async () => {
+    const response = await request(app)
+      .delete(
+        `/api/users/6FA3B831-7B92-4575-9BB5-C29A5E8E3FC9/friends/70C2B79E-A6C3-42A3-9CF7-D09FEEF62268`
+      )
+      .auth(token, { type: "bearer" });
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("Unfriended");
+  });
+
+  it("should return 400 for invalid user ID", async () => {
+    const response = await request(app)
+      .delete(
+        `/api/users/invalid-user-id/friends/70C2B79E-A6C3-42A3-9CF7-D09FEEF62268`
+      )
+      .auth(token, { type: "bearer" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('"userid" must be a valid GUID');
+  });
+
+  it("should return 400 for invalid friend ID", async () => {
+    const response = await request(app)
+      .delete(
+        `/api/users/6FA3B831-7B92-4575-9BB5-C29A5E8E3FC9/friends/invalid-friend-id`
+      )
+      .auth(token, { type: "bearer" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('"friendId" must be a valid GUID');
+  });
+
+  it("should return 403 for unauthorized user", async () => {
+    const response = await request(app)
+      .delete(
+        `/api/users/70C2B79E-A6C3-42A3-9CF7-D09FEEF62268/friends/6FA3B831-7B92-4575-9BB5-C29A5E8E3FC9`
+      )
+      .auth(token, { type: "bearer" });
+
+    expect(response.status).toBe(403);
+    expect(response.body.message).toBe("Unauthorized");
+  });
+
+  it("should return 404 for non-existing user ID", async () => {
+    const validTokenForTheUserID = await jwt.sign(
+      { id: "00000000-0000-0000-0000-000000000000", role_id: 1 },
+      process.env.JWT_KEY,
+      { expiresIn: "1h" }
+    );
+
+    const response = await request(app)
+      .delete(
+        `/api/users/00000000-0000-0000-0000-000000000000/friends/70C2B79E-A6C3-42A3-9CF7-D09FEEF62268`
+      )
+      .auth(validTokenForTheUserID, { type: "bearer" });
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("No user exists with given userid");
+  });
+
+  it("should return 404 for non-existing friend ID", async () => {
+    const response = await request(app)
+      .delete(
+        `/api/users/6FA3B831-7B92-4575-9BB5-C29A5E8E3FC9/friends/00000000-0000-0000-0000-000000000000`
+      )
+      .auth(token, { type: "bearer" });
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("No user exists with given friendId");
+  });
+
+  it("should return 404 if users are not friends", async () => {
+    const response = await request(app)
+      .delete(
+        `/api/users/6FA3B831-7B92-4575-9BB5-C29A5E8E3FC9/friends/8AED864A-4C16-4F26-AE5B-7299CC051351`
+      )
+      .auth(token, { type: "bearer" });
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("Users are not friends");
+  });
+
+  it("should return 500 for internal error during unfriending", async () => {
+    // Mock an internal error during unfriending
+    jest.spyOn(users, "unFriend").mockImplementation(() => {
+      throw new Error("Internal error");
+    });
+
+    const response = await request(app)
+      .delete(
+        `/api/users/6FA3B831-7B92-4575-9BB5-C29A5E8E3FC9/friends/70C2B79E-A6C3-42A3-9CF7-D09FEEF62268`
+      )
+      .auth(token, { type: "bearer" });
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Internal error");
+
+    // Restore the original function to avoid side effects on other tests
+    jest.spyOn(users, "unFriend").mockRestore();
+  });
+});
