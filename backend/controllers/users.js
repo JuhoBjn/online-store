@@ -183,7 +183,7 @@ const sendFriendRequest = async (req, res) => {
       throw new Error("No user exists with given senderUserId");
     }
   } catch (error) {
-    return res.status(400).send({ message: error.message });
+    return res.status(404).send({ message: error.message });
   }
 
   let receiverUser;
@@ -193,7 +193,7 @@ const sendFriendRequest = async (req, res) => {
       throw new Error("No user exists with given receiverUserId");
     }
   } catch (error) {
-    return res.status(400).send({ message: error.message });
+    return res.status(404).send({ message: error.message });
   }
 
   // Check that the users are not already friends.
@@ -257,7 +257,7 @@ const getSentFriendRequests = async (req, res) => {
   try {
     user = await userModels.findById(userid);
     if (!user) {
-      res.status(400).send({ message: "No user exists with given userid" });
+      res.status(404).send({ message: "No user exists with given userid" });
     }
   } catch (error) {
     return res.status(500).send({ message: "Internal error" });
@@ -294,7 +294,7 @@ const getReceivedFriendRequests = async (req, res) => {
   try {
     user = await userModels.findById(userid);
     if (!user) {
-      res.status(400).send({ message: "No user exists with given userid" });
+      res.status(404).send({ message: "No user exists with given userid" });
     }
   } catch (error) {
     return res.status(500).send({ message: "Internal error" });
@@ -342,7 +342,7 @@ const acceptOrDenyFriendRequest = async (req, res) => {
   try {
     user = await userModels.findById(userid);
     if (!user) {
-      res.status(400).send({ message: "No user exists with given userid" });
+      res.status(404).send({ message: "No user exists with given userid" });
     }
   } catch (error) {
     return res.status(500).send({ message: "Internal error" });
@@ -353,7 +353,7 @@ const acceptOrDenyFriendRequest = async (req, res) => {
   try {
     friendRequest = await userModels.findFriendRequestById(friendRequestId);
     if (!friendRequest) {
-      return res.status(400).send({
+      return res.status(404).send({
         message: "No friend request exists with given friendRequestId"
       });
     }
@@ -420,7 +420,7 @@ const getFriends = async (req, res) => {
     user = await userModels.findById(userid);
     if (!user) {
       return res
-        .status(400)
+        .status(404)
         .send({ message: "No user exists with given userid" });
     }
   } catch (error) {

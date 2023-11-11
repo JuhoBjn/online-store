@@ -77,14 +77,14 @@ describe("sendFriendRequest", () => {
     );
   });
 
-  it("should return 400 if receiverUserId does not exist", async () => {
+  it("should return 404 if receiverUserId does not exist", async () => {
     const response = await request(app)
       .post(
         `/api/users/${senderUser.id}/friend-requests/00000000-0000-0000-0000-000000000000`
       )
       .auth(senderUser.token, { type: "bearer" });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(404);
     expect(response.body.message).toBe(
       "No user exists with given receiverUserId"
     );
@@ -378,7 +378,7 @@ describe("acceptOrDenyFriendRequest", () => {
     expect(response.body.message).toBe("Unauthorized");
   });
 
-  it("should return 400 for non-existing friend request ID", async () => {
+  it("should return 404 for non-existing friend request ID", async () => {
     const response = await request(app)
       .put(
         `/api/users/7BB4A1C9-187B-4A68-885C-3BE6B1828B6B/friend-requests/999`
@@ -386,7 +386,7 @@ describe("acceptOrDenyFriendRequest", () => {
       .send({ status: "accepted" })
       .auth(token, { type: "bearer" });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(404);
     expect(response.body.message).toBe(
       "No friend request exists with given friendRequestId"
     );
@@ -539,7 +539,7 @@ describe("getFriends", () => {
     expect(response.body.message).toBe("Unauthorized");
   });
 
-  it("should return 400 for non-existing user ID", async () => {
+  it("should return 404 for non-existing user ID", async () => {
     const validTokenForTheUserID = await jwt.sign(
       { id: "00000000-0000-0000-0000-000000000000", role_id: 1 },
       process.env.JWT_KEY,
@@ -550,7 +550,7 @@ describe("getFriends", () => {
       .get(`/api/users/00000000-0000-0000-0000-000000000000/friends`)
       .auth(validTokenForTheUserID, { type: "bearer" });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(404);
     expect(response.body.message).toBe("No user exists with given userid");
   });
 
