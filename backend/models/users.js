@@ -7,8 +7,17 @@ const users = {
    */
   findAll: async () => {
     const queryString = `
-      SELECT id, first_name AS firstname, last_name AS lastname, email,
-      postal_code AS postalcode, city, country, phone, premium
+      SELECT
+        id,
+        first_name AS firstname,
+        last_name AS lastname,
+        email,
+        email_hash AS emailhash,
+        postal_code AS postalcode,
+        city,
+        country,
+        phone,
+        premium
       FROM users`;
     const [rows] = await promisePool.query(queryString);
     return rows;
