@@ -181,11 +181,11 @@ const getUser = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
-  const response = await userModels.findAll();
-  if (response) {
+  try {
+    const response = await userModels.findAll();
     return res.status(200).json(response);
-  } else {
-    res.status(404).json({ message: "No users found" });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
