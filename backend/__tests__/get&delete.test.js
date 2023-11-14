@@ -1,5 +1,6 @@
 const supertest = require("supertest");
 const { describe, it, expect, beforeAll, afterAll } = require("@jest/globals");
+const { toBeOneOf } = require("jest-extended");
 const bcrypt = require("bcryptjs");
 
 const app = require("../app");
@@ -44,6 +45,8 @@ describe("all profile finding or searching by id", () => {
     password: "Tomi@testi1234",
     premium: 1
   };
+
+  expect.extend({ toBeOneOf });
 
   beforeAll(() => {
     return new Promise((resolve, reject) => {
@@ -117,6 +120,21 @@ describe("all profile finding or searching by id", () => {
       .set("Content", "application/json");
 
     expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: expect.any(String),
+          firstname: expect.toBeOneOf([expect.any(String), null]),
+          lastname: expect.toBeOneOf([expect.any(String), null]),
+          email: expect.any(String),
+          postalcode: expect.toBeOneOf([expect.any(String), null]),
+          city: expect.toBeOneOf([expect.any(String), null]),
+          country: expect.toBeOneOf([expect.any(String), null]),
+          phone: expect.toBeOneOf([expect.any(String), null]),
+          premium: expect.any(Number)
+        })
+      ])
+    );
   });
   it("should delete user by id", async () => {
     const response = await supertest(app)
