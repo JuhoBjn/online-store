@@ -19,6 +19,7 @@ describe("all profile updating", () => {
     role_id: 1,
     first_name: "Tommy",
     last_name: "Tester",
+    bio: "This is the bio of Tommy Tester",
     email: "tommy@tester.com",
     postal_code: "00104",
     city: "Helsinki",
@@ -34,6 +35,7 @@ describe("all profile updating", () => {
     role_id: 1,
     first_name: "Tomi",
     last_name: "Testaaja",
+    bio: "This is the bio of Tomi Testaaja",
     email: "Tomi@Testaaja.com",
     postal_code: "00200",
     city: "Tampere",
@@ -196,5 +198,34 @@ describe("all profile updating", () => {
       .set("Accept", "application/json")
       .set("Content-Type", "application/json");
     expect(response.status).toEqual(403);
+  });
+
+  it("should update a user's bio", async () => {
+    const newBio = "This is the updated bio of Tommy Tester.";
+    const response = await supertest(app)
+      .post("/api/users/updateUser")
+      .send({
+        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
+        bio: newBio
+      })
+      .set("Authorization", `Bearer ${token}`)
+      .set("Content-Type", "application/json")
+      .set("Accept", "application/json");
+
+    expect(response.status).toEqual(200);
+    expect(response.body.bio).toEqual(newBio);
+  });
+
+  it("should not allow a user to update someone else's bio", async () => {
+    const newBio = "This is a user's attempt to update another user's bio.";
+    const response = await supertest(app)
+      .post("/api/users/updateUser")
+      .set({ id: "8b414dd1-f7cb-482c-9f4a-3cfdb998f948", bio: newBio })
+      .set("Content-Type", "application/json")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toEqual(403);
+    expect(response.body.message).toEqual("Unauthorized");
   });
 });

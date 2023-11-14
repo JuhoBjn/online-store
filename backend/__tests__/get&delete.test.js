@@ -20,6 +20,7 @@ describe("all profile finding or searching by id", () => {
     role_id: 1,
     first_name: "Tommy1",
     last_name: "Tester1",
+    bio: "This is the bio of Tommy1 Tester1",
     email: "tommy@tester1.com",
     postal_code: "00104",
     city: "Helsinkii",
@@ -35,6 +36,7 @@ describe("all profile finding or searching by id", () => {
     role_id: 1,
     first_name: "Tomi",
     last_name: "Testaaja",
+    bio: "This is the bio of Tomi Testaaja.",
     email: "Tomi@Testaaja.com",
     postal_code: "00200",
     city: "Tampere",
@@ -110,7 +112,20 @@ describe("all profile finding or searching by id", () => {
       .set("Authorization", `Bearer ${token}`)
       .set("Accept", "application/json")
       .set("Content-Type", "application/json");
+
     expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      id: expect.any(String),
+      firstname: expect.any(String),
+      lastname: expect.any(String),
+      bio: expect.any(String),
+      email: expect.any(String),
+      postalcode: expect.any(String),
+      city: expect.any(String),
+      country: expect.any(String),
+      phone: expect.any(String),
+      premium: expect.any(Number)
+    });
   });
   it("Should find all users", async () => {
     const response = await supertest(app)
@@ -126,6 +141,7 @@ describe("all profile finding or searching by id", () => {
           id: expect.any(String),
           firstname: expect.toBeOneOf([expect.any(String), null]),
           lastname: expect.toBeOneOf([expect.any(String), null]),
+          bio: expect.toBeOneOf([expect.any(String), null]),
           email: expect.any(String),
           postalcode: expect.toBeOneOf([expect.any(String), null]),
           city: expect.toBeOneOf([expect.any(String), null]),
