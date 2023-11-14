@@ -26,7 +26,7 @@ const users = {
    */
   findByEmail: async (email) => {
     const queryString = `
-      SELECT users.id, users.role_id, roles.name AS role, users.first_name, users.last_name, users.email, users.postal_code, users.city, users.country, users.phone, users.premium, users.password
+      SELECT users.id, users.role_id, roles.name AS role, users.first_name, users.last_name, users.email, users.email_hash, users.postal_code, users.city, users.country, users.phone, users.premium, users.password
       FROM users
       LEFT JOIN roles ON users.role_id = roles.id
       WHERE email = ?;`;
@@ -40,7 +40,7 @@ const users = {
    */
   findById: async (id) => {
     const queryString = `
-      SELECT users.id, roles.name AS role, users.first_name, users.last_name, users.email, users.postal_code, users.city, users.country, users.phone, users.premium, users.password
+      SELECT users.id, roles.name AS role, users.first_name, users.last_name, users.email, users.email_hash, users.postal_code, users.city, users.country, users.phone, users.premium, users.password
       FROM users
       LEFT JOIN roles ON users.role_id = roles.id
       WHERE users.id = ?;`;
@@ -64,7 +64,7 @@ const users = {
     ]);
 
     const fetchString = `
-      SELECT id, email, role_id 
+      SELECT id, email, role_id, email_hash
       FROM users
       WHERE id = ?;
       `;
@@ -239,7 +239,8 @@ const users = {
               AND is_rejected = 0 THEN 1
               ELSE 0
           END
-      ) as is_request_pending
+      ) as is_request_pending,
+      requestedFriend.email_hash AS requested_friend_email_hash
     FROM friend_requests AS fr
       JOIN users AS requestedFriend ON fr.requested_friend_user_id = requestedFriend.id
     WHERE (
@@ -270,7 +271,8 @@ const users = {
               AND is_rejected = 0 THEN 1
               ELSE 0
           END
-      ) as is_request_pending
+      ) as is_request_pending,
+      requester.email_hash AS requester_email_hash
     FROM friend_requests AS fr
       JOIN users AS requester ON fr.requester_user_id = requester.id
     WHERE (
@@ -368,7 +370,8 @@ const users = {
       friend.last_name AS friend_last_name,
       f.is_unfriended,
       f.became_friends_at,
-      f.updated_at
+      f.updated_at,
+      friend.email_hash AS friend_email_hash
     FROM friends AS f
       JOIN users AS friend ON f.friend_user_id = friend.id
     WHERE
