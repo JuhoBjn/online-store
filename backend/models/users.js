@@ -11,7 +11,7 @@ const users = {
       postal_code AS postalcode, city, country, phone, premium
       FROM users`;
     const [rows] = await promisePool.query(queryString);
-    return rows === undefined ? null : rows;
+    return rows;
   },
   /**
    * Find users based on id and delete it.
