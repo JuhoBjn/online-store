@@ -376,8 +376,6 @@ const sendFriendRequest = async (req, res) => {
   }
 };
 
-// const cancelFriendRequest = async (req, res) => {};
-
 const getSentFriendRequests = async (req, res) => {
   const schema = Joi.object({
     userid: Joi.string().uuid().required()
@@ -650,7 +648,6 @@ module.exports = {
   deleteUser,
   updateUser,
   sendFriendRequest,
-  // cancelFriendRequest,
   getSentFriendRequests,
   getReceivedFriendRequests,
   acceptOrDenyFriendRequest,

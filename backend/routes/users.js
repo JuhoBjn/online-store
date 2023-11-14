@@ -10,7 +10,6 @@ const {
   deleteUser,
   updateUser,
   sendFriendRequest,
-  //   cancelFriendRequest,
   getSentFriendRequests,
   getReceivedFriendRequests,
   acceptOrDenyFriendRequest,
@@ -36,11 +35,6 @@ router.post(
   "/:senderUserId/friend-requests/:receiverUserId",
   sendFriendRequest
 );
-
-// router.delete(
-//   "/:senderUserId/friend-requests/:receiverUserId",
-//   cancelFriendRequest
-// );
 
 router.get("/:userid/friend-requests/sent", getSentFriendRequests);
 
