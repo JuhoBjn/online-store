@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* background-color: var(--main-background-color); */
+  overflow: hidden;
 }
 
 .auth-page_login-container {
@@ -41,7 +41,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 1rem;
 }
 
@@ -68,7 +68,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .auth-page_input {
@@ -82,7 +82,8 @@
 .auth-page_submit-button {
   padding: 1rem;
   margin: 0.75rem;
-  color: var(--main-text-color);
+  color: white;
+  align-self: center;
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
@@ -129,4 +130,30 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.auth-page_login-form-footer button {
+  color: var(--main-background-color);
+}
+
+@media (max-width: 768px) {
+  .auth-page_login-container {
+    flex-direction: column;
+    border-style: none;
+  }
+
+  .auth-page {
+    background-color: var(--main-background-color);
+  }
+
+  .auth-page_logo {
+    padding: 0;
+  }
+}
+
+@media (max-height: 680px) {
+  .auth-page_logo {
+    width: auto;
+    height: 65px;
+  }
 }
