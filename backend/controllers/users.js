@@ -4,87 +4,6 @@ const jwt = require("jsonwebtoken");
 const { v4: genUuid } = require("uuid");
 const userModels = require("../models/users");
 
-const getUser = async (req, res) => {
-  const schema = Joi.object({
-    id: Joi.string().uuid().required()
-  });
-  const providedCredentials = {
-    id: req.params.id
-  };
-  try {
-    const { error } = schema.validate(providedCredentials);
-    if (error) throw error;
-  } catch (error) {
-    return res.status(400).send({ message: error.details[0].message });
-  }
-  const response = await userModels.findById(providedCredentials.id);
-  if (response) {
-    res.status(200).json({
-      id: response.id,
-      first_name: response.first_name,
-      last_name: response.last_name,
-      email: response.email,
-      postal_code: response.postal_code,
-      city: response.city,
-      country: response.country,
-      phone: response.phone,
-      premium: response.premium
-    });
-  } else {
-    res.status(404).json({ message: "No user found with given id" });
-  }
-};
-
-const getAllUsers = async (req, res) => {
-  console.log(req.params);
-  const response = await userModels.findAll();
-  if (response) {
-    res.status(200).json({
-      id: response.id,
-      first_name: response.first_name,
-      last_name: response.last_name,
-      email: response.email,
-      postal_code: response.postal_code,
-      city: response.city,
-      country: response.country,
-      phone: response.phone,
-      premium: response.premium
-    });
-  } else {
-    res.status(404).json({ message: "No users found" });
-  }
-};
-
-const deleteUser = async (req, res) => {
-  const schema = Joi.object({
-    id: Joi.string().uuid().required()
-  });
-  const providedCredentials = {
-    id: req.params.id
-  };
-  const authenticatedUserId = req.user.id;
-  try {
-    const { error } = schema.validate(providedCredentials);
-    if (error) throw error;
-  } catch (error) {
-    return res.status(400).send({ message: error.details[0].message });
-  }
-
-  const userToDelete = await userModels.findById(providedCredentials.id);
-
-  if (!userToDelete) {
-    return res.status(404).json({ message: "User not found" });
-  }
-  if (userToDelete.id === authenticatedUserId) {
-    await userModels.delete(userToDelete.id);
-    res.status(200).json({ message: "User deleted successfully" });
-  } else {
-    res.status(403).json({
-      message: "Unauthorized: You do not have permission to delete this user"
-    });
-  }
-};
-
 const signup = async (req, res) => {
   // Password must be at least 8 characters long,
   // contain at least one upper case letter, one lower case letter and one number.
@@ -230,6 +149,87 @@ const login = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.string().uuid().required()
+  });
+  const providedCredentials = {
+    id: req.params.id
+  };
+  try {
+    const { error } = schema.validate(providedCredentials);
+    if (error) throw error;
+  } catch (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+  const response = await userModels.findById(providedCredentials.id);
+  if (response) {
+    res.status(200).json({
+      id: response.id,
+      first_name: response.first_name,
+      last_name: response.last_name,
+      email: response.email,
+      postal_code: response.postal_code,
+      city: response.city,
+      country: response.country,
+      phone: response.phone,
+      premium: response.premium
+    });
+  } else {
+    res.status(404).json({ message: "No user found with given id" });
+  }
+};
+
+const getAllUsers = async (req, res) => {
+  console.log(req.params);
+  const response = await userModels.findAll();
+  if (response) {
+    res.status(200).json({
+      id: response.id,
+      first_name: response.first_name,
+      last_name: response.last_name,
+      email: response.email,
+      postal_code: response.postal_code,
+      city: response.city,
+      country: response.country,
+      phone: response.phone,
+      premium: response.premium
+    });
+  } else {
+    res.status(404).json({ message: "No users found" });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.string().uuid().required()
+  });
+  const providedCredentials = {
+    id: req.params.id
+  };
+  const authenticatedUserId = req.user.id;
+  try {
+    const { error } = schema.validate(providedCredentials);
+    if (error) throw error;
+  } catch (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const userToDelete = await userModels.findById(providedCredentials.id);
+
+  if (!userToDelete) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  if (userToDelete.id === authenticatedUserId) {
+    await userModels.delete(userToDelete.id);
+    res.status(200).json({ message: "User deleted successfully" });
+  } else {
+    res.status(403).json({
+      message: "Unauthorized: You do not have permission to delete this user"
+    });
+  }
+};
+
 const updateUser = async (req, res) => {
   if (req.user.id !== req.body.id) {
     return res.status(403).send({ message: "Unauthorized" });
@@ -293,11 +293,364 @@ const updateUser = async (req, res) => {
   }
 };
 
+const sendFriendRequest = async (req, res) => {
+  const schema = Joi.object({
+    senderUserId: Joi.string().uuid().required(),
+    receiverUserId: Joi.string().uuid().required()
+  });
+
+  const { error } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const { senderUserId, receiverUserId } = req.params;
+
+  // Check that the sender matches the authenticated user.
+  if (senderUserId !== req.user.id) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+
+  // Check that the sender and receiver are not the same user.
+  if (senderUserId === receiverUserId) {
+    return res
+      .status(400)
+      .send({ message: "Sender and receiver cannot be the same user" });
+  }
+
+  // Check that both users exist.
+  let senderUser;
+  try {
+    senderUser = await userModels.findById(senderUserId);
+    if (!senderUser) {
+      throw new Error("No user exists with given senderUserId");
+    }
+  } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }
+
+  let receiverUser;
+  try {
+    receiverUser = await userModels.findById(receiverUserId);
+    if (!receiverUser) {
+      throw new Error("No user exists with given receiverUserId");
+    }
+  } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }
+
+  // Check that the users are not already friends.
+  try {
+    const areFriends = await userModels.friendshipExists(
+      senderUserId,
+      receiverUserId
+    );
+    if (areFriends) {
+      return res.status(400).send({ message: "Already friends" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Check that the users do not have a pending friend request.
+  try {
+    const arePendingFriends = await userModels.pendingFriendRequestExists(
+      senderUserId,
+      receiverUserId
+    );
+    if (arePendingFriends) {
+      return res
+        .status(400)
+        .send({ message: "Pending friend request already exists" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Create the friend request.
+  try {
+    await userModels.addFriendRequest(senderUserId, receiverUserId);
+    res.send({ message: "Friend request sent" });
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+};
+
+const getSentFriendRequests = async (req, res) => {
+  const schema = Joi.object({
+    userid: Joi.string().uuid().required()
+  });
+
+  const { error } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const { userid } = req.params;
+
+  // Check that the userid matches the authenticated user.
+  if (userid !== req.user.id) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+
+  // Check that the user exists.
+  let user;
+  try {
+    user = await userModels.findById(userid);
+    if (!user) {
+      res.status(404).send({ message: "No user exists with given userid" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Get all pending friend requests.
+  try {
+    const friendRequests = await userModels.getSentFriendRequests(userid);
+    res.send(friendRequests);
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+};
+
+const getReceivedFriendRequests = async (req, res) => {
+  const schema = Joi.object({
+    userid: Joi.string().uuid().required()
+  });
+
+  const { error } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const { userid } = req.params;
+
+  // Check that the userid matches the authenticated user.
+  if (userid !== req.user.id) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+
+  // Check that the user exists.
+  let user;
+  try {
+    user = await userModels.findById(userid);
+    if (!user) {
+      res.status(404).send({ message: "No user exists with given userid" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Get all pending friend requests.
+  try {
+    const friendRequests = await userModels.getReceivedFriendRequests(userid);
+    res.send(friendRequests);
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+};
+
+const acceptOrDenyFriendRequest = async (req, res) => {
+  const paramSchema = Joi.object({
+    userid: Joi.string().uuid().required(),
+    friendRequestId: Joi.number().required()
+  });
+
+  const bodySchema = Joi.object({
+    status: Joi.string().valid("accepted", "denied").required()
+  });
+
+  const { error: paramError } = paramSchema.validate(req.params);
+  if (paramError) {
+    return res.status(400).send({ message: paramError.details[0].message });
+  }
+
+  const { error: bodyError } = bodySchema.validate(req.body);
+  if (bodyError) {
+    return res.status(400).send({ message: bodyError.details[0].message });
+  }
+
+  const { userid, friendRequestId } = req.params;
+  const { status } = req.body;
+
+  // Check that the receiver is the authenticated user.
+  if (userid !== req.user.id) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+
+  // Check that the user exists.
+  let user;
+  try {
+    user = await userModels.findById(userid);
+    if (!user) {
+      res.status(404).send({ message: "No user exists with given userid" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Check that the friend request exists.
+  let friendRequest;
+  try {
+    friendRequest = await userModels.findFriendRequestById(friendRequestId);
+    if (!friendRequest) {
+      return res.status(404).send({
+        message: "No friend request exists with given friendRequestId"
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Check that the friend request is pending.
+  if (!friendRequest.is_request_pending) {
+    return res.status(400).send({ message: "Friend request is not pending" });
+  }
+
+  // Check that the friend request is for the user that should accept or deny it.
+  if (friendRequest.requested_friend_user_id !== userid) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+
+  // Accept or deny the friend request.
+  if (status === "accepted") {
+    try {
+      await userModels.acceptFriendRequest(
+        friendRequestId,
+        friendRequest.requester_user_id,
+        friendRequest.requested_friend_user_id
+      );
+      return res.status(201).send({
+        message: "Friend request accepted and friendship created"
+      });
+    } catch (error) {
+      return res.status(500).send({ message: "Internal error" });
+    }
+  } else if (status === "denied") {
+    try {
+      await userModels.updateFriendRequest(friendRequestId, {
+        is_rejected: true
+      });
+      return res.status(200).send({ message: "Friend request denied" });
+    } catch (error) {
+      return res.status(500).send({ message: "Internal error" });
+    }
+  }
+};
+
+const getFriends = async (req, res) => {
+  const schema = Joi.object({
+    userid: Joi.string().uuid().required()
+  });
+
+  const { error } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const { userid } = req.params;
+
+  // Check that the userid matches the authenticated user.
+  if (userid !== req.user.id) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+
+  // Check that the user exists.
+  let user;
+  try {
+    user = await userModels.findById(userid);
+    if (!user) {
+      return res
+        .status(404)
+        .send({ message: "No user exists with given userid" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Get all friends.
+  try {
+    const friends = await userModels.findFriendsByUserId(userid);
+    res.status(200).send(friends);
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+};
+
+const unFriend = async (req, res) => {
+  const schema = Joi.object({
+    userid: Joi.string().uuid().required(),
+    friendId: Joi.string().uuid().required()
+  });
+
+  const { error } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const { userid, friendId } = req.params;
+
+  // Check that the userid matches the authenticated user.
+  if (userid !== req.user.id) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+
+  // Check that the user exists.
+  let user;
+  try {
+    user = await userModels.findById(userid);
+    if (!user) {
+      return res
+        .status(404)
+        .send({ message: "No user exists with given userid" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Check that the friend user exists.
+  let friend;
+  try {
+    friend = await userModels.findById(friendId);
+    if (!friend) {
+      return res
+        .status(404)
+        .send({ message: "No user exists with given friendId" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Check that the users are friends.
+  try {
+    const areFriends = await userModels.friendshipExists(userid, friendId);
+    if (!areFriends) {
+      return res.status(404).send({ message: "Users are not friends" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Unfriend the users.
+  try {
+    await userModels.unFriend(userid, friendId);
+    res.status(200).send({ message: "Unfriended" });
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+};
+
 module.exports = {
   signup,
   login,
   getUser,
   getAllUsers,
   deleteUser,
-  updateUser
+  updateUser,
+  sendFriendRequest,
+  getSentFriendRequests,
+  getReceivedFriendRequests,
+  acceptOrDenyFriendRequest,
+  getFriends,
+  unFriend
 };

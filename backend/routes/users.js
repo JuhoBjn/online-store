@@ -8,7 +8,13 @@ const {
   getUser,
   getAllUsers,
   deleteUser,
-  updateUser
+  updateUser,
+  sendFriendRequest,
+  getSentFriendRequests,
+  getReceivedFriendRequests,
+  acceptOrDenyFriendRequest,
+  getFriends,
+  unFriend
 } = require("../controllers/users");
 
 router.post("/signup", signup);
@@ -24,5 +30,23 @@ router.get("/:id", getUser);
 router.post("/updateUser", updateUser);
 
 router.delete("/:id", deleteUser);
+
+router.post(
+  "/:senderUserId/friend-requests/:receiverUserId",
+  sendFriendRequest
+);
+
+router.get("/:userid/friend-requests/sent", getSentFriendRequests);
+
+router.get("/:userid/friend-requests/received", getReceivedFriendRequests);
+
+router.put(
+  "/:userid/friend-requests/:friendRequestId",
+  acceptOrDenyFriendRequest
+);
+
+router.get("/:userid/friends", getFriends);
+
+router.delete("/:userid/friends/:friendId", unFriend);
 
 module.exports = router;
