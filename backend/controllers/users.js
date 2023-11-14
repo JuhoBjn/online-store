@@ -183,7 +183,7 @@ const getUser = async (req, res) => {
 const getAllUsers = async (req, res) => {
   const response = await userModels.findAll();
   if (response) {
-    res.json(response);
+    return res.status(200).json(response);
   } else {
     res.status(404).json({ message: "No users found" });
   }
