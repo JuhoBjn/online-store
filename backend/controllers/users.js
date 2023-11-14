@@ -119,6 +119,7 @@ const login = async (req, res) => {
     role: user.role,
     firstname: user.first_name,
     lastname: user.last_name,
+    bio: user.bio,
     email: user.email,
     postalcode: user.postal_code,
     city: user.city,
@@ -166,10 +167,11 @@ const getUser = async (req, res) => {
   if (response) {
     res.status(200).json({
       id: response.id,
-      first_name: response.first_name,
-      last_name: response.last_name,
+      firstname: response.first_name,
+      lastname: response.last_name,
+      bio: response.bio,
       email: response.email,
-      postal_code: response.postal_code,
+      postalcode: response.postal_code,
       city: response.city,
       country: response.country,
       phone: response.phone,
@@ -227,6 +229,7 @@ const updateUser = async (req, res) => {
     id: Joi.string().uuid(),
     first_name: Joi.string(),
     last_name: Joi.string(),
+    bio: Joi.string(),
     email: Joi.string().email(),
     postal_code: Joi.string(),
     city: Joi.string(),
@@ -239,6 +242,7 @@ const updateUser = async (req, res) => {
     id: req.body.id,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
+    bio: req.body.bio,
     email: req.body.email,
     postal_code: req.body.postal_code,
     city: req.body.city,
@@ -254,22 +258,13 @@ const updateUser = async (req, res) => {
     return res.status(400).send(error.details[0].message);
   }
 
-  const user = {
-    id: providedUserDetails.id,
-    first_name: providedUserDetails.first_name,
-    last_name: providedUserDetails.last_name,
-    email: providedUserDetails.email,
-    postal_code: providedUserDetails.postal_code,
-    city: providedUserDetails.city,
-    country: providedUserDetails.country,
-    phone: providedUserDetails.phone,
-    premium: providedUserDetails.premium
-  };
-
   const filteredUser = {};
-  for (const key in user) {
-    if (user[key] !== null && user[key] !== undefined) {
-      filteredUser[key] = user[key];
+  for (const key in providedUserDetails) {
+    if (
+      providedUserDetails[key] !== null &&
+      providedUserDetails[key] !== undefined
+    ) {
+      filteredUser[key] = providedUserDetails[key];
     }
   }
 
