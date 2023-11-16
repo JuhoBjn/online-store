@@ -7,7 +7,7 @@ const users = {
    */
   findAll: async () => {
     const queryString = `
-      SELECT id, first_name AS firstname, last_name AS lastname, email,
+      SELECT id, first_name AS firstname, last_name AS lastname, bio, email,
       postal_code AS postalcode, city, country, phone, premium
       FROM users`;
     const [rows] = await promisePool.query(queryString);
@@ -29,7 +29,9 @@ const users = {
    */
   findByEmail: async (email) => {
     const queryString = `
-      SELECT users.id, users.role_id, roles.name AS role, users.first_name, users.last_name, users.email, users.postal_code, users.city, users.country, users.phone, users.premium, users.password
+      SELECT users.id, users.role_id, roles.name AS role, users.first_name, 
+        users.last_name, users.bio, users.email, users.postal_code, users.city,
+        users.country, users.phone, users.premium, users.password
       FROM users
       LEFT JOIN roles ON users.role_id = roles.id
       WHERE email = ?;`;
@@ -44,8 +46,9 @@ const users = {
   findById: async (id) => {
     const queryString = `
       SELECT users.id, roles.name AS role, users.first_name AS firstname,
-        users.last_name AS lastname, users.email, users.postal_code AS postalcode,
-        users.city, users.country, users.phone, users.premium
+        users.last_name AS lastname, users.bio, users.email,
+        users.postal_code AS postalcode, users.city, users.country,
+        users.phone, users.premium
       FROM users
       LEFT JOIN roles ON users.role_id = roles.id
       WHERE users.id = ?;`;
@@ -98,6 +101,12 @@ const users = {
       updateString += " last_name = ?,";
       updateValues.push(user.last_name);
     }
+
+    if (user.bio) {
+      updateString += " bio = ?,";
+      updateValues.push(user.bio);
+    }
+
     if (user.email) {
       updateString += " email = ?,";
       updateValues.push(user.email);
@@ -143,7 +152,8 @@ const users = {
 
     await promisePool.query(updateString, updateValues);
     const fetchString = `
-      SELECT id, email, role_id, first_name, last_name, email, postal_code, city, country, phone, premium
+      SELECT id, email, role_id, first_name, last_name, bio, email, postal_code,
+        city, country, phone, premium
       FROM users
       WHERE id = ?;`;
     const [updatedUser] = await promisePool.query(fetchString, [user.id]);
