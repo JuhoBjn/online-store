@@ -177,6 +177,7 @@ const getUser = async (req, res) => {
       id: user.id,
       firstname: user.firstname,
       lastname: user.lastname,
+      bio: user.bio,
       city: user.city,
       isFriend: isFriend
     };
