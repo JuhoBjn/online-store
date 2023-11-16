@@ -116,6 +116,7 @@ describe("Fetch users", () => {
         id: expect.any(String),
         firstname: expect.any(String),
         lastname: expect.any(String),
+        bio: expect.any(String),
         email: expect.any(String),
         postalcode: expect.any(String),
         city: expect.any(String),
@@ -139,6 +140,7 @@ describe("Fetch users", () => {
         id: expect.any(String),
         firstname: expect.any(String),
         lastname: expect.any(String),
+        bio: expect.any(String),
         city: expect.any(String),
         isFriend: expect.any(Boolean)
       })
