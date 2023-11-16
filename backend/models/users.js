@@ -43,14 +43,15 @@ const users = {
    */
   findById: async (id) => {
     const queryString = `
-      SELECT users.id, roles.name AS role, users.first_name, users.last_name, users.email, users.postal_code, users.city, users.country, users.phone, users.premium, users.password
+      SELECT users.id, roles.name AS role, users.first_name AS firstname,
+        users.last_name AS lastname, users.email, users.postal_code AS postalcode,
+        users.city, users.country, users.phone, users.premium
       FROM users
       LEFT JOIN roles ON users.role_id = roles.id
       WHERE users.id = ?;`;
     const [rows] = await promisePool.query(queryString, [id]);
     return rows[0] === undefined ? null : rows[0];
   },
-
   /**
    * Create a new user entry.
    * @param {Object} user - The user object containing user details.

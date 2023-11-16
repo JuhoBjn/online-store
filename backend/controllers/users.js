@@ -153,28 +153,36 @@ const getUser = async (req, res) => {
   const schema = Joi.object({
     id: Joi.string().uuid().required()
   });
-  const providedCredentials = {
-    id: req.params.id
-  };
-  try {
-    const { error } = schema.validate(providedCredentials);
-    if (error) throw error;
-  } catch (error) {
+
+  const paramUserId = req.params.id;
+
+  const { error } = schema.validate({ id: paramUserId });
+  if (error) {
     return res.status(400).send({ message: error.details[0].message });
   }
-  const response = await userModels.findById(providedCredentials.id);
+
+  // Fetch and return full profile if the requester is requesting their own profile.
+  // Return only brief info if the user is requesting for someone else's profile.
+  let response;
+  if (paramUserId === req.user.id) {
+    response = await userModels.findById(paramUserId);
+  } else {
+    const user = await userModels.findById(paramUserId);
+    const isFriend = await userModels.friendshipExists(
+      req.user.id,
+      paramUserId
+    );
+    response = {
+      id: user.id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      city: user.city,
+      isFriend: isFriend
+    };
+  }
+
   if (response) {
-    res.status(200).json({
-      id: response.id,
-      first_name: response.first_name,
-      last_name: response.last_name,
-      email: response.email,
-      postal_code: response.postal_code,
-      city: response.city,
-      country: response.country,
-      phone: response.phone,
-      premium: response.premium
-    });
+    res.status(200).json(response);
   } else {
     res.status(404).json({ message: "No user found with given id" });
   }
