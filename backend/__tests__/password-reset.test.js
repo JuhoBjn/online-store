@@ -10,6 +10,7 @@ const app = require("../app");
 const request = require("supertest");
 const jwt = require("jsonwebtoken");
 const users = require("../models/users");
+const { promisePool } = require("../db/pool");
 
 const waitMailDevShutdown = (maildev) => {
   return new Promise((resolve) => {
@@ -109,9 +110,9 @@ describe("Password reset", () => {
       expect(res.statusCode).toEqual(204);
       expect(res.body).toEqual({});
 
-      const passwordHashAfter = await users
-        .findById(user.id)
-        .then((user) => user.password);
+      const queryString = "SELECT password FROM users WHERE id = ?;";
+      const [rows] = await promisePool.query(queryString, [user.id]);
+      const passwordHashAfter = rows[0];
 
       expect(passwordHashBefore).not.toEqual(passwordHashAfter);
     });
