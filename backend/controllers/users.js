@@ -220,11 +220,11 @@ const deleteUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  if (req.user.id !== req.body.id) {
-    return res.status(403).send({ message: "Unauthorized" });
-  }
-  const schema = Joi.object({
-    id: Joi.string().uuid(),
+  const paramSchema = Joi.object({
+    id: Joi.string().uuid().required()
+  });
+
+  const bodySchema = Joi.object({
     first_name: Joi.string(),
     last_name: Joi.string(),
     email: Joi.string().email(),
@@ -236,7 +236,7 @@ const updateUser = async (req, res) => {
   });
 
   const providedUserDetails = {
-    id: req.body.id,
+    id: req.params.id,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     email: req.body.email,
@@ -248,10 +248,22 @@ const updateUser = async (req, res) => {
   };
 
   try {
-    const { error } = schema.validate(providedUserDetails);
+    const { error } = paramSchema.validate(req.params);
     if (error) throw error;
   } catch (error) {
     return res.status(400).send(error.details[0].message);
+  }
+
+  try {
+    const { error } = bodySchema.validate(req.body);
+    if (error) throw error;
+  } catch (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
+  // Can only update own details.
+  if (req.user.id !== req.params.id) {
+    return res.status(403).send({ message: "Unauthorized" });
   }
 
   const user = {
@@ -263,7 +275,7 @@ const updateUser = async (req, res) => {
     city: providedUserDetails.city,
     country: providedUserDetails.country,
     phone: providedUserDetails.phone,
-    premium: providedUserDetails.premium
+    premium: providedUserDetails.premium // TODO: Upgrading to premium should be moved to a separate endpoint with "payment" validation in the future.
   };
 
   const filteredUser = {};
@@ -273,10 +285,16 @@ const updateUser = async (req, res) => {
     }
   }
 
+  // if nothing to update (nothing except id in filteredUser) return 400
+  // (this deals with: empty body will throw mysql error)
+  if (Object.keys(filteredUser).length === 1) {
+    return res.status(400).send({ message: "Nothing to update" });
+  }
+
   try {
     const updatedUser = await userModels.update(filteredUser);
     if (!updatedUser) throw new Error("Failed to update user");
-    res.status(200).send(updatedUser);
+    return res.status(200).send(updatedUser);
   } catch (error) {
     return res.status(500).send({ message: error.message });
   }
