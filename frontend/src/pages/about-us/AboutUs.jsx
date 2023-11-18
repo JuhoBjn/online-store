@@ -22,7 +22,7 @@ const AboutUs = () => {
           data-testid="about-us-content-left"
           className="about-us-content-left"
         >
-          <p>
+          <p data-testid="about-us-paragraph1">
             Welcome to GoldenAge, where we believe in making every phase of life
             vibrant, engaging, and fulfilling. We understand the challenges that
             elderly individuals face, and we&apos;re here to transform their
@@ -30,7 +30,7 @@ const AboutUs = () => {
             myriad of activities, from lively parties to the pursuit of exciting
             new hobbies and the chance to make new friends.
           </p>
-          <p>
+          <p data-testid="about-us-paragraph2">
             Our mission is clear: to reduce loneliness, promote an active and
             happy lifestyle, and ultimately improve the quality of life and
             mental well-being of the elderly. We are dedicated to creating a
@@ -45,6 +45,7 @@ const AboutUs = () => {
           className="about-us-content-right"
         >
           <img
+            data-testid="about-us-image"
             src={ElatedPensioner}
             alt="An elated old lady sitting on a chair pumping her arm in the air in celebration."
           />
