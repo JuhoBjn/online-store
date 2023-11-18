@@ -41,12 +41,16 @@
   resize: vertical;
 }
 
-.contact-us-form-button-container {
+.contact-us-form-footer {
   width: 100%;
   height: fit-content;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+#message-sent {
+  margin: 0 1em;
 }
 
 @media (max-width: 768px) {

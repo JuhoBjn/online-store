@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Button from "../../components/button/Button";
@@ -6,6 +6,7 @@ import Button from "../../components/button/Button";
 import "./ContactUs.css";
 
 const ContactUs = () => {
+  const [messageSent, setMessageSent] = useState(false);
   const emailRef = useRef("");
   const messageRef = useRef("");
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const ContactUs = () => {
     console.log(
       `Email: ${emailRef.current.value}, message: ${messageRef.current.value}`
     );
+    setMessageSent(true);
   };
 
   useEffect(() => {
@@ -57,7 +59,8 @@ const ContactUs = () => {
             rows="5"
             required
           />
-          <div className="contact-us-form-button-container">
+          <div className="contact-us-form-footer">
+            {messageSent && <p id="message-sent">&#x2714; Message sent</p>}
             <Button type="confirm">Send message</Button>
           </div>
         </form>
