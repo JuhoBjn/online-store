@@ -1,7 +1,9 @@
 .frontpage {
-  height: 100vh;
+  /* height = 100vh - navbar */
+  height: calc(100vh - 7em);
   width: 100vw;
   display: flex;
+  margin-top: 7em;
   flex-direction: column;
   justify-content: center;
   align-items: center;

@@ -1,7 +1,8 @@
 .about-us-page {
-  height: calc(100vh - 6em);
+  /* height: 100vh - navbar */
+  height: calc(100vh - 7em);
   width: 100vw;
-  margin-top: 6em;
+  margin-top: 7em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,7 +12,8 @@
 
 .about-us-page-content {
   height: fit-content;
-  max-height: calc(100vh - 6em);
+  /* max-height: 100vh - navbar */
+  max-height: calc(100vh - 7em);
   width: 80%;
   max-width: 60em;
   display: flex;
