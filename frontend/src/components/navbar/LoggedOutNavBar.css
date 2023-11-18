@@ -52,6 +52,7 @@
 
 .logged-out-navigation-links a {
   text-decoration: none;
+  color: var(--main-text-color);
 }
 
 .logged-out-navigation-links a:hover {
