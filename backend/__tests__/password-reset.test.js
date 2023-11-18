@@ -9,7 +9,6 @@ const MailDev = require("maildev");
 const app = require("../app");
 const request = require("supertest");
 const jwt = require("jsonwebtoken");
-const users = require("../models/users");
 const { promisePool } = require("../db/pool");
 
 const waitMailDevShutdown = (maildev) => {
