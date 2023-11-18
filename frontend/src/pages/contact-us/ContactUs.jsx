@@ -28,7 +28,7 @@ const ContactUs = () => {
   return (
     <div className="contact-us-page">
       <div className="contact-us-form-container">
-        <h2>Contact Form</h2>
+        <h2 data-testid="contact-form-title">Contact Form</h2>
         <form
           data-testid="contact-us-form"
           id="contact-us-form"
@@ -39,6 +39,7 @@ const ContactUs = () => {
           </label>
           <input
             id="email-input"
+            data-testid="email-input"
             type="email"
             placeholder="Your email"
             ref={emailRef}
@@ -49,6 +50,7 @@ const ContactUs = () => {
           </label>
           <textarea
             id="message-input"
+            data-testid="message-input"
             placeholder="Leave your message here"
             ref={messageRef}
             autoComplete="on"
