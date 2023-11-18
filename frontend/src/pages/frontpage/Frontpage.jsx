@@ -1,15 +1,26 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useContext } from "react";
 
 import Button from "../../components/button/Button";
+import { AuthContext } from "../../utils/AuthContext";
 
 import "./Frontpage.css";
 
 const Frontpage = () => {
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   const navigateToAuthHandler = () => {
     navigate("/auth");
   };
+
+  // Redirect user to the news page if they're logged in.
+  useEffect(() => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser?.token) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className="frontpage">
