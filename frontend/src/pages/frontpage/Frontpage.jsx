@@ -23,8 +23,10 @@ const Frontpage = () => {
   return (
     <div className="frontpage">
       <div className="frontpage-content">
-        <h2 id="frontpage-title">What is GoldenAge?</h2>
-        <p>
+        <h2 data-testid="frontpage-title" id="frontpage-title">
+          What is GoldenAge?
+        </h2>
+        <p data-testid="frontpage-content">
           GoldenAge is more than a community; it&apos;s a celebration of
           life&apos;s richness and the pursuit of vibrant connections. We are a
           dedicated platform designed to enhance the lives of seniors through a
@@ -32,7 +34,12 @@ const Frontpage = () => {
           supportive connections.
         </p>
       </div>
-      <Button id="join-button" type="confirm" onClick={navigateToAuthHandler}>
+      <Button
+        id="join-button"
+        data-testid="join-button"
+        type="confirm"
+        onClick={navigateToAuthHandler}
+      >
         Join
       </Button>
     </div>
