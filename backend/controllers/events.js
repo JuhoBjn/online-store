@@ -165,59 +165,21 @@ const updateEvent = async (req, res) => {
     return res.status(500).json({ error: "Internal error" });
   }
 
-  let newFileKey = null;
-  // if a new image was uploaded, upload it to S3 and delete the old image
-  if (req.file) {
-    newFileKey = `${Date.now().toString()}-${req.file.originalname}`;
-    try {
-      await s3.send(
-        new PutObjectCommand({
-          Bucket: process.env.S3_BUCKET_NAME,
-          Key: newFileKey,
-          Body: req.file.buffer,
-          ContentType: req.file.mimetype
-        })
-      );
-
-      await s3.send(
-        new DeleteObjectCommand({
-          Bucket: process.env.S3_BUCKET_NAME,
-          Key: existingEvent.image_object_key
-        })
-      );
-    } catch (e) {
-      console.log(e);
-      return res.status(500).json({ error: "Internal error" });
-    }
-  }
-
   // build the event object to update
   const eventData = {
-    name: req.body.json.name ?? existingEvent.name,
-    description: req.body.json.description ?? existingEvent.description,
-    starts_at: req.body.json.starts_at
-      ? new Date(req.body.json.starts_at)
+    name: req.body.json?.name ?? existingEvent.name,
+    description: req.body.json?.description ?? existingEvent.description,
+    starts_at: req.body.json?.starts_at
+      ? new Date(req.body.json?.starts_at)
       : existingEvent.starts_at,
-    ends_at: req.body.json.ends_at
-      ? new Date(req.body.json.ends_at)
+    ends_at: req.body.json?.ends_at
+      ? new Date(req.body.json?.ends_at)
       : existingEvent.ends_at
   };
 
   try {
     // update the event in the database
-    await events.updateEvent(
-      eventId,
-      eventData,
-      req.file
-        ? {
-            objectKey: newFileKey,
-            originalName: req.file.originalname,
-            mimetype: req.file.mimetype,
-            size: req.file.size,
-            oldFileId: existingEvent.picture_id
-          }
-        : null
-    );
+    await events.updateEvent(eventId, eventData);
     return res.status(204).json({ message: "Event updated" });
   } catch (e) {
     console.log(e);
