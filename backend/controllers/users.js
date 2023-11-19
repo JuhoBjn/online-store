@@ -121,6 +121,7 @@ const login = async (req, res) => {
     lastname: user.last_name,
     bio: user.bio,
     email: user.email,
+    email_hash: user.email_hash,
     postalcode: user.postal_code,
     city: user.city,
     country: user.country,
@@ -177,6 +178,7 @@ const getUser = async (req, res) => {
       id: user.id,
       firstname: user.firstname,
       lastname: user.lastname,
+      emailhash: user.email_hash,
       bio: user.bio,
       city: user.city,
       isFriend: isFriend
