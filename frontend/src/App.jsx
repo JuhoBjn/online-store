@@ -9,6 +9,7 @@ import { AuthContext } from "./utils/AuthContext";
 import { signup, login } from "./utils/UsersAPI";
 import Home from "./pages/home/Home";
 import Authorization from "./pages/authorization/Authorization";
+import ResetPassword from "./pages/reset-password/ResetPassword";
 
 import "./App.css";
 
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: <Authorization />
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPassword />
   },
   {
     path: "*",
