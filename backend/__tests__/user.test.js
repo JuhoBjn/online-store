@@ -195,9 +195,8 @@ describe("all profile updating", () => {
   it("should update a user's bio", async () => {
     const newBio = "This is the updated bio of Tommy Tester.";
     const response = await supertest(app)
-      .post("/api/users/updateUser")
+      .patch("/api/users/197bdce9-f60b-4529-b781-a78fb54d7c51")
       .send({
-        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         bio: newBio
       })
       .set("Authorization", `Bearer ${token}`)
@@ -211,8 +210,8 @@ describe("all profile updating", () => {
   it("should not allow a user to update someone else's bio", async () => {
     const newBio = "This is a user's attempt to update another user's bio.";
     const response = await supertest(app)
-      .post("/api/users/updateUser")
-      .send({ id: "8b414dd1-f7cb-482c-9f4a-3cfdb998f948", bio: newBio })
+      .patch("/api/users/8b414dd1-f7cb-482c-9f4a-3cfdb998f948")
+      .send({ bio: newBio })
       .set("Content-Type", "application/json")
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
