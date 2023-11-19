@@ -24,7 +24,7 @@
 
 .action {
   background-color: var(--dark-brown);
-  color: var(--light-brown);
+  color: var(--main-background-color);
 }
 
 .confirm {
