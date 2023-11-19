@@ -98,8 +98,8 @@ CREATE TABLE `users` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `role_id` int NOT NULL,
-  `bio` varchar(400) DEFAULT NULL,
   `email_hash` varchar(64) GENERATED ALWAYS AS (sha2(lower(trim(`email`)),256)) STORED,
+  `bio` varchar(400) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_users_roles_idx` (`role_id`),
   CONSTRAINT `fk_users_roles_idx` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
@@ -133,5 +133,6 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20231024203602'),
   ('20231025202701'),
   ('20231029153934'),
-  ('20231114145827');
+  ('20231114145827'),
+  ('20231114194708');
 UNLOCK TABLES;
