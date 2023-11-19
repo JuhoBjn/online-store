@@ -218,3 +218,15 @@ Authorization: Bearer {{caretakerLogin.response.body.token}}
 # @prompt event_id Enter event id
 GET http://localhost:5000/api/events/{{event_id}}
 Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:5000/api/events?limit=10&page=1
+Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:5000/api/events
+Authorization: Bearer {{token}}
+
+###

@@ -215,6 +215,33 @@ const getEvent = async (req, res) => {
   }
 };
 
-const getEvents = async (req, res) => {};
+const getEvents = async (req, res) => {
+  const schema = Joi.object({
+    limit: Joi.number().integer().min(1).max(1000),
+    page: Joi.number().integer().min(1)
+  });
+
+  const validation = schema.validate(req.query);
+  if (validation.error) {
+    return res.status(400).json({ error: validation.error.details[0].message });
+  }
+
+  const limit = parseInt(req.query?.limit ?? 100); // default to 100
+  const page = parseInt(req.query?.page ?? 1); // default to 1
+  const offset = (page - 1) * limit;
+
+  try {
+    let eventsList = await events.getEvents(limit, offset);
+    eventsList = eventsList.map((event) => ({
+      ...event,
+      image_url: getS3Url(event.image_object_key)
+    }));
+
+    return res.status(200).json(eventsList);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Failed to get events" });
+  }
+};
 
 module.exports = { addEvent, deleteEvent, updateEvent, getEvent, getEvents };

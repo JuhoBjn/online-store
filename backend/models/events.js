@@ -117,11 +117,48 @@ const eventsDB = {
       if (conn) conn.release();
     }
   },
+  /**
+   * Updates an event in the database.
+   * @async
+   * @param {number} id - The ID of the event to update.
+   * @param {Object} eventData - The event object.
+   * @param {string} eventData.name - The name of the event.
+   * @param {string} eventData.description - The description of the event.
+   * @param {string} eventData.starts_at - The start date and time of the event. In ISO 8601 format.
+   * @param {string} eventData.ends_at - The end date and time of the event. In ISO 8601 format.
+   * @returns {Promise<void>}
+   */
   updateEvent: async (id, eventData) => {
     return await promisePool.query("UPDATE events SET ? WHERE id = ?", [
       eventData,
       id
     ]);
+  },
+  /**
+   * Get all events.
+   * @async
+   * @returns {Promise<Array>} An array of event objects.
+   */
+  getEvents: async (limit, offset) => {
+    const [rows] = await promisePool.query(
+      `SELECT 
+        e.id,
+        e.name,
+        e.description,
+        e.picture_id,
+        e.starts_at,
+        e.ends_at,
+        e.created_at,
+        e.updated_at,
+        f.object_key AS image_object_key
+      FROM events e
+       LEFT JOIN files f ON e.picture_id = f.id
+      ORDER BY e.id DESC
+      LIMIT ?
+      OFFSET ?;`,
+      [limit, offset]
+    );
+    return rows;
   }
 };
 

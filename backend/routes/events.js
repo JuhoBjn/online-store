@@ -7,7 +7,8 @@ const {
   addEvent,
   deleteEvent,
   updateEvent,
-  getEvent
+  getEvent,
+  getEvents
 } = require("../controllers/events");
 const { upload } = require("../s3/multer");
 
@@ -20,5 +21,7 @@ router.delete("/:id", checkCaretaker, deleteEvent);
 router.patch("/:id", checkCaretaker, updateEvent);
 
 router.get("/:id", getEvent);
+
+router.get("/", getEvents);
 
 module.exports = router;
