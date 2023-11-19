@@ -115,6 +115,40 @@ const eventsDB = {
     } finally {
       if (conn) conn.release();
     }
+  },
+  updateEvent: async (id, event, image = null) => {
+    let conn = null;
+    try {
+      conn = await promisePool.getConnection();
+      await conn.beginTransaction();
+
+      let fileRow = null;
+      if (image) {
+        [fileRow] = await conn.query(
+          "INSERT INTO files (object_key, original_name, mimetype, size) VALUES (?, ?, ?, ?)",
+          [image.objectKey, image.originalName, image.mimetype, image.size]
+        );
+      }
+
+      await conn.query(
+        "UPDATE events SET name = ?, description = ?, starts_at = ?, ends_at = ?, picture_id = ? WHERE id = ?",
+        [
+          event.name,
+          event.description,
+          event.starts_at,
+          event.ends_at,
+          fileRow?.insertId, // null if no image was uploaded
+          id
+        ]
+      );
+
+      await conn.commit();
+    } catch (error) {
+      if (conn) await conn.rollback();
+      throw error;
+    } finally {
+      if (conn) conn.release();
+    }
   }
 };
 

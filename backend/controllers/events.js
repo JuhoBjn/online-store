@@ -112,10 +112,121 @@ const deleteEvent = async (req, res) => {
   }
 };
 
-// const updateEvent = async (req, res) => {};
+const updateEvent = async (req, res) => {
+  const paramSchema = Joi.object({
+    id: Joi.number().integer().required()
+  });
+
+  const paramValidation = paramSchema.validate(req.params);
+  if (paramValidation.error) {
+    return res
+      .status(400)
+      .json({ error: paramValidation.error.details[0].message });
+  }
+
+  if (req.is("multipart/form-data") && req.body.json) {
+    // parse the stringified JSON in the json field into an object
+    try {
+      req.body.json = JSON.parse(req.body.json);
+    } catch (e) {
+      return res.status(400).json({ error: "Invalid JSON body" });
+    }
+  } else if (req.is("application/json")) {
+    // make non multipart/form-data requests look like multipart/form-data
+    // so that we can use the same code to parse the request body
+    req.body = { json: req.body };
+  }
+
+  const eventSchema = Joi.object({
+    name: Joi.string().max(255),
+    description: Joi.string().max(4096),
+    starts_at: Joi.date(),
+    ends_at: Joi.date()
+  });
+
+  const eventValidation = eventSchema.validate(req.body.json);
+  if (eventValidation.error) {
+    return res
+      .status(400)
+      .json({ error: eventValidation.error.details[0].message });
+  }
+
+  const eventId = req.params.id;
+
+  let existingEvent = null;
+  // check if event exists
+  try {
+    existingEvent = await events.getEvent(eventId);
+    if (!existingEvent) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal error" });
+  }
+
+  let newFileKey = null;
+  // if a new image was uploaded, upload it to S3 and delete the old image
+  if (req.file) {
+    newFileKey = `${Date.now().toString()}-${req.file.originalname}`;
+    try {
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: process.env.S3_BUCKET_NAME,
+          Key: newFileKey,
+          Body: req.file.buffer,
+          ContentType: req.file.mimetype
+        })
+      );
+
+      await s3.send(
+        new DeleteObjectCommand({
+          Bucket: process.env.S3_BUCKET_NAME,
+          Key: existingEvent.image_object_key
+        })
+      );
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ error: "Internal error" });
+    }
+  }
+
+  // build the event object to update
+  const eventData = {
+    name: req.body.json.name ?? existingEvent.name,
+    description: req.body.json.description ?? existingEvent.description,
+    starts_at: req.body.json.starts_at
+      ? new Date(req.body.json.starts_at)
+      : existingEvent.starts_at,
+    ends_at: req.body.json.ends_at
+      ? new Date(req.body.json.ends_at)
+      : existingEvent.ends_at
+  };
+
+  try {
+    // update the event in the database
+    await events.updateEvent(
+      eventId,
+      eventData,
+      req.file
+        ? {
+            objectKey: newFileKey,
+            originalName: req.file.originalname,
+            mimetype: req.file.mimetype,
+            size: req.file.size,
+            oldFileId: existingEvent.picture_id
+          }
+        : null
+    );
+    return res.status(204).json({ message: "Event updated" });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Failed to update event" });
+  }
+};
 
 // const getEvent = async (req, res) => {};
 
 // const getEvents = async (req, res) => {};
 
-module.exports = { addEvent, deleteEvent };
+module.exports = { addEvent, deleteEvent, updateEvent };
