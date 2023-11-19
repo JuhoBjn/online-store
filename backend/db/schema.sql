@@ -19,7 +19,7 @@ CREATE TABLE `events` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` varchar(4096) NOT NULL,
-  `picture_id` int NOT NULL,
+  `picture_id` int DEFAULT NULL,
   `starts_at` timestamp NOT NULL,
   `ends_at` timestamp NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -39,6 +39,9 @@ CREATE TABLE `events` (
 CREATE TABLE `files` (
   `id` int NOT NULL AUTO_INCREMENT,
   `object_key` varchar(1024) NOT NULL,
+  `original_name` varchar(255) NOT NULL,
+  `mimetype` varchar(255) NOT NULL,
+  `size` int NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
