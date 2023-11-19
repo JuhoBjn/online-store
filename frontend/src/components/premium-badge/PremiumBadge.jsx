@@ -2,7 +2,7 @@ import "./PremiumBadge.css";
 
 const PremiumBadge = () => {
   return (
-    <div className="premium-account-badge">
+    <div data-testid="premium-badge" className="premium-account-badge">
       <p>Premium</p>
     </div>
   );
