@@ -40,7 +40,7 @@ const users = {
   findByEmail: async (email) => {
     const queryString = `
       SELECT users.id, users.role_id, roles.name AS role, users.first_name, 
-        users.last_name, users.bio, users.email, users.email_has,
+        users.last_name, users.bio, users.email, users.email_hash,
         users.postal_code, users.city, users.country, users.phone, users.premium,
         users.password
       FROM users
