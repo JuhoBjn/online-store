@@ -10,6 +10,8 @@ import { signup, login } from "./utils/UsersAPI";
 import Home from "./pages/home/Home";
 import Authorization from "./pages/authorization/Authorization";
 import ResetPassword from "./pages/reset-password/ResetPassword";
+import UserProfile from "./pages/user-profile/UserProfile";
+import { UserProfileLoader } from "./pages/user-profile/UserProfileLoader";
 
 import "./App.css";
 
@@ -25,6 +27,11 @@ const router = createBrowserRouter([
   {
     path: "/reset-password",
     element: <ResetPassword />
+  },
+  {
+    path: "/user/:id",
+    element: <UserProfile />,
+    loader: UserProfileLoader
   },
   {
     path: "*",
@@ -53,7 +60,7 @@ function App() {
   const signupUser = async (email, password) => {
     try {
       const response = await signup(email, password);
-      setCurrentUser({ ...response });
+      setCurrentUser(response);
       // Set token expiration time to two hours.
       const expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
       setTokenExpiration(expiration);
@@ -68,7 +75,7 @@ function App() {
   const loginUser = async (email, password) => {
     try {
       const response = await login(email, password);
-      setCurrentUser({ ...response });
+      setCurrentUser(response);
       // Set token expiration time to two hours.
       const expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
       setTokenExpiration(expiration);
@@ -115,6 +122,7 @@ function App() {
       setTokenExpiration(newTokenExpiration);
       storedUser.tokenExpiration = newTokenExpiration;
       localStorage.setItem("currentUser", JSON.stringify(storedUser));
+      setCurrentUser(storedUser);
     }
   }, []);
 

@@ -1,0 +1,10 @@
+.premium-account-badge {
+  height: fit-content;
+  width: fit-content;
+  padding: 2px 7px;
+  background-color: var(--light-green);
+}
+
+.premium-account-badge p {
+  margin: 0;
+}
