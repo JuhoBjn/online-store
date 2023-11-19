@@ -64,7 +64,9 @@ const UserProfile = () => {
             {!user.isFriend && user.isFriend !== undefined && (
               <div className="friend-request-button-container">
                 {friendRequestSent ? (
-                  <p>&#x2714; Friend request sent</p>
+                  <p data-testid="friend-request-sent">
+                    &#x2714; Friend request sent
+                  </p>
                 ) : (
                   <Button type="action" onClick={sendFriendRequestHandler}>
                     Send friend request
