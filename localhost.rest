@@ -155,7 +155,7 @@ Content-Type: multipart/form-data; boundary=--contentboundary
 Authorization: Bearer {{caretakerLogin.response.body.token}}
 
 ----contentboundary
-Content-Disposition: form-data; name="data"
+Content-Disposition: form-data; name="json"
 Content-Type: application/json
 
 {
@@ -170,5 +170,18 @@ Content-Type: image/jpeg
 
 < ./red.jpg
 ----contentboundary--
+
+###
+
+POST http://localhost:5000/api/events
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+Content-Type: application/json
+
+{
+    "name": "Test Event",
+    "description": "This is a test event",
+    "starts_at": "2021-02-01T00:00:00.000Z",
+    "ends_at": "2021-02-01T12:00:00.000Z"
+}
 
 ###

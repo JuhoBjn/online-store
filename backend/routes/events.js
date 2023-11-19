@@ -4,7 +4,7 @@ const verifyToken = require("../middleware/verifyToken");
 const checkCaretaker = require("../middleware/checkCaretaker");
 
 const { addEvent } = require("../controllers/events");
-const upload = require("../s3/multer");
+const { upload } = require("../s3/multer");
 
 router.use(verifyToken);
 
