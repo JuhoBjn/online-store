@@ -248,19 +248,6 @@ const updateUser = async (req, res) => {
     premium: Joi.boolean()
   });
 
-  const providedUserDetails = {
-    id: req.params.id,
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    bio: req.body.bio,
-    email: req.body.email,
-    postal_code: req.body.postal_code,
-    city: req.body.city,
-    country: req.body.country,
-    phone: req.body.phone,
-    premium: req.body.premium
-  };
-
   try {
     const { error } = paramSchema.validate(req.params);
     if (error) throw error;
@@ -280,16 +267,17 @@ const updateUser = async (req, res) => {
     return res.status(403).send({ message: "Unauthorized" });
   }
 
-  const user = {
-    id: providedUserDetails.id,
-    first_name: providedUserDetails.first_name,
-    last_name: providedUserDetails.last_name,
-    email: providedUserDetails.email,
-    postal_code: providedUserDetails.postal_code,
-    city: providedUserDetails.city,
-    country: providedUserDetails.country,
-    phone: providedUserDetails.phone,
-    premium: providedUserDetails.premium // TODO: Upgrading to premium should be moved to a separate endpoint with "payment" validation in the future.
+  const providedUserDetails = {
+    id: req.params.id,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    bio: req.body.bio,
+    email: req.body.email,
+    postal_code: req.body.postal_code,
+    city: req.body.city,
+    country: req.body.country,
+    phone: req.body.phone,
+    premium: req.body.premium // TODO: Upgrading to premium should be moved to a separate endpoint with "payment" validation in the future.
   };
 
   const filteredUser = {};
