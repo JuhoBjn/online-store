@@ -3,6 +3,7 @@ const { s3 } = require("../s3/multer");
 const { PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 
 const events = require("../models/events");
+const { getS3Url } = require("../s3/util");
 
 const addEvent = async (req, res) => {
   if (req.is("multipart/form-data") && req.body.json) {
@@ -187,8 +188,33 @@ const updateEvent = async (req, res) => {
   }
 };
 
-// const getEvent = async (req, res) => {};
+const getEvent = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().required()
+  });
 
-// const getEvents = async (req, res) => {};
+  const validation = schema.validate(req.params);
+  if (validation.error) {
+    return res.status(400).json({ error: validation.error.details[0].message });
+  }
 
-module.exports = { addEvent, deleteEvent, updateEvent };
+  const eventId = req.params.id;
+
+  try {
+    let event = await events.getEvent(eventId);
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    event = { ...event, image_url: getS3Url(event.image_object_key) };
+
+    return res.status(200).json(event);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Failed to get event" });
+  }
+};
+
+const getEvents = async (req, res) => {};
+
+module.exports = { addEvent, deleteEvent, updateEvent, getEvent, getEvents };
