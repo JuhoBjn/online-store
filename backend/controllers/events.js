@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const { s3 } = require("../s3/multer");
-const { PutObjectCommand } = require("@aws-sdk/client-s3");
+const { PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 
 const events = require("../models/events");
 
@@ -74,7 +74,43 @@ const addEvent = async (req, res) => {
   }
 };
 
-// const deleteEvent = async (req, res) => {};
+const deleteEvent = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().required()
+  });
+
+  const validation = schema.validate(req.params);
+  if (validation.error) {
+    return res.status(400).json({ error: validation.error.details[0].message });
+  }
+
+  const eventId = req.params.id;
+
+  try {
+    // if event has an image, delete the image from S3
+    const event = await events.getEvent(eventId);
+    if (event?.picture_id) {
+      await s3.send(
+        new DeleteObjectCommand({
+          Bucket: process.env.S3_BUCKET_NAME,
+          Key: event.image_object_key
+        })
+      );
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Failed to delete event image" });
+  }
+
+  try {
+    // delete the event from the database
+    await events.deleteEvent(eventId);
+    return res.status(204).json({ message: "Event deleted" });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Failed to delete event" });
+  }
+};
 
 // const updateEvent = async (req, res) => {};
 
@@ -82,4 +118,4 @@ const addEvent = async (req, res) => {
 
 // const getEvents = async (req, res) => {};
 
-module.exports = { addEvent };
+module.exports = { addEvent, deleteEvent };

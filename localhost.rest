@@ -185,3 +185,9 @@ Content-Type: application/json
 }
 
 ###
+
+# @prompt event_id Enter event id
+DELETE http://localhost:5000/api/events/{{event_id}}
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+
+###
