@@ -1,5 +1,6 @@
 const supertest = require("supertest");
 const { describe, it, expect, beforeAll, afterAll } = require("@jest/globals");
+const { toBeOneOf } = require("jest-extended");
 const bcrypt = require("bcryptjs");
 
 const app = require("../app");
@@ -7,18 +8,13 @@ const { pool } = require("../db/pool");
 
 const jwt = require("jsonwebtoken");
 
-describe("all profile finding or searching by id", () => {
-  let user = {
-    id: "e07689a6-e43b-4f07-9331-782fa4f5decf"
-  };
-  let token = jwt.sign({ id: user.id }, process.env.JWT_KEY, {
-    expiresIn: "30m"
-  });
+describe("Fetch users", () => {
   const testUser1 = {
     id: "e07689a6-e43b-4f07-9331-782fa4f5decf",
     role_id: 1,
     first_name: "Tommy1",
     last_name: "Tester1",
+    bio: "This is the bio of Tommy1 Tester1",
     email: "tommy@tester1.com",
     postal_code: "00104",
     city: "Helsinkii",
@@ -29,11 +25,16 @@ describe("all profile finding or searching by id", () => {
     password: "Tommy@test1234",
     premium: 1
   };
+  let token = jwt.sign({ id: testUser1.id }, process.env.JWT_KEY, {
+    expiresIn: "30m"
+  });
+
   const testUser2 = {
     id: "ae6c9a1d-5dd7-440f-ac4e-c7c43806c879",
     role_id: 1,
     first_name: "Tomi",
     last_name: "Testaaja",
+    bio: "This is the bio of Tomi Testaaja.",
     email: "Tomi@Testaaja.com",
     postal_code: "00200",
     city: "Tampere",
@@ -44,6 +45,8 @@ describe("all profile finding or searching by id", () => {
     password: "Tomi@testi1234",
     premium: 1
   };
+
+  expect.extend({ toBeOneOf });
 
   beforeAll(() => {
     return new Promise((resolve, reject) => {
@@ -101,14 +104,49 @@ describe("all profile finding or searching by id", () => {
     });
   });
 
-  it("Should find user by id", async () => {
+  it("should return full user details when requesting own profile", async () => {
     const response = await supertest(app)
-      .get("/api/users/e07689a6-e43b-4f07-9331-782fa4f5decf")
+      .get(`/api/users/${testUser1.id}`)
       .set("Authorization", `Bearer ${token}`)
-      .set("Accept", "application/json")
-      .set("Content-Type", "application/json");
+      .set("Accept", "application/json");
+
     expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        id: expect.any(String),
+        firstname: expect.any(String),
+        lastname: expect.any(String),
+        bio: expect.any(String),
+        email: expect.any(String),
+        postalcode: expect.any(String),
+        city: expect.any(String),
+        country: expect.any(String),
+        phone: expect.any(String),
+        premium: expect.any(Number),
+        role: expect.any(String)
+      })
+    );
   });
+
+  it("should return brief profile when requesting for someone else's profile", async () => {
+    const response = await supertest(app)
+      .get(`/api/users/${testUser2.id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .set("Accept", "application/json");
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        id: expect.any(String),
+        firstname: expect.any(String),
+        lastname: expect.any(String),
+        bio: expect.any(String),
+        city: expect.any(String),
+        isFriend: expect.any(Boolean)
+      })
+    );
+  });
+
   it("Should find all users", async () => {
     const response = await supertest(app)
       .get("/api/users/")
@@ -117,7 +155,24 @@ describe("all profile finding or searching by id", () => {
       .set("Content", "application/json");
 
     expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: expect.any(String),
+          firstname: expect.toBeOneOf([expect.any(String), null]),
+          lastname: expect.toBeOneOf([expect.any(String), null]),
+          bio: expect.toBeOneOf([expect.any(String), null]),
+          email: expect.any(String),
+          postalcode: expect.toBeOneOf([expect.any(String), null]),
+          city: expect.toBeOneOf([expect.any(String), null]),
+          country: expect.toBeOneOf([expect.any(String), null]),
+          phone: expect.toBeOneOf([expect.any(String), null]),
+          premium: expect.any(Number)
+        })
+      ])
+    );
   });
+
   it("should delete user by id", async () => {
     const response = await supertest(app)
       .delete("/api/users/e07689a6-e43b-4f07-9331-782fa4f5decf")
@@ -127,6 +182,7 @@ describe("all profile finding or searching by id", () => {
 
     expect(response.status).toBe(200);
   });
+
   it("should not able delete other user by id", async () => {
     const response = await supertest(app)
       .delete("/api/users/ae6c9a1d-5dd7-440f-ac4e-c7c43806c879")
@@ -136,6 +192,7 @@ describe("all profile finding or searching by id", () => {
 
     expect(response.status).toBe(403);
   });
+
   it("Should not find deleted user", async () => {
     const response = await supertest(app)
       .get("/api/users/e07689a6-e43b-4f07-9331-782fa4f5decf")
@@ -144,14 +201,5 @@ describe("all profile finding or searching by id", () => {
       .set("Content", "application/json");
 
     expect(response.status).toBe(404);
-  });
-  it("Should find only 1 user", async () => {
-    const response = await supertest(app)
-      .get("/api/users/")
-      .set("Authorization", `Bearer ${token}`)
-      .set("Accept", "application/json")
-      .set("Content", "application/json");
-
-    expect(response.status).toBe(200);
   });
 });

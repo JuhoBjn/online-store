@@ -1,6 +1,6 @@
-# Online Store
+# Goldenage
 
-Online store is a full-stack online store page made for a course. The client for this project is a group of International Business students. Implementation of the project is done by a group of four software engineering students.
+Goldenage is a full-stack, online activation service for the elderly, made for a course. The client for this project is a group of International Business students. Implementation of the project is done by a group of three software engineering students.
 
 Software development team:
 
