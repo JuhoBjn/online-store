@@ -98,6 +98,7 @@ CREATE TABLE `users` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `role_id` int NOT NULL,
+  `bio` varchar(400) DEFAULT NULL,
   `email_hash` varchar(64) GENERATED ALWAYS AS (sha2(lower(trim(`email`)),256)) STORED,
   PRIMARY KEY (`id`),
   KEY `fk_users_roles_idx` (`role_id`),

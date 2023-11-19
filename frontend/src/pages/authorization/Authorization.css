@@ -71,6 +71,13 @@
   align-items: flex-start;
 }
 
+.auth-page_login-form a {
+  width: 100%;
+  text-align: center;
+  color: var(--main-text-color);
+  font-size: medium;
+}
+
 .auth-page_input {
   padding: 0.75rem;
   width: calc(100% - 2 * 0.75rem);
