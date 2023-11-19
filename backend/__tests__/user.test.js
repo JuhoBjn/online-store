@@ -220,7 +220,7 @@ describe("all profile updating", () => {
     const newBio = "This is a user's attempt to update another user's bio.";
     const response = await supertest(app)
       .post("/api/users/updateUser")
-      .set({ id: "8b414dd1-f7cb-482c-9f4a-3cfdb998f948", bio: newBio })
+      .send({ id: "8b414dd1-f7cb-482c-9f4a-3cfdb998f948", bio: newBio })
       .set("Content-Type", "application/json")
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
