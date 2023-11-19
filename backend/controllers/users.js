@@ -119,6 +119,7 @@ const login = async (req, res) => {
     role: user.role,
     firstname: user.first_name,
     lastname: user.last_name,
+    bio: user.bio,
     email: user.email,
     postalcode: user.postal_code,
     city: user.city,
@@ -153,28 +154,37 @@ const getUser = async (req, res) => {
   const schema = Joi.object({
     id: Joi.string().uuid().required()
   });
-  const providedCredentials = {
-    id: req.params.id
-  };
-  try {
-    const { error } = schema.validate(providedCredentials);
-    if (error) throw error;
-  } catch (error) {
+
+  const paramUserId = req.params.id;
+
+  const { error } = schema.validate({ id: paramUserId });
+  if (error) {
     return res.status(400).send({ message: error.details[0].message });
   }
-  const response = await userModels.findById(providedCredentials.id);
+
+  // Fetch and return full profile if the requester is requesting their own profile.
+  // Return only brief info if the user is requesting for someone else's profile.
+  let response;
+  if (paramUserId === req.user.id) {
+    response = await userModels.findById(paramUserId);
+  } else {
+    const user = await userModels.findById(paramUserId);
+    const isFriend = await userModels.friendshipExists(
+      req.user.id,
+      paramUserId
+    );
+    response = {
+      id: user.id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      bio: user.bio,
+      city: user.city,
+      isFriend: isFriend
+    };
+  }
+
   if (response) {
-    res.status(200).json({
-      id: response.id,
-      first_name: response.first_name,
-      last_name: response.last_name,
-      email: response.email,
-      postal_code: response.postal_code,
-      city: response.city,
-      country: response.country,
-      phone: response.phone,
-      premium: response.premium
-    });
+    res.status(200).json(response);
   } else {
     res.status(404).json({ message: "No user found with given id" });
   }
@@ -227,6 +237,7 @@ const updateUser = async (req, res) => {
     id: Joi.string().uuid(),
     first_name: Joi.string(),
     last_name: Joi.string(),
+    bio: Joi.string(),
     email: Joi.string().email(),
     postal_code: Joi.string(),
     city: Joi.string(),
@@ -239,6 +250,7 @@ const updateUser = async (req, res) => {
     id: req.body.id,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
+    bio: req.body.bio,
     email: req.body.email,
     postal_code: req.body.postal_code,
     city: req.body.city,
@@ -254,22 +266,13 @@ const updateUser = async (req, res) => {
     return res.status(400).send(error.details[0].message);
   }
 
-  const user = {
-    id: providedUserDetails.id,
-    first_name: providedUserDetails.first_name,
-    last_name: providedUserDetails.last_name,
-    email: providedUserDetails.email,
-    postal_code: providedUserDetails.postal_code,
-    city: providedUserDetails.city,
-    country: providedUserDetails.country,
-    phone: providedUserDetails.phone,
-    premium: providedUserDetails.premium
-  };
-
   const filteredUser = {};
-  for (const key in user) {
-    if (user[key] !== null && user[key] !== undefined) {
-      filteredUser[key] = user[key];
+  for (const key in providedUserDetails) {
+    if (
+      providedUserDetails[key] !== null &&
+      providedUserDetails[key] !== undefined
+    ) {
+      filteredUser[key] = providedUserDetails[key];
     }
   }
 
