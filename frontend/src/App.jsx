@@ -97,6 +97,7 @@ function App() {
   const updateProfile = async () => {
     try {
       const response = await getUser(currentUser.id, currentUser.token);
+      response.token = currentUser.token;
       setCurrentUser(response);
       // Set token expiration time to two hours.
       const expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
