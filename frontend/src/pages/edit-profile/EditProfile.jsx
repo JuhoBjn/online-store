@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useNavigate, useLoaderData } from "react-router-dom";
 
 import { AuthContext } from "../../utils/AuthContext";
 import Button from "../../components/button/Button";
@@ -11,6 +11,7 @@ const EditProfile = () => {
   const [userProfile, setUserProfile] = useState(useLoaderData());
   const [profileUpdated, setProfileUpdated] = useState(false);
   const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const updateUserProfileState = (event) => {
     event.preventDefault();
@@ -23,15 +24,29 @@ const EditProfile = () => {
   const profileUpdateHandler = async (event) => {
     event.preventDefault();
 
+    const updatedProfile = {
+      first_name: userProfile.firstname,
+      last_name: userProfile.lastname,
+      bio: userProfile.bio,
+      email: userProfile.email,
+      postal_code: userProfile.postalcode,
+      city: userProfile.city,
+      country: userProfile.country,
+      phone: userProfile.phone,
+      premium: userProfile === 1
+    };
+
     const response = await updateProfile(
       authContext.id,
       authContext.token,
-      userProfile
+      updatedProfile
     );
 
     if (response) {
       console.log("Profile updated successfully");
       setProfileUpdated(true);
+      authContext.updateProfile();
+      navigate(`/user/${userProfile.id}`);
     } else {
       console.log("Profile update failed");
     }
@@ -74,6 +89,7 @@ const EditProfile = () => {
             data-testid="bio-input"
             name="bio"
             placeholder="Enter your bio here"
+            maxLength={400}
             value={userProfile.bio}
             onChange={() => updateUserProfileState(event)}
           />
@@ -129,7 +145,6 @@ const EditProfile = () => {
             className="country-dropdown"
             id="country-input"
             data-testid="country-input"
-            defaultValue={userProfile.country}
             value={userProfile.country}
             onChange={() => updateUserProfileState(event)}
           >
