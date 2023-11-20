@@ -31,7 +31,7 @@ const UserProfile = () => {
   };
 
   const editProfileHandler = () => {
-    console.log("Edit profile");
+    navigate(`/user/${authContext.id}/edit`);
   };
 
   const upgradeToPremiumHandler = async () => {
