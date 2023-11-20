@@ -104,9 +104,8 @@ describe("all profile updating", () => {
   });
   it("Should update user first name", async () => {
     const response = await supertest(app)
-      .post("/api/users/updateUser")
+      .patch("/api/users/197bdce9-f60b-4529-b781-a78fb54d7c51")
       .send({
-        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         first_name: "John"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -116,9 +115,8 @@ describe("all profile updating", () => {
   });
   it("Should update user last name", async () => {
     const response = await supertest(app)
-      .post("/api/users/updateUser")
+      .patch("/api/users/197bdce9-f60b-4529-b781-a78fb54d7c51")
       .send({
-        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         last_name: "Jhonson"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -128,9 +126,8 @@ describe("all profile updating", () => {
   });
   it("Should update user email", async () => {
     const response = await supertest(app)
-      .post("/api/users/updateUser")
+      .patch("/api/users/197bdce9-f60b-4529-b781-a78fb54d7c51")
       .send({
-        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         email: "tommy1@tester1.com"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -140,9 +137,8 @@ describe("all profile updating", () => {
   });
   it("Should update user postal code", async () => {
     const response = await supertest(app)
-      .post("/api/users/updateUser")
+      .patch("/api/users/197bdce9-f60b-4529-b781-a78fb54d7c51")
       .send({
-        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         postal_code: "64958"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -152,9 +148,8 @@ describe("all profile updating", () => {
   });
   it("Should update user city", async () => {
     const response = await supertest(app)
-      .post("/api/users/updateUser")
+      .patch("/api/users/197bdce9-f60b-4529-b781-a78fb54d7c51")
       .send({
-        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         city: "Stockholm"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -164,9 +159,8 @@ describe("all profile updating", () => {
   });
   it("Should update user country", async () => {
     const response = await supertest(app)
-      .post("/api/users/updateUser")
+      .patch("/api/users/197bdce9-f60b-4529-b781-a78fb54d7c51")
       .send({
-        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         country: "S"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -176,9 +170,8 @@ describe("all profile updating", () => {
   });
   it("Should update user phone number", async () => {
     const response = await supertest(app)
-      .post("/api/users/updateUser")
+      .patch("/api/users/197bdce9-f60b-4529-b781-a78fb54d7c51")
       .send({
-        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         phone: "654987321"
       })
       .set("Authorization", `Bearer ${token}`)
@@ -189,10 +182,9 @@ describe("all profile updating", () => {
 
   it("Should NOT update other user name", async () => {
     const response = await supertest(app)
-      .post("/api/users/updateUser")
+      .patch("/api/users/8b414dd1-f7cb-482c-9f4a-3cfdb998f948")
       .send({
-        id: "8b414dd1-f7cb-482c-9f4a-3cfdb998f948",
-        name: "Jorma"
+        first_name: "Jorma"
       })
       .set("Authorization", `Bearer ${token}`)
       .set("Accept", "application/json")
@@ -203,9 +195,8 @@ describe("all profile updating", () => {
   it("should update a user's bio", async () => {
     const newBio = "This is the updated bio of Tommy Tester.";
     const response = await supertest(app)
-      .post("/api/users/updateUser")
+      .patch("/api/users/197bdce9-f60b-4529-b781-a78fb54d7c51")
       .send({
-        id: "197bdce9-f60b-4529-b781-a78fb54d7c51",
         bio: newBio
       })
       .set("Authorization", `Bearer ${token}`)
@@ -219,8 +210,8 @@ describe("all profile updating", () => {
   it("should not allow a user to update someone else's bio", async () => {
     const newBio = "This is a user's attempt to update another user's bio.";
     const response = await supertest(app)
-      .post("/api/users/updateUser")
-      .send({ id: "8b414dd1-f7cb-482c-9f4a-3cfdb998f948", bio: newBio })
+      .patch("/api/users/8b414dd1-f7cb-482c-9f4a-3cfdb998f948")
+      .send({ bio: newBio })
       .set("Content-Type", "application/json")
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
