@@ -57,7 +57,7 @@ const UserProfile = () => {
             <div className="profile-picture-container">
               <img
                 data-testid="profile-picture"
-                src={`https://gravatar.com/avatar/${user.email_hash}`}
+                src={`https://gravatar.com/avatar/${user.email_hash}?d=mp`}
                 alt={`Profile picture of ${user.firstname} ${user.lastname}`}
               />
             </div>
