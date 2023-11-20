@@ -66,6 +66,7 @@ const EditProfile = () => {
                 name="firstname"
                 type="text"
                 placeholder="First name"
+                maxLength={20}
                 value={userProfile.firstname}
                 onChange={() => updateUserProfileState(event)}
               />
@@ -78,6 +79,7 @@ const EditProfile = () => {
                 name="lastname"
                 type="text"
                 placeholder="Last name"
+                maxLength={30}
                 value={userProfile.lastname}
                 onChange={() => updateUserProfileState(event)}
               />
@@ -100,6 +102,7 @@ const EditProfile = () => {
             name="email"
             type="email"
             placeholder="Email"
+            maxLength={320}
             value={userProfile.email}
             onChange={() => updateUserProfileState(event)}
           />
@@ -110,6 +113,7 @@ const EditProfile = () => {
             name="phone"
             type="tel"
             placeholder="Phone"
+            maxLength={15}
             value={userProfile.phone}
             onChange={() => updateUserProfileState(event)}
           />
