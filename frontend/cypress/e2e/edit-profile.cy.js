@@ -27,6 +27,21 @@ describe("The edit profile page", () => {
     );
   });
 
+  it("should not allow a user to edit another user's profile", () => {
+    cy.login(anthony.email, anthony.password);
+    // Try to access Lotta Schmiedmann's edit profile page.
+    cy.visit(
+      `${Cypress.config(
+        "baseUrl"
+      )}/user/858560f9-fc03-43b0-b931-01213e4787ce/edit`
+    );
+
+    cy.url().should(
+      "be.equal",
+      `${Cypress.config("baseUrl")}/user/858560f9-fc03-43b0-b931-01213e4787ce`
+    );
+  });
+
   it("should display a form to edit a user's profile", () => {
     cy.login(anthony.email, anthony.password);
     cy.visit(`${Cypress.config("baseUrl")}/user/${anthony.id}/edit`);
