@@ -1,10 +1,14 @@
 .edit-profile-page {
   height: 100vh;
   width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--main-background-color);
+  overflow-x: scroll;
 }
 
 .edit-profile-form-container {
@@ -26,10 +30,25 @@
   gap: 1em;
 }
 
+.edit-profile-firstname-input-container {
+  width: 100%;
+}
+
+.edit-profile-lastname-input-container {
+  width: 100%;
+}
+
+.edit-profile-city-input-container {
+  width: 100%;
+}
+
+.edit-profile-postalcode-input-container {
+  width: 100%;
+}
+
 .edit-profile-form-container input {
-  width: calc(100% - 2 * 0.75rem);
+  width: calc(100% - 2 * 0.75rem - 2 * 1px);
   padding: 0.75rem;
-  min-width: 15em;
   margin-bottom: 1rem;
   font-size: large;
 }
@@ -43,6 +62,7 @@
   border-style: solid;
   border-width: 1px;
   border-color: var(--main-text-color);
+  font-size: large;
   resize: vertical;
 }
 
@@ -66,4 +86,10 @@
   width: 100%;
   display: flex;
   flex-direction: row;
+}
+
+@media (max-width: 768px) {
+  .edit-profile-form-container textarea {
+    resize: none;
+  }
 }

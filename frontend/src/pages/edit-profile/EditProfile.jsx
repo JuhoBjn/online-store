@@ -114,7 +114,7 @@ const EditProfile = () => {
             onChange={() => updateUserProfileState(event)}
           />
           <div className="edit-profile-sidebyside-input-container">
-            <div>
+            <div className="edit-profile-city-input-container">
               <label htmlFor="city-input">City</label>
               <input
                 id="city-input"
@@ -126,7 +126,7 @@ const EditProfile = () => {
                 onChange={() => updateUserProfileState(event)}
               />
             </div>
-            <div>
+            <div className="edit-profile-postalcode-input-container">
               <label htmlFor="postalcode-input">Postal code</label>
               <input
                 id="postalcode-input"
