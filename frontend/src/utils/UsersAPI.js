@@ -69,14 +69,14 @@ const getUser = async (id, token) => {
  */
 const upgradeToPremium = async (id, token) => {
   const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_API}/api/users/updateUser`,
+    `${import.meta.env.VITE_BACKEND_API}/api/users/${id}`,
     {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ id, premium: true })
+      body: JSON.stringify({ premium: true })
     }
   );
   const responseMessage = await response.json();
