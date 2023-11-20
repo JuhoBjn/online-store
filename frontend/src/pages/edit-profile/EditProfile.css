@@ -1,0 +1,69 @@
+.edit-profile-page {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--main-background-color);
+}
+
+.edit-profile-form-container {
+  height: fit-content;
+  width: 80%;
+  max-width: 50em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.edit-profile-sidebyside-input-container {
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.edit-profile-form-container input {
+  width: calc(100% - 2 * 0.75rem);
+  padding: 0.75rem;
+  min-width: 15em;
+  margin-bottom: 1rem;
+  font-size: large;
+}
+
+.edit-profile-form-container textarea {
+  /* width = 100% - 2 * padding */
+  width: calc(100% - 2 * 0.75rem);
+  max-height: 50em;
+  padding: 0.75rem;
+  margin-bottom: 1em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--main-text-color);
+  resize: vertical;
+}
+
+.edit-profile-form-container select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: large;
+  background-color: white;
+}
+
+.edit-profile-submit-container {
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 2em;
+}
+
+.edit-profile-address-input-container {
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}

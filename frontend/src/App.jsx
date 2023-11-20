@@ -12,6 +12,8 @@ import Authorization from "./pages/authorization/Authorization";
 import ResetPassword from "./pages/reset-password/ResetPassword";
 import UserProfile from "./pages/user-profile/UserProfile";
 import { UserProfileLoader } from "./pages/user-profile/UserProfileLoader";
+import EditProfile from "./pages/edit-profile/EditProfile";
+import { EditProfileLoader } from "./pages/edit-profile/EditProfileLoader";
 
 import "./App.css";
 
@@ -32,6 +34,11 @@ const router = createBrowserRouter([
     path: "/user/:id",
     element: <UserProfile />,
     loader: UserProfileLoader
+  },
+  {
+    path: "/user/:id/edit",
+    element: <EditProfile />,
+    loader: EditProfileLoader
   },
   {
     path: "*",
