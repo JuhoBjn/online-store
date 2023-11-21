@@ -259,6 +259,22 @@ const addAttendee = async (req, res) => {
   const eventId = req.params.id;
   const userId = req.body.user_id;
 
+  // check if user matches the user in the token
+  if (req.user.id !== userId) {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+
+  // check if event exists
+  try {
+    const event = await events.getEvent(eventId);
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal error" });
+  }
+
   try {
     await events.addAttendee(eventId, userId);
     return res.status(204).json({ message: "Attendee added" });
@@ -329,6 +345,17 @@ const getEventAttendees = async (req, res) => {
   }
 
   const eventId = req.params.id;
+
+  // check if event exists
+  try {
+    const event = await events.getEvent(eventId);
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal error" });
+  }
 
   try {
     const attendees = await events.getEventAttendees(eventId);
