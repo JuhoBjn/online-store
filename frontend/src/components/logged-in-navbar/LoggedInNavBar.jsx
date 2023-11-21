@@ -40,19 +40,29 @@ const LoggedInNavBar = () => {
       <div className="logged-in-nav-links">
         <ul>
           <li>
-            <NavLink to="/">News</NavLink>
+            <NavLink data-testid="news-page-link" to="/">
+              News
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/activities">Activities</NavLink>
+            <NavLink data-testid="activities-page-link" to="/activities">
+              Activities
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/match">Match</NavLink>
+            <NavLink data-testid="match-page-link" to="/match">
+              Match
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/messages">Messages</NavLink>
+            <NavLink data-testid="messages-page-link" to="/messages">
+              Messages
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/help">Help</NavLink>
+            <NavLink data-testid="help-page-link" to="/help">
+              Help
+            </NavLink>
           </li>
         </ul>
       </div>
