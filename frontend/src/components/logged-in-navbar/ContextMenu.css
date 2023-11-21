@@ -1,0 +1,35 @@
+.context-menu-container {
+  height: fit-content;
+  width: 10em;
+  position: relative;
+  top: 100%;
+  left: 0;
+  transform: translate(-70%, -80%);
+  background-color: var(--light-green);
+  border-style: none;
+  border-radius: 10px;
+  box-shadow: 2px 3px 15px rgba(0, 0, 0, 0.568);
+  padding: 0 1em;
+}
+
+#context-menu-links {
+  list-style: none;
+  padding: 0;
+}
+
+.context-menu-link-container {
+  height: fit-content;
+  width: calc(100% - 2 * 10px);
+  padding: 10px;
+  background-color: var(--light-green);
+}
+
+.context-menu-link-container p {
+  margin: 0;
+}
+
+.context-menu-link-container div:hover {
+  cursor: pointer;
+  color: var(--light-green);
+  filter: brightness(80%);
+}

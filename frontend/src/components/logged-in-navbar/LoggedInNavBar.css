@@ -1,0 +1,78 @@
+.logged-in-navbar {
+  height: 5em;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--light-green);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logged-in-nav-logo-container {
+  height: 85%;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 1em;
+}
+
+#goldenage-logo {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.logged-in-nav-links {
+  height: 100%;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logged-in-nav-links ul {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+}
+
+.logged-in-nav-links li {
+  margin: 25px;
+}
+
+.logged-in-nav-links a {
+  text-decoration: none;
+  color: var(--main-text-color);
+}
+
+.logged-in-nav-links a:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.logged-in-nav-links a.active {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.nav-profile-picture-container {
+  height: 4em;
+  width: 4em;
+  margin-right: 1em;
+}
+
+.nav-profile-picture-container img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.nav-profile-picture-container :hover {
+  cursor: pointer;
+}
