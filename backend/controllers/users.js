@@ -681,5 +681,6 @@ module.exports = {
   getReceivedFriendRequests,
   acceptOrDenyFriendRequest,
   getFriends,
-  unFriend
+  unFriend,
+  getEvents
 };

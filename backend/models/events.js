@@ -198,13 +198,14 @@ const eventsDB = {
         u.id,
         u.first_name,
         u.last_name,
-        u.email,
-        u.email_hash,
-        u.created_at,
+        -- u.email_hash,
+        u.created
       FROM event_attendees ea
-       LEFT JOIN users u ON ea.user_id = u.id
+        LEFT JOIN users u ON ea.user_id = u.id
       WHERE ea.event_id = ?
-      ORDER BY u.first_name u.last_name u.id DESC;`,
+      ORDER BY u.first_name,
+        u.last_name,
+        u.id;`,
       [eventId]
     );
     return rows;
