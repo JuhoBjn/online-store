@@ -54,6 +54,10 @@ jobs:
           VITE_BACKEND_API: http://localhost:5000
         run: npm run dev &
 
+      - name: Start email server
+        working-directory: ./backend
+        run: npx maildev --ip 127.0.0.1 --smtp 10025 &
+
       - name: Run e2e tests
         working-directory: ./frontend
         run: npx cypress run

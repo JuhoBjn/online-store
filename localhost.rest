@@ -90,8 +90,58 @@ Content-Type: application/json
     "password": "newpassword"
 }
 
-### Update user
-# You can update many values as same by changing the key
+### Send Friend Request
+@receiver_user_id = 239aec9f-066e-4e6a-88d7-9cdccd43445b
+POST http://localhost:5000/api/users/{{user_id}}/friend-requests/{{receiver_user_id}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get list of sent friend requests
+
+GET http://localhost:5000/api/users/{{user_id}}/friend-requests/sent
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get list of received friend requests
+
+GET http://localhost:5000/api/users/{{user_id}}/friend-requests/received
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Deny friend request
+# @prompt friend_request_id Enter friend request id
+PUT http://localhost:5000/api/users/{{user_id}}/friend-requests/{{friend_request_id}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "status": "denied"
+}
+
+### Accept friend request
+# @prompt friend_request_id Enter friend request id
+PUT http://localhost:5000/api/users/{{user_id}}/friend-requests/{{friend_request_id}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "status": "accepted"
+}
+
+### Get list of friends
+
+GET http://localhost:5000/api/users/{{user_id}}/friends
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Unfriend a user
+# @prompt friends_user_id Enter user id of friend
+DELETE http://localhost:5000/api/users/{{user_id}}/friends/{{friends_user_id}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Update user profile
+# You can update many values as same by changing the key:
 # first-name
 # last_name
 # email
@@ -99,7 +149,7 @@ Content-Type: application/json
 # city
 # country
 # phone
-POST http://localhost:5000/api/users/{{user_id}}
+PATCH http://localhost:5000/api/users/{{user_id}}
 Content-Type: application/json
 Authorization: BEARER {{token}}
 
