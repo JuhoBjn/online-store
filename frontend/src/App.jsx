@@ -7,16 +7,62 @@ import {
 
 import { AuthContext } from "./utils/AuthContext";
 import { signup, login } from "./utils/UsersAPI";
-import Home from "./pages/home/Home";
+import LoggedInNavBar from "./components/logged-in-navbar/LoggedInNavBar";
 import Authorization from "./pages/authorization/Authorization";
 import ResetPassword from "./pages/reset-password/ResetPassword";
+import News from "./pages/news/News";
+import Activities from "./pages/activities/Activities";
+import Messages from "./pages/messages/Messages";
+import Match from "./pages/match/Match";
+import Help from "./pages/help/Help";
 
 import "./App.css";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />
+    element: (
+      <>
+        <LoggedInNavBar />
+        <News />
+      </>
+    )
+  },
+  {
+    path: "/activities",
+    element: (
+      <>
+        <LoggedInNavBar />
+        <Activities />
+      </>
+    )
+  },
+  {
+    path: "/match",
+    element: (
+      <>
+        <LoggedInNavBar />
+        <Match />
+      </>
+    )
+  },
+  {
+    path: "/messages",
+    element: (
+      <>
+        <LoggedInNavBar />
+        <Messages />
+      </>
+    )
+  },
+  {
+    path: "/help",
+    element: (
+      <>
+        <LoggedInNavBar />
+        <Help />
+      </>
+    )
   },
   {
     path: "/auth",
@@ -41,6 +87,7 @@ function App() {
     firstname: "",
     lastname: "",
     email: "",
+    email_hash: "",
     postalcode: "",
     city: "",
     country: "",
@@ -88,6 +135,7 @@ function App() {
       firstname: "",
       lastname: "",
       email: "",
+      email_hash: "",
       postalcode: "",
       city: "",
       country: "",
@@ -135,6 +183,7 @@ function App() {
         firstname: currentUser.firstname,
         lastname: currentUser.lastname,
         email: currentUser.email,
+        email_hash: currentUser.email_hash,
         postalcode: currentUser.postalcode,
         city: currentUser.city,
         country: currentUser.country,
