@@ -6,6 +6,7 @@ import { AuthContext } from "../../utils/AuthContext";
 import ContextMenu from "./ContextMenu";
 
 import "./LoggedInNavBar.css";
+import TransparentOverlay from "../transparent-overlay/TransparentOverlay";
 
 const LoggedInNavBar = () => {
   const [showContextMenu, setShowContextMenu] = useState(false);
@@ -65,10 +66,13 @@ const LoggedInNavBar = () => {
           src={`https://gravatar.com/avatar/${authContext.email_hash}?d=mp`}
         />
         {showContextMenu && (
-          <ContextMenu
-            navigateToProfileHandler={navigateToProfileHandler}
-            logoutHandler={logoutHandler}
-          />
+          <>
+            <TransparentOverlay onClick={toggleContextMenu} />
+            <ContextMenu
+              navigateToProfileHandler={navigateToProfileHandler}
+              logoutHandler={logoutHandler}
+            />
+          </>
         )}
       </div>
     </nav>
