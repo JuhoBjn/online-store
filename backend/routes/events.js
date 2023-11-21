@@ -24,4 +24,8 @@ router.get("/:id", getEvent);
 
 router.get("/", getEvents);
 
+// router.post(":id/attendees/:userId", addAttendee);
+
+// router.delete(":id/attendees/:userId", deleteAttendee);
+
 module.exports = router;
