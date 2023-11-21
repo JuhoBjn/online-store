@@ -159,6 +159,82 @@ const eventsDB = {
       [limit, offset]
     );
     return rows;
+  },
+  /**
+   * Add an attendee to an event.
+   * @async
+   * @param {number} eventId - The ID of the event.
+   * @param {string} userId - The user id of the user.
+   * @returns {Promise<void>}
+   */
+  addAttendee: async (eventId, userId) => {
+    return await promisePool.query(
+      "INSERT INTO event_attendees (event_id, user_id) VALUES (?, ?)",
+      [eventId, userId]
+    );
+  },
+  /**
+   * Delete an attendee from an event.
+   * @async
+   * @param {number} eventId - The ID of the event.
+   * @param {string} userId - The user id of the user.
+   * @returns {Promise<void>}
+   */
+  deleteAttendee: async (eventId, userId) => {
+    return await promisePool.query(
+      "DELETE FROM event_attendees WHERE event_id = ? AND user_id = ?",
+      [eventId, userId]
+    );
+  },
+  /**
+   * Get all attendees of an event.
+   * @async
+   * @param {number} eventId - The ID of the event.
+   * @returns {Promise<Array>} An array of user objects.
+   */
+  getEventAttendees: async (eventId) => {
+    const [rows] = await promisePool.query(
+      `SELECT 
+        u.id,
+        u.first_name,
+        u.last_name,
+        u.email,
+        u.email_hash,
+        u.created_at,
+      FROM event_attendees ea
+       LEFT JOIN users u ON ea.user_id = u.id
+      WHERE ea.event_id = ?
+      ORDER BY u.first_name u.last_name u.id DESC;`,
+      [eventId]
+    );
+    return rows;
+  },
+  /**
+   * Get all events that a user is attending.
+   * @async
+   * @param {string} userId - The user id of the user.
+   * @returns {Promise<Array>} An array of event objects.
+   */
+  findEventsByUserId: async (userId) => {
+    const [rows] = await promisePool.query(
+      `SELECT 
+        e.id,
+        e.name,
+        e.description,
+        e.picture_id,
+        e.starts_at,
+        e.ends_at,
+        e.created_at,
+        e.updated_at,
+        f.object_key AS image_object_key
+      FROM event_attendees ea
+       LEFT JOIN events e ON ea.event_id = e.id
+       LEFT JOIN files f ON e.picture_id = f.id
+      WHERE ea.user_id = ?
+      ORDER BY e.id DESC;`,
+      [userId]
+    );
+    return rows;
   }
 };
 

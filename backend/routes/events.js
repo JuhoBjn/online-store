@@ -8,7 +8,10 @@ const {
   deleteEvent,
   updateEvent,
   getEvent,
-  getEvents
+  getEvents,
+  addAttendee,
+  deleteAttendee,
+  getEventAttendees
 } = require("../controllers/events");
 const { upload } = require("../s3/multer");
 
@@ -24,8 +27,10 @@ router.get("/:id", getEvent);
 
 router.get("/", getEvents);
 
-// router.post(":id/attendees/:userId", addAttendee);
+router.post("/:id/attendees", addAttendee);
 
-// router.delete(":id/attendees/:userId", deleteAttendee);
+router.delete("/:id/attendees/:userId", deleteAttendee);
+
+router.get("/:id/attendees", getEventAttendees);
 
 module.exports = router;

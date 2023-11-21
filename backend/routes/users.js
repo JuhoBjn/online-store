@@ -14,7 +14,8 @@ const {
   getReceivedFriendRequests,
   acceptOrDenyFriendRequest,
   getFriends,
-  unFriend
+  unFriend,
+  getEvents
 } = require("../controllers/users");
 
 router.post("/signup", signup);
@@ -48,5 +49,7 @@ router.put(
 router.get("/:userid/friends", getFriends);
 
 router.delete("/:userid/friends/:friendId", unFriend);
+
+router.get("/:userid/events", getEvents);
 
 module.exports = router;

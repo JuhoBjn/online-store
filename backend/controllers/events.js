@@ -3,6 +3,7 @@ const { s3 } = require("../s3/multer");
 const { PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 
 const events = require("../models/events");
+const users = require("../models/users");
 const { getS3Url } = require("../s3/util");
 
 const addEvent = async (req, res) => {
@@ -244,4 +245,107 @@ const getEvents = async (req, res) => {
   }
 };
 
-module.exports = { addEvent, deleteEvent, updateEvent, getEvent, getEvents };
+const addAttendee = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().required(),
+    userId: Joi.string().uuid().required()
+  });
+
+  const validation = schema.validate({ ...req.params, ...req.body });
+  if (validation.error) {
+    return res.status(400).json({ error: validation.error.details[0].message });
+  }
+
+  const eventId = req.params.id;
+  const userId = req.body.userId;
+
+  try {
+    await events.addAttendee(eventId, userId);
+    return res.status(204).json({ message: "Attendee added" });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Failed to add attendee" });
+  }
+};
+
+const deleteAttendee = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().required(),
+    userId: Joi.string().uuid().required()
+  });
+
+  const validation = schema.validate(req.params);
+  if (validation.error) {
+    return res.status(400).json({ error: validation.error.details[0].message });
+  }
+
+  const eventId = req.params.id;
+  const userId = req.params.userId;
+
+  // check if user matches the user in the token
+  if (req.user.id !== userId) {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+
+  // check if event exists
+  try {
+    const event = await events.getEvent(eventId);
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal error" });
+  }
+
+  // check if user exists
+  try {
+    const user = await users.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal error" });
+  }
+
+  try {
+    await events.deleteAttendee(eventId, userId);
+    return res.status(204).json({ message: "Attendee deleted" });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Failed to delete attendee" });
+  }
+};
+
+const getEventAttendees = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().required()
+  });
+
+  const validation = schema.validate(req.params);
+  if (validation.error) {
+    return res.status(400).json({ error: validation.error.details[0].message });
+  }
+
+  const eventId = req.params.id;
+
+  try {
+    const attendees = await events.getEventAttendees(eventId);
+    return res.status(200).json(attendees);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Failed to get event attendees" });
+  }
+};
+
+module.exports = {
+  addEvent,
+  deleteEvent,
+  updateEvent,
+  getEvent,
+  getEvents,
+  addAttendee,
+  deleteAttendee,
+  getEventAttendees
+};
