@@ -153,6 +153,7 @@ describe("User login endpoint", () => {
     role_id: 1,
     first_name: "Tommy",
     last_name: "Tester",
+    bio: "This is the bio of Tommy Tester.",
     email: "tommy@tester.com",
     postal_code: "00100",
     city: "Helsinki",
@@ -221,6 +222,7 @@ describe("User login endpoint", () => {
     expect(response.body.role).toEqual(testUserRole);
     expect(response.body.firstname).toEqual(testUser.first_name);
     expect(response.body.lastname).toEqual(testUser.last_name);
+    expect(response.body.bio).toEqual(testUser.bio);
     expect(response.body.email).toEqual(testUser.email);
     expect(response.body.postalcode).toEqual(testUser.postal_code);
     expect(response.body.city).toEqual(testUser.city);
