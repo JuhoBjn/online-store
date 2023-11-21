@@ -6,6 +6,7 @@ const ContextMenu = ({ navigateToProfileHandler, logoutHandler }) => {
       <ul id="context-menu-links">
         <li id="context-menu-profile-link">
           <div
+            data-testid="go-to-profile"
             className="context-menu-link-container"
             onClick={navigateToProfileHandler}
           >
@@ -13,7 +14,11 @@ const ContextMenu = ({ navigateToProfileHandler, logoutHandler }) => {
           </div>
         </li>
         <li>
-          <div className="context-menu-link-container" onClick={logoutHandler}>
+          <div
+            data-testid="log-out"
+            className="context-menu-link-container"
+            onClick={logoutHandler}
+          >
             <p>Log out</p>
           </div>
         </li>
