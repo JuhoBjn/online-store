@@ -9,7 +9,7 @@ const MailDev = require("maildev");
 const app = require("../app");
 const request = require("supertest");
 const jwt = require("jsonwebtoken");
-const users = require("../models/users");
+const { promisePool } = require("../db/pool");
 
 const waitMailDevShutdown = (maildev) => {
   return new Promise((resolve) => {
@@ -95,9 +95,9 @@ describe("Password reset", () => {
     });
 
     it("should let you set a new password with a valid password reset token", async () => {
-      const passwordHashBefore = await users
-        .findById(user.id)
-        .then((user) => user.password);
+      const passwordQuery = "SELECT password FROM users WHERE id = ?;";
+      const [rowsBefore] = await promisePool.query(passwordQuery, [user.id]);
+      const passwordHashBefore = rowsBefore[0];
 
       const res = await request(app)
         .post("/api/password-reset/set-new-password")
@@ -109,9 +109,8 @@ describe("Password reset", () => {
       expect(res.statusCode).toEqual(204);
       expect(res.body).toEqual({});
 
-      const passwordHashAfter = await users
-        .findById(user.id)
-        .then((user) => user.password);
+      const [rowsAfter] = await promisePool.query(passwordQuery, [user.id]);
+      const passwordHashAfter = rowsAfter[0];
 
       expect(passwordHashBefore).not.toEqual(passwordHashAfter);
     });
