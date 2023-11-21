@@ -248,7 +248,7 @@ const getEvents = async (req, res) => {
 const addAttendee = async (req, res) => {
   const schema = Joi.object({
     id: Joi.number().integer().required(),
-    userId: Joi.string().uuid().required()
+    user_id: Joi.string().uuid().required()
   });
 
   const validation = schema.validate({ ...req.params, ...req.body });
@@ -257,7 +257,7 @@ const addAttendee = async (req, res) => {
   }
 
   const eventId = req.params.id;
-  const userId = req.body.userId;
+  const userId = req.body.user_id;
 
   try {
     await events.addAttendee(eventId, userId);
