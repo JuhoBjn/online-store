@@ -198,7 +198,7 @@ const eventsDB = {
         u.id,
         u.first_name,
         u.last_name,
-        -- u.email_hash,
+        u.email_hash,
         u.created
       FROM event_attendees ea
         LEFT JOIN users u ON ea.user_id = u.id
