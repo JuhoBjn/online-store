@@ -325,6 +325,17 @@ const deleteAttendee = async (req, res) => {
     return res.status(500).json({ error: "Internal error" });
   }
 
+  // check if user is an attendee
+  try {
+    const attendee = await events.getEventAttendee(eventId, userId);
+    if (!attendee) {
+      return res.status(404).json({ error: "Attendee not found" });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal error" });
+  }
+
   try {
     await events.deleteAttendee(eventId, userId);
     return res.status(204).json({ message: "Attendee deleted" });

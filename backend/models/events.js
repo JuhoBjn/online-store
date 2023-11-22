@@ -211,6 +211,32 @@ const eventsDB = {
     return rows;
   },
   /**
+   * Get an attendee of an event.
+   * @async
+   * @param {number} eventId - The ID of the event.
+   * @param {string} userId - The user id of the user.
+   * @returns {Promise<Object>} The user object.
+   */
+  getEventAttendee: async (eventId, userId) => {
+    const [rows] = await promisePool.query(
+      `SELECT 
+        u.id,
+        u.first_name,
+        u.last_name,
+        u.email_hash,
+        u.created
+      FROM event_attendees ea
+        LEFT JOIN users u ON ea.user_id = u.id
+      WHERE ea.event_id = ?
+        AND ea.user_id = ?
+      ORDER BY u.first_name,
+        u.last_name,
+        u.id;`,
+      [eventId, userId]
+    );
+    return rows[0];
+  },
+  /**
    * Get all events that a user is attending.
    * @async
    * @param {string} userId - The user id of the user.
