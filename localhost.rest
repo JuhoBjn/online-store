@@ -1,3 +1,8 @@
+# https://github.com/Huachao/vscode-restclient 
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+###
+
 http://localhost:5000/healthz
 
 ###
@@ -136,12 +141,156 @@ Accept: application/json
 Authorization: Bearer {{token}}
 
 ### Update user profile
-
+# You can update many values at once by changing the key:
+# first_name
+# last_name
+# email
+# postal_code
+# city
+# country
+# phone
 PATCH http://localhost:5000/api/users/{{user_id}}
+Content-Type: application/json
+Authorization: BEARER {{token}}
+
+{
+    "first_name": "Jorma",
+    "last_name": "Korhonen"
+}
+
+### Find user by id
+
+GET http://localhost:5000/api/users/{{user_id}}
+Content-Type: application/json
+Authorization: BEARER {{token}}
+
+### find all users
+
+GET http://localhost:5000/api/users
+Content-Type: application/json
+Authorization: BEARER {{token}}
+
+### Delete user
+
+DELETE http://localhost:5000/api/users/{{user_id}}
+Content-Type: application/json
+Authorization: BEARER {{token}}
+
+### Login as caretaker (for testing events)
+# @name caretakerLogin
+POST http://localhost:5000/api/users/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "larrys@test.com",
+  "password": "Larry12345"
+}
+
+### Create event - with image
+
+POST http://localhost:5000/api/events
+Content-Type: multipart/form-data; boundary=--contentboundary
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+
+----contentboundary
+Content-Disposition: form-data; name="json"
+Content-Type: application/json
+
+{
+    "name": "Test Event",
+    "description": "This is a test event",
+    "starts_at": "2021-02-01T00:00:00.000Z",
+    "ends_at": "2021-02-01T00:00:00.000Z"
+}
+----contentboundary
+Content-Disposition: form-data; name="file"; filename="red.jpg"
+Content-Type: image/jpeg
+
+< ./red.jpg
+----contentboundary--
+
+### Create event - no image
+
+POST http://localhost:5000/api/events
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+Content-Type: application/json
+
+{
+    "name": "Test Event",
+    "description": "This is a test event",
+    "starts_at": "2021-02-01T00:00:00.000Z",
+    "ends_at": "2021-02-01T12:00:00.000Z"
+}
+
+### Delete event
+
+# @prompt event_id Enter event id
+DELETE http://localhost:5000/api/events/{{event_id}}
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+
+### Update event
+# @prompt event_id Enter event id
+PATCH http://localhost:5000/api/events/{{event_id}}
+Content-Type: application/json
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+
+{
+    "name": "Test Event Updated",
+    "description": "This is a updated test event",
+    "starts_at": "2021-02-01T06:00:00.000Z",
+    "ends_at": "2021-02-01T18:00:00.000Z"
+}
+
+### Update event
+# @prompt event_id Enter event id
+PATCH http://localhost:5000/api/events/{{event_id}}
+Content-Type: application/json
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+
+{
+    "starts_at": "2021-02-04T06:00:00.000Z",
+    "ends_at": "2021-02-05T18:00:00.000Z"
+}
+
+### Get event details
+# @prompt event_id Enter event id
+GET http://localhost:5000/api/events/{{event_id}}
+Authorization: Bearer {{token}}
+
+### Get list of events with pagination
+
+GET http://localhost:5000/api/events?limit=10&page=1
+Authorization: Bearer {{token}}
+
+### Get list of events
+
+GET http://localhost:5000/api/events
+Authorization: Bearer {{token}}
+
+### Signup as event attendee
+# @prompt event_id Enter event id
+POST http://localhost:5000/api/events/{{event_id}}/attendees
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "first_name": "Timothy",
-    "last_name": "Tester"
+    "user_id": "{{user_id}}"
 }
+
+### Get list of event attendees
+# @prompt event_id Enter event id
+GET http://localhost:5000/api/events/{{event_id}}/attendees
+Authorization: Bearer {{token}}
+
+### Delete event attendee
+# @prompt event_id Enter event id
+# @prompt user_id Enter user id
+DELETE http://localhost:5000/api/events/{{event_id}}/attendees/{{user_id}}
+Authorization: Bearer {{token}}
+
+### Get list of events for a user
+
+GET http://localhost:5000/api/users/{{user_id}}/events
+Authorization: Bearer {{token}}
+

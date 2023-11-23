@@ -35,6 +35,9 @@ app.use("/api/users", users);
 const passwordReset = require("./routes/password-reset");
 app.use("/api/password-reset", passwordReset);
 
+const events = require("./routes/events");
+app.use("/api/events", events);
+
 const io = new Server({
   cors: {
     origin: [

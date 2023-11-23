@@ -14,5 +14,6 @@ export const AuthContext = createContext({
   token: "",
   signup: () => {},
   login: () => {},
+  updateProfile: () => {},
   logout: () => {}
 });
