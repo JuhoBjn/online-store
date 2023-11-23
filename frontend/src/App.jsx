@@ -11,7 +11,9 @@ import LoggedInNavBar from "./components/logged-in-navbar/LoggedInNavBar";
 import Authorization from "./pages/authorization/Authorization";
 import ResetPassword from "./pages/reset-password/ResetPassword";
 import News from "./pages/news/News";
+import { NewsLoader } from "./pages/news/NewsLoader";
 import Activities from "./pages/activities/Activities";
+import { ActivitiesLoader } from "./pages/activities/ActivitiesLoader";
 import Messages from "./pages/messages/Messages";
 import Match from "./pages/match/Match";
 import Help from "./pages/help/Help";
@@ -21,6 +23,7 @@ import "./App.css";
 const router = createBrowserRouter([
   {
     path: "/",
+    loader: NewsLoader,
     element: (
       <>
         <LoggedInNavBar />
@@ -30,6 +33,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/activities",
+    loader: ActivitiesLoader,
     element: (
       <>
         <LoggedInNavBar />
