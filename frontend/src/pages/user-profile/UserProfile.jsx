@@ -23,10 +23,7 @@ const UserProfile = () => {
       authContext.token
     );
     if (response) {
-      console.log(response.message);
       setFriendRequestSent(true);
-    } else {
-      console.log("Failed to send friend request.");
     }
   };
 
