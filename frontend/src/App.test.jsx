@@ -3,8 +3,8 @@ import { render, screen } from "@testing-library/react";
 import App from "./App";
 
 describe("main page", () => {
-  it("should have Hello world", () => {
+  it("should have What is Goldenage?", () => {
     render(<App />);
-    expect(screen.getByText("Hello, World!")).toBeInTheDocument();
+    expect(screen.getByText("What is GoldenAge?")).toBeInTheDocument();
   });
 });
