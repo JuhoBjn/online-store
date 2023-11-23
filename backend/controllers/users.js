@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: genUuid } = require("uuid");
 const userModels = require("../models/users");
+const eventsModels = require("../models/events");
 
 const signup = async (req, res) => {
   // Password must be at least 8 characters long,
@@ -652,6 +653,45 @@ const unFriend = async (req, res) => {
   }
 };
 
+const getEvents = async (req, res) => {
+  const schema = Joi.object({
+    userid: Joi.string().uuid().required()
+  });
+
+  const { error } = schema.validate(req.params);
+  if (error) {
+    return res.status(400).send({ message: error.details[0].message });
+  }
+
+  const { userid } = req.params;
+
+  // Check that the userid matches the authenticated user.
+  if (userid !== req.user.id) {
+    return res.status(403).send({ message: "Unauthorized" });
+  }
+
+  // Check that the user exists.
+  let user;
+  try {
+    user = await userModels.findById(userid);
+    if (!user) {
+      return res
+        .status(404)
+        .send({ message: "No user exists with given userid" });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal error" });
+  }
+
+  // Get all events.
+  try {
+    const events = await eventsModels.findEventsByUserId(userid);
+    return res.status(200).json(events);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal error" });
+  }
+};
+
 module.exports = {
   signup,
   login,
@@ -664,5 +704,6 @@ module.exports = {
   getReceivedFriendRequests,
   acceptOrDenyFriendRequest,
   getFriends,
-  unFriend
+  unFriend,
+  getEvents
 };
