@@ -25,7 +25,8 @@ p,
 a,
 label,
 li,
-button {
+button,
+textarea {
   font-family: "Tenor Sans", sans-serif;
   font-size: large;
   color: var(--main-text-color);
