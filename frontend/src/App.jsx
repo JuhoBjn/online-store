@@ -7,7 +7,11 @@ import {
 
 import { AuthContext } from "./utils/AuthContext";
 import { signup, login, getUser } from "./utils/UsersAPI";
-import LoggedInNavBar from "./components/logged-in-navbar/LoggedInNavBar";
+import LoggedInNavBar from "./components/navbar/LoggedInNavBar";
+import LoggedOutNavBar from "./components/navbar/LoggedOutNavbar";
+import Frontpage from "./pages/frontpage/Frontpage";
+import AboutUs from "./pages/about-us/AboutUs";
+import ContactUs from "./pages/contact-us/ContactUs";
 import Authorization from "./pages/authorization/Authorization";
 import ResetPassword from "./pages/reset-password/ResetPassword";
 import News from "./pages/news/News";
@@ -15,8 +19,11 @@ import { NewsLoader } from "./pages/news/NewsLoader";
 import Activities from "./pages/activities/Activities";
 import { ActivitiesLoader } from "./pages/activities/ActivitiesLoader";
 import Messages from "./pages/messages/Messages";
+import { MessagesLoader } from "./pages/messages/MessagesLoader";
 import Match from "./pages/match/Match";
+import { MatchLoader } from "./pages/match/MatchLoader";
 import Help from "./pages/help/Help";
+import { HelpLoader } from "./pages/help/HelpLoader";
 import UserProfile from "./pages/user-profile/UserProfile";
 import { UserProfileLoader } from "./pages/user-profile/UserProfileLoader";
 import EditProfile from "./pages/edit-profile/EditProfile";
@@ -47,6 +54,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/match",
+    loader: MatchLoader,
     element: (
       <>
         <LoggedInNavBar />
@@ -56,6 +64,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/messages",
+    loader: MessagesLoader,
     element: (
       <>
         <LoggedInNavBar />
@@ -65,6 +74,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/help",
+    loader: HelpLoader,
     element: (
       <>
         <LoggedInNavBar />
@@ -82,13 +92,45 @@ const router = createBrowserRouter([
   },
   {
     path: "/user/:id",
-    element: <UserProfile />,
+    element: (
+      <>
+        <UserProfile />
+        <LoggedInNavBar />
+      </>
+    ),
     loader: UserProfileLoader
   },
   {
     path: "/user/:id/edit",
     element: <EditProfile />,
     loader: EditProfileLoader
+  },
+  {
+    path: "/frontpage",
+    element: (
+      <>
+        <LoggedOutNavBar />
+        <Frontpage />
+      </>
+    )
+  },
+  {
+    path: "/about-us",
+    element: (
+      <>
+        <LoggedOutNavBar />
+        <AboutUs />
+      </>
+    )
+  },
+  {
+    path: "/contact-us",
+    element: (
+      <>
+        <LoggedOutNavBar />
+        <ContactUs />
+      </>
+    )
   },
   {
     path: "*",

@@ -4,7 +4,7 @@ import { getUser } from "../../utils/UsersAPI";
 export const UserProfileLoader = async ({ params }) => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser?.token) {
-    return redirect("/auth");
+    return redirect("/frontpage");
   }
   return getUser(params.id, currentUser.token);
 };

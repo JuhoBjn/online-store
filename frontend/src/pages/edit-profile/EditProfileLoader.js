@@ -4,7 +4,7 @@ import { getUser } from "../../utils/UsersAPI";
 export const EditProfileLoader = async ({ params }) => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser?.token) {
-    return redirect("/auth");
+    return redirect("/frontpage");
   }
   if (currentUser.id !== params.id) {
     return redirect(`/user/${params.id}`);
