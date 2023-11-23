@@ -175,17 +175,17 @@ const getUser = async (req, res) => {
       paramUserId
     );
     response = {
-      id: user.id,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      emailhash: user.email_hash,
-      bio: user.bio,
-      city: user.city,
-      isFriend: isFriend
+      id: user?.id,
+      firstname: user?.firstname,
+      lastname: user?.lastname,
+      emailhash: user?.email_hash,
+      bio: user?.bio,
+      city: user?.city,
+      isFriend: user ? isFriend : undefined
     };
   }
 
-  if (response) {
+  if (response?.id) {
     res.status(200).json(response);
   } else {
     res.status(404).json({ message: "No user found with given id" });

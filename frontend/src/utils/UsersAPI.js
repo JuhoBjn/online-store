@@ -36,4 +36,82 @@ const login = async (email, password) => {
   return responseMessage;
 };
 
-export { signup, login };
+/**
+ * Fetch a user's profile.
+ * @param {String} id ID of the user to fetch
+ * @param {String} token JWT token
+ * @returns Compact user object if other user, full profile if own profile
+ */
+const getUser = async (id, token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_API}/api/users/${id}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
+      }
+    }
+  );
+  const responseMessage = await response.json();
+  if (response.status !== 200) {
+    console.error(`Failed to get user: ${responseMessage.message}`);
+    return {};
+  }
+  return responseMessage;
+};
+
+/**
+ * Upgrade a user account to premium.
+ * @param {String} id ID of user to upgrade
+ * @param {String} token JWT token
+ * @returns Response message if successful, false if upgrade fails.
+ */
+const upgradeToPremium = async (id, token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_API}/api/users/${id}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ premium: true })
+    }
+  );
+  const responseMessage = await response.json();
+  if (response.status !== 200) {
+    console.error(`Failed to upgrade to premium: ${responseMessage.message}`);
+    return false;
+  }
+  return response;
+};
+
+/**
+ * Update a user's profile.
+ * @param {String} id ID of the user to update
+ * @param {String} token JWT token
+ * @param {String} profile Object containing the fields to update
+ * @returns Updated user object
+ */
+const updateProfile = async (id, token, profile) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_API}/api/users/${id}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(profile)
+    }
+  );
+  const responseMessage = await response.json();
+  if (response.status !== 200) {
+    console.error(`Failed to update user: ${responseMessage}`);
+    return false;
+  }
+  return responseMessage;
+};
+
+export { signup, login, getUser, upgradeToPremium, updateProfile };

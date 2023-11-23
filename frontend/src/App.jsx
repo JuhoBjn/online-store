@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 
 import { AuthContext } from "./utils/AuthContext";
-import { signup, login } from "./utils/UsersAPI";
+import { signup, login, getUser } from "./utils/UsersAPI";
 import LoggedInNavBar from "./components/logged-in-navbar/LoggedInNavBar";
 import Authorization from "./pages/authorization/Authorization";
 import ResetPassword from "./pages/reset-password/ResetPassword";
@@ -17,6 +17,10 @@ import { ActivitiesLoader } from "./pages/activities/ActivitiesLoader";
 import Messages from "./pages/messages/Messages";
 import Match from "./pages/match/Match";
 import Help from "./pages/help/Help";
+import UserProfile from "./pages/user-profile/UserProfile";
+import { UserProfileLoader } from "./pages/user-profile/UserProfileLoader";
+import EditProfile from "./pages/edit-profile/EditProfile";
+import { EditProfileLoader } from "./pages/edit-profile/EditProfileLoader";
 
 import "./App.css";
 
@@ -77,6 +81,16 @@ const router = createBrowserRouter([
     element: <ResetPassword />
   },
   {
+    path: "/user/:id",
+    element: <UserProfile />,
+    loader: UserProfileLoader
+  },
+  {
+    path: "/user/:id/edit",
+    element: <EditProfile />,
+    loader: EditProfileLoader
+  },
+  {
     path: "*",
     element: <Navigate to="/" replace="true" />
   }
@@ -104,7 +118,7 @@ function App() {
   const signupUser = async (email, password) => {
     try {
       const response = await signup(email, password);
-      setCurrentUser({ ...response });
+      setCurrentUser(response);
       // Set token expiration time to two hours.
       const expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
       setTokenExpiration(expiration);
@@ -119,7 +133,7 @@ function App() {
   const loginUser = async (email, password) => {
     try {
       const response = await login(email, password);
-      setCurrentUser({ ...response });
+      setCurrentUser(response);
       // Set token expiration time to two hours.
       const expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
       setTokenExpiration(expiration);
@@ -128,6 +142,21 @@ function App() {
     } catch (error) {
       console.log(error.message);
       throw error;
+    }
+  };
+
+  const updateProfile = async () => {
+    try {
+      const response = await getUser(currentUser.id, currentUser.token);
+      response.token = currentUser.token;
+      setCurrentUser(response);
+      // Set token expiration time to two hours.
+      const expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
+      setTokenExpiration(expiration);
+      response.tokenExpiration = expiration;
+      localStorage.setItem("currentUser", JSON.stringify(response));
+    } catch (error) {
+      console.error(error.message);
     }
   };
 
@@ -167,6 +196,7 @@ function App() {
       setTokenExpiration(newTokenExpiration);
       storedUser.tokenExpiration = newTokenExpiration;
       localStorage.setItem("currentUser", JSON.stringify(storedUser));
+      setCurrentUser(storedUser);
     }
   }, []);
 
@@ -196,6 +226,7 @@ function App() {
         token: currentUser.token,
         signup: signupUser,
         login: loginUser,
+        updateProfile: updateProfile,
         logout: logoutUser
       }}
     >
