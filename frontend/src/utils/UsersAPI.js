@@ -69,14 +69,14 @@ const getUser = async (id, token) => {
  */
 const upgradeToPremium = async (id, token) => {
   const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_API}/api/users/updateUser`,
+    `${import.meta.env.VITE_BACKEND_API}/api/users/${id}`,
     {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ id, premium: true })
+      body: JSON.stringify({ premium: true })
     }
   );
   const responseMessage = await response.json();
@@ -87,4 +87,31 @@ const upgradeToPremium = async (id, token) => {
   return response;
 };
 
-export { signup, login, getUser, upgradeToPremium };
+/**
+ * Update a user's profile.
+ * @param {String} id ID of the user to update
+ * @param {String} token JWT token
+ * @param {String} profile Object containing the fields to update
+ * @returns Updated user object
+ */
+const updateProfile = async (id, token, profile) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_API}/api/users/${id}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(profile)
+    }
+  );
+  const responseMessage = await response.json();
+  if (response.status !== 200) {
+    console.error(`Failed to update user: ${responseMessage}`);
+    return false;
+  }
+  return responseMessage;
+};
+
+export { signup, login, getUser, upgradeToPremium, updateProfile };

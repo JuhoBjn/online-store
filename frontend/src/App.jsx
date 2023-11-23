@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 
 import { AuthContext } from "./utils/AuthContext";
-import { signup, login } from "./utils/UsersAPI";
+import { signup, login, getUser } from "./utils/UsersAPI";
 import LoggedOutNavBar from "./components/navbar/LoggedOutNavBar";
 import Frontpage from "./pages/frontpage/Frontpage";
 import AboutUs from "./pages/about-us/AboutUs";
@@ -16,6 +16,8 @@ import Authorization from "./pages/authorization/Authorization";
 import ResetPassword from "./pages/reset-password/ResetPassword";
 import UserProfile from "./pages/user-profile/UserProfile";
 import { UserProfileLoader } from "./pages/user-profile/UserProfileLoader";
+import EditProfile from "./pages/edit-profile/EditProfile";
+import { EditProfileLoader } from "./pages/edit-profile/EditProfileLoader";
 
 import "./App.css";
 
@@ -63,6 +65,11 @@ const router = createBrowserRouter([
     path: "/user/:id",
     element: <UserProfile />,
     loader: UserProfileLoader
+  },
+  {
+    path: "/user/:id/edit",
+    element: <EditProfile />,
+    loader: EditProfileLoader
   },
   {
     path: "*",
@@ -115,6 +122,21 @@ function App() {
     } catch (error) {
       console.log(error.message);
       throw error;
+    }
+  };
+
+  const updateProfile = async () => {
+    try {
+      const response = await getUser(currentUser.id, currentUser.token);
+      response.token = currentUser.token;
+      setCurrentUser(response);
+      // Set token expiration time to two hours.
+      const expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
+      setTokenExpiration(expiration);
+      response.tokenExpiration = expiration;
+      localStorage.setItem("currentUser", JSON.stringify(response));
+    } catch (error) {
+      console.error(error.message);
     }
   };
 
@@ -182,6 +204,7 @@ function App() {
         token: currentUser.token,
         signup: signupUser,
         login: loginUser,
+        updateProfile: updateProfile,
         logout: logoutUser
       }}
     >

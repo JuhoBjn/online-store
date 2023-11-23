@@ -23,15 +23,12 @@ const UserProfile = () => {
       authContext.token
     );
     if (response) {
-      console.log(response.message);
       setFriendRequestSent(true);
-    } else {
-      console.log("Failed to send friend request.");
     }
   };
 
   const editProfileHandler = () => {
-    console.log("Edit profile");
+    navigate(`/user/${authContext.id}/edit`);
   };
 
   const upgradeToPremiumHandler = async () => {
@@ -57,7 +54,7 @@ const UserProfile = () => {
             <div className="profile-picture-container">
               <img
                 data-testid="profile-picture"
-                src={`https://gravatar.com/avatar/${user.email_hash}`}
+                src={`https://gravatar.com/avatar/${user.email_hash}?d=mp`}
                 alt={`Profile picture of ${user.firstname} ${user.lastname}`}
               />
             </div>
