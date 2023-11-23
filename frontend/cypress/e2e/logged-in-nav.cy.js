@@ -1,6 +1,6 @@
 describe("The logged in nav bar", () => {
   it("should display a navigation bar with logo, links and profile image", () => {
-    cy.login("anthonya@test.com", "Anthony12345");
+    cy.login("bobb@test.com", "Bob12345");
 
     cy.get('[data-testid="goldenage-logo"]').should("be.visible");
     cy.get('[data-testid="news-page-link"]').should("be.visible");
@@ -12,7 +12,7 @@ describe("The logged in nav bar", () => {
   });
 
   it("should allow a user to navigate to the activities page", () => {
-    cy.login("anthonya@test.com", "Anthony12345");
+    cy.login("bobb@test.com", "Bob12345");
 
     cy.get('[data-testid="activities-page-link"]').click();
 
@@ -20,7 +20,7 @@ describe("The logged in nav bar", () => {
   });
 
   it("should allow a user to navigate to the match page", () => {
-    cy.login("anthonya@test.com", "Anthony12345");
+    cy.login("bobb@test.com", "Bob12345");
 
     cy.get('[data-testid="match-page-link"]').click();
 
@@ -28,7 +28,7 @@ describe("The logged in nav bar", () => {
   });
 
   it("should allow a user to navigate to the messages page", () => {
-    cy.login("anthonya@test.com", "Anthony12345");
+    cy.login("bobb@test.com", "Bob12345");
 
     cy.get('[data-testid="messages-page-link"]').click();
 
@@ -36,7 +36,7 @@ describe("The logged in nav bar", () => {
   });
 
   it("should allow a user to navigate to the help page", () => {
-    cy.login("anthonya@test.com", "Anthony12345");
+    cy.login("bobb@test.com", "Bob12345");
 
     cy.get('[data-testid="help-page-link"]').click();
 
@@ -44,7 +44,7 @@ describe("The logged in nav bar", () => {
   });
 
   it("should display dropdown menu when profile picture is clicked", () => {
-    cy.login("anthonya@test.com", "Anthony12345");
+    cy.login("bobb@test.com", "Bob12345");
 
     cy.get('[data-testid="profile-picture"]').click();
 
