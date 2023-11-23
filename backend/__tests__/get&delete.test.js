@@ -3,7 +3,7 @@ const { describe, it, expect, beforeAll, afterAll } = require("@jest/globals");
 const { toBeOneOf } = require("jest-extended");
 const bcrypt = require("bcryptjs");
 
-const app = require("../app");
+const { app } = require("../app");
 const { pool } = require("../db/pool");
 
 const jwt = require("jsonwebtoken");
