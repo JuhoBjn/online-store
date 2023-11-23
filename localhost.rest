@@ -1,3 +1,8 @@
+# https://github.com/Huachao/vscode-restclient 
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+###
+
 http://localhost:5000/healthz
 
 ###
@@ -136,12 +141,38 @@ Accept: application/json
 Authorization: Bearer {{token}}
 
 ### Update user profile
-
+# You can update many values as same by changing the key:
+# first-name
+# last_name
+# email
+# postal_code
+# city
+# country
+# phone
 PATCH http://localhost:5000/api/users/{{user_id}}
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: BEARER {{token}}
 
 {
-    "first_name": "Timothy",
-    "last_name": "Tester"
+    "first_name": "Jorma",
+    "last_name": "Korhonen"
 }
+
+### Find user by id
+
+GET http://localhost:5000/api/users/{{user_id}}
+Content-Type: application/json
+Authorization: BEARER {{token}}
+
+### find all users
+
+GET http://localhost:5000/api/users
+Content-Type: application/json
+Authorization: BEARER {{token}}
+
+
+### Delete user
+
+DELETE http://localhost:5000/api/users/{{user_id}}
+Content-Type: application/json
+Authorization: BEARER {{token}}
