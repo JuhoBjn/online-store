@@ -69,6 +69,7 @@ const EditProfile = () => {
                 maxLength={20}
                 value={userProfile.firstname}
                 onChange={() => updateUserProfileState(event)}
+                required
               />
             </div>
             <div className="edit-profile-lastname-input-container">
@@ -82,6 +83,7 @@ const EditProfile = () => {
                 maxLength={30}
                 value={userProfile.lastname}
                 onChange={() => updateUserProfileState(event)}
+                required
               />
             </div>
           </div>
@@ -94,6 +96,7 @@ const EditProfile = () => {
             maxLength={400}
             value={userProfile.bio}
             onChange={() => updateUserProfileState(event)}
+            required
           />
           <label htmlFor="email-input">Email</label>
           <input
@@ -105,6 +108,7 @@ const EditProfile = () => {
             maxLength={320}
             value={userProfile.email}
             onChange={() => updateUserProfileState(event)}
+            required
           />
           <label htmlFor="phone-input">Phone number</label>
           <input
@@ -116,6 +120,7 @@ const EditProfile = () => {
             maxLength={15}
             value={userProfile.phone}
             onChange={() => updateUserProfileState(event)}
+            required
           />
           <div className="edit-profile-sidebyside-input-container">
             <div className="edit-profile-city-input-container">
@@ -128,6 +133,7 @@ const EditProfile = () => {
                 placeholder="City"
                 value={userProfile.city}
                 onChange={() => updateUserProfileState(event)}
+                required
               />
             </div>
             <div className="edit-profile-postalcode-input-container">
@@ -140,6 +146,7 @@ const EditProfile = () => {
                 placeholder="Postal code"
                 value={userProfile.postalcode}
                 onChange={() => updateUserProfileState(event)}
+                required
               />
             </div>
           </div>
@@ -151,6 +158,7 @@ const EditProfile = () => {
             data-testid="country-input"
             value={userProfile.country}
             onChange={() => updateUserProfileState(event)}
+            required
           >
             <option value="af">Afghanistan</option>
             <option value="ax">Åland Islands</option>
