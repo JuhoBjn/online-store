@@ -1,5 +1,5 @@
 import "./Home.css";
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
@@ -8,14 +8,11 @@ const Home = () => {
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("currentUser"));
     if (storedUser?.token) {
-
-    }
-    else(
-      navigate("/frontpage")
-    )
+      navigate("/frontpage");
+    } else navigate("/frontpage");
   }, [navigate]);
 
-  return 
+  return;
 };
 
 export default Home;
