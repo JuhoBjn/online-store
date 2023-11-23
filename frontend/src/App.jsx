@@ -7,10 +7,6 @@ import {
 
 import { AuthContext } from "./utils/AuthContext";
 import { signup, login } from "./utils/UsersAPI";
-import LoggedOutNavBar from "./components/navbar/LoggedOutNavBar";
-import Frontpage from "./pages/frontpage/Frontpage";
-import AboutUs from "./pages/about-us/AboutUs";
-import ContactUs from "./pages/contact-us/ContactUs";
 import LoggedInNavBar from "./components/logged-in-navbar/LoggedInNavBar";
 import Authorization from "./pages/authorization/Authorization";
 import ResetPassword from "./pages/reset-password/ResetPassword";
@@ -65,60 +61,6 @@ const router = createBrowserRouter([
       <>
         <LoggedInNavBar />
         <Help />
-      </>
-    )
-  },
-  {
-    path: "/frontpage",
-    element: (
-      <>
-        <LoggedOutNavBar />
-        <Frontpage />
-      </>
-    )
-  },
-  {
-    path: "/about-us",
-    element: (
-      <>
-        <LoggedOutNavBar />
-        <AboutUs />
-      </>
-    )
-  },
-  {
-    path: "/contact-us",
-    element: (
-      <>
-        <LoggedOutNavBar />
-        <ContactUs />
-      </>
-    )
-  },
-  {
-    path: "/frontpage",
-    element: (
-      <>
-        <LoggedOutNavBar />
-        <Frontpage />
-      </>
-    )
-  },
-  {
-    path: "/about-us",
-    element: (
-      <>
-        <LoggedOutNavBar />
-        <AboutUs />
-      </>
-    )
-  },
-  {
-    path: "/contact-us",
-    element: (
-      <>
-        <LoggedOutNavBar />
-        <ContactUs />
       </>
     )
   },
