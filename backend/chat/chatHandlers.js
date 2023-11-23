@@ -59,7 +59,7 @@ module.exports = (io, socket) => {
     const userId = socket.data.user?.id;
     const usersAreFriends = await chatDb.checkFriends(userId, friendUser.id);
     if (usersAreFriends) {
-      let chatId = await chatDb.getDirectChatID(userId, friendUser.id);
+      let chatId = await chatDb.getDirectChatID(userId, friendUser.id); // TODO: better error handling. DB access should be in try/catch.
       if (!chatId) {
         chatId = await chatDb.createDirectChat(userId, friendUser.id);
         if (!chatId) {
@@ -107,6 +107,7 @@ module.exports = (io, socket) => {
     }
 
     const userId = socket.data.user?.id;
+    // TODO: better error handling. DB access should be in try/catch.
     if (chatDb.checkFriends(userId, friendUser.id)) {
       const chatId = await chatDb.getDirectChatID(userId, friendUser.id);
       if (!chatId) {
