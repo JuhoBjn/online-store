@@ -1,17 +1,16 @@
 import { render, screen } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
 
-import ContextMenu from "./ContextMenu";
+import DropdownMenu from "./DropdownMenu";
 
-describe("The context menu", () => {
+describe("The dropdown menu", () => {
   it("should display an option to navigate to profile", () => {
-    render(<ContextMenu />);
+    render(<DropdownMenu />);
 
     expect(screen.getByTestId("go-to-profile")).toBeInTheDocument();
   });
 
   it("should display on option to log out", () => {
-    render(<ContextMenu />);
+    render(<DropdownMenu />);
 
     expect(screen.getByTestId("log-out")).toBeInTheDocument();
   });

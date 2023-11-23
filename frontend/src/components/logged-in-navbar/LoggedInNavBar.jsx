@@ -3,18 +3,18 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 import GoldenageLogo from "../../assets/Goldenage_logo.png";
 import { AuthContext } from "../../utils/AuthContext";
-import ContextMenu from "./ContextMenu";
+import DropdownMenu from "./DropdownMenu";
 
 import "./LoggedInNavBar.css";
 import TransparentOverlay from "../transparent-overlay/TransparentOverlay";
 
 const LoggedInNavBar = () => {
-  const [showContextMenu, setShowContextMenu] = useState(false);
+  const [showDropdownMenu, setShowDropdownMenu] = useState(false);
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const toggleContextMenu = () => {
-    setShowContextMenu(!showContextMenu);
+  const toggleDropdownMenu = () => {
+    setShowDropdownMenu(!showDropdownMenu);
   };
 
   const navigateToProfileHandler = () => {
@@ -68,17 +68,17 @@ const LoggedInNavBar = () => {
       </div>
       <div
         className="nav-profile-picture-container"
-        onClick={toggleContextMenu}
+        onClick={toggleDropdownMenu}
       >
         <img
           id="profile-picture"
           data-testid="profile-picture"
           src={`https://gravatar.com/avatar/${authContext.email_hash}?d=mp`}
         />
-        {showContextMenu && (
+        {showDropdownMenu && (
           <>
-            <TransparentOverlay onClick={toggleContextMenu} />
-            <ContextMenu
+            <TransparentOverlay onClick={toggleDropdownMenu} />
+            <DropdownMenu
               navigateToProfileHandler={navigateToProfileHandler}
               logoutHandler={logoutHandler}
             />

@@ -1,13 +1,13 @@
-import "./ContextMenu.css";
+import "./DropdownMenu.css";
 
-const ContextMenu = ({ navigateToProfileHandler, logoutHandler }) => {
+const DropdownMenu = ({ navigateToProfileHandler, logoutHandler }) => {
   return (
-    <div className="context-menu-container">
-      <ul id="context-menu-links">
-        <li id="context-menu-profile-link">
+    <div className="dropdown-menu-container">
+      <ul id="dropdown-menu-links">
+        <li id="dropdown-menu-profile-link">
           <div
             data-testid="go-to-profile"
-            className="context-menu-link-container"
+            className="dropdown-menu-link-container"
             onClick={navigateToProfileHandler}
           >
             <p>Go to profile</p>
@@ -16,7 +16,7 @@ const ContextMenu = ({ navigateToProfileHandler, logoutHandler }) => {
         <li>
           <div
             data-testid="log-out"
-            className="context-menu-link-container"
+            className="dropdown-menu-link-container"
             onClick={logoutHandler}
           >
             <p>Log out</p>
@@ -27,4 +27,4 @@ const ContextMenu = ({ navigateToProfileHandler, logoutHandler }) => {
   );
 };
 
-export default ContextMenu;
+export default DropdownMenu;
