@@ -1,5 +1,89 @@
 .match-page {
-  height: 100vh;
+  /* height = 100vh - navbar */
+  height: calc(100vh - 5em);
   width: 100vw;
   padding-top: 5em;
+  background-color: var(--main-background-color);
+  overflow: hidden;
+}
+
+.match-container {
+  height: 80%;
+  width: 90%;
+  max-width: 55em;
+  position: absolute;
+  /* top = top + navbar + gap from navbar */
+  top: calc(0em + 5em + 5em);
+  left: 50%;
+  transform: translate(-50%, 0%);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.match-page_profile-card-container {
+  height: 100%;
+  width: 60%;
+  max-width: 30em;
+  position: absolute;
+  /* top = top + navbar + gap from navbar */
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.pass-button-container {
+  width: 100%;
+  max-width: 10em;
+  height: auto;
+  max-height: 10em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4em;
+}
+
+.pass-button-container :hover {
+  cursor: pointer;
+}
+
+.pass-button-container :active {
+  background-color: black;
+  filter: opacity(20%);
+}
+
+.pass-button-container h2 {
+  margin: 0.75em 0;
+}
+
+#pass-button-image {
+  height: 7em;
+  object-fit: contain;
+}
+
+.smash-button-container {
+  width: 100%;
+  max-width: 10em;
+  height: auto;
+  max-height: 10em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4em;
+}
+
+.smash-button-container :hover {
+  cursor: pointer;
+}
+
+.smash-button-container h2 {
+  margin: 0.75em 0;
+}
+
+#smash-button-image {
+  height: 7em;
+  object-fit: contain;
 }
