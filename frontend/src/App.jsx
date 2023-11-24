@@ -7,13 +7,23 @@ import {
 
 import { AuthContext } from "./utils/AuthContext";
 import { signup, login, getUser } from "./utils/UsersAPI";
-import LoggedOutNavBar from "./components/navbar/LoggedOutNavBar";
+import LoggedInNavBar from "./components/navbar/LoggedInNavBar";
+import LoggedOutNavBar from "./components/navbar/LoggedOutNavbar";
 import Frontpage from "./pages/frontpage/Frontpage";
 import AboutUs from "./pages/about-us/AboutUs";
 import ContactUs from "./pages/contact-us/ContactUs";
-import Home from "./pages/home/Home";
 import Authorization from "./pages/authorization/Authorization";
 import ResetPassword from "./pages/reset-password/ResetPassword";
+import News from "./pages/news/News";
+import { NewsLoader } from "./pages/news/NewsLoader";
+import Activities from "./pages/activities/Activities";
+import { ActivitiesLoader } from "./pages/activities/ActivitiesLoader";
+import Messages from "./pages/messages/Messages";
+import { MessagesLoader } from "./pages/messages/MessagesLoader";
+import Match from "./pages/match/Match";
+import { MatchLoader } from "./pages/match/MatchLoader";
+import Help from "./pages/help/Help";
+import { HelpLoader } from "./pages/help/HelpLoader";
 import UserProfile from "./pages/user-profile/UserProfile";
 import { UserProfileLoader } from "./pages/user-profile/UserProfileLoader";
 import EditProfile from "./pages/edit-profile/EditProfile";
@@ -24,7 +34,76 @@ import "./App.css";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />
+    loader: NewsLoader,
+    element: (
+      <>
+        <LoggedInNavBar />
+        <News />
+      </>
+    )
+  },
+  {
+    path: "/activities",
+    loader: ActivitiesLoader,
+    element: (
+      <>
+        <LoggedInNavBar />
+        <Activities />
+      </>
+    )
+  },
+  {
+    path: "/match",
+    loader: MatchLoader,
+    element: (
+      <>
+        <LoggedInNavBar />
+        <Match />
+      </>
+    )
+  },
+  {
+    path: "/messages",
+    loader: MessagesLoader,
+    element: (
+      <>
+        <LoggedInNavBar />
+        <Messages />
+      </>
+    )
+  },
+  {
+    path: "/help",
+    loader: HelpLoader,
+    element: (
+      <>
+        <LoggedInNavBar />
+        <Help />
+      </>
+    )
+  },
+  {
+    path: "/auth",
+    element: <Authorization />
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPassword />
+  },
+  {
+    path: "/user/:id",
+    element: (
+      <>
+        <UserProfile />
+        <LoggedInNavBar />
+      </>
+    ),
+    loader: UserProfileLoader
+  },
+  {
+    path: "/user/:id/edit",
+    element: <EditProfile />,
+    loader: EditProfileLoader
   },
   {
     path: "/frontpage",
@@ -54,24 +133,6 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: "/auth",
-    element: <Authorization />
-  },
-  {
-    path: "/reset-password",
-    element: <ResetPassword />
-  },
-  {
-    path: "/user/:id",
-    element: <UserProfile />,
-    loader: UserProfileLoader
-  },
-  {
-    path: "/user/:id/edit",
-    element: <EditProfile />,
-    loader: EditProfileLoader
-  },
-  {
     path: "*",
     element: <Navigate to="/" replace="true" />
   }
@@ -86,6 +147,7 @@ function App() {
     firstname: "",
     lastname: "",
     email: "",
+    email_hash: "",
     postalcode: "",
     city: "",
     country: "",
@@ -148,6 +210,7 @@ function App() {
       firstname: "",
       lastname: "",
       email: "",
+      email_hash: "",
       postalcode: "",
       city: "",
       country: "",
@@ -196,6 +259,7 @@ function App() {
         firstname: currentUser.firstname,
         lastname: currentUser.lastname,
         email: currentUser.email,
+        email_hash: currentUser.email_hash,
         postalcode: currentUser.postalcode,
         city: currentUser.city,
         country: currentUser.country,
