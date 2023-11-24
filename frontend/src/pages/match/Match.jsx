@@ -9,22 +9,18 @@ import TrashBinImage from "../../assets/Trash_bin.png";
 import "./Match.css";
 
 const Match = () => {
-  const [matchUsers, setMatchUsers] = useState(useLoaderData());
-  const [displayedUser, setDisplayedUser] = useState(matchUsers.at(0));
-  const displayedUserIndex = useRef(0);
+  const matchUsers = useRef(useLoaderData());
+  const [displayedUser, setDisplayedUser] = useState(matchUsers.current.at(0));
   const authContext = useContext(AuthContext);
 
   const nextHandler = () => {
-    if (displayedUserIndex.current === matchUsers.length - 1) {
-      displayedUserIndex.current = 0;
-    } else {
-      displayedUserIndex.current++;
+    if (matchUsers.current.at(0).id === displayedUser.id) {
+      matchUsers.current.shift();
     }
-    setDisplayedUser(matchUsers.at(displayedUserIndex.current));
+    setDisplayedUser(matchUsers.current.shift());
   };
 
   const friendRequestHandler = async () => {
-    console.log("Friend request handler");
     const response = await fetch(
       `${import.meta.env.VITE_BACKEND_API}/api/users/${
         authContext.id
@@ -38,21 +34,16 @@ const Match = () => {
       }
     );
 
-    if (response.status === 200) {
-      setMatchUsers((prev) => prev.splice(displayedUserIndex.current, 1));
-      if (displayedUserIndex.current >= matchUsers.length) {
-        displayedUserIndex.current = 0;
-      }
-      setDisplayedUser(displayedUserIndex.current);
-    } else {
+    if (response.status !== 200) {
       const responseBody = response.json();
       console.error(responseBody.message);
     }
+    nextHandler();
   };
 
   return (
     <div className="match-page">
-      {matchUsers.length > 1 ? (
+      {matchUsers.current.length > 0 ? (
         <div className="match-container">
           <div className="pass-button-container" onClick={nextHandler}>
             <h2>PASS</h2>
@@ -80,7 +71,9 @@ const Match = () => {
           </div>
         </div>
       ) : (
-        <h2>No users found</h2>
+        <div className="match-page_no-users-found-container">
+          <h2>No users found</h2>
+        </div>
       )}
     </div>
   );

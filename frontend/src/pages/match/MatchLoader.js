@@ -39,6 +39,5 @@ export const MatchLoader = async () => {
     (user) => !friendIds.includes(user.id) && user.id !== storedUser.id
   );
 
-  console.log(matchUsers);
   return matchUsers;
 };

@@ -15,17 +15,19 @@ const ProfileCard = ({ user }) => {
         <img
           id="profile-card-image"
           data-testid="profile-card-image"
-          src={`https://gravatar.com/avatar/${user.email_hash}?d=mp`}
+          src={`https://gravatar.com/avatar/${user.emailhash}?d=mp`}
           alt={`Profile picture of ${user.firstname} ${user.lastname}`}
         />
       </div>
       <div className="profile-card-content">
         <div className="profile-card-content-header">
           <span id="profile-card-header-title">
-            <h2 id="profile-card-user-name">
+            <h2
+              id="profile-card-user-name"
+              data-testid="profile-card-user-name"
+            >
               {user.firstname} {user.lastname}
             </h2>
-            <h3>{user.age}</h3>
           </span>
           <h3>
             {user.city}, {user.country}
