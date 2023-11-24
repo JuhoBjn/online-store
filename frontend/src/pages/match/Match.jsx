@@ -45,7 +45,11 @@ const Match = () => {
     <div className="match-page">
       {matchUsers.current.length > 0 ? (
         <div className="match-container">
-          <div className="pass-button-container" onClick={nextHandler}>
+          <div
+            data-testid="pass-button-container"
+            className="pass-button-container"
+            onClick={nextHandler}
+          >
             <h2>PASS</h2>
             <img
               id="pass-button-image"
@@ -54,10 +58,14 @@ const Match = () => {
               alt="Pass - image"
             />
           </div>
-          <div className="match-page_profile-card-container">
+          <div
+            data-testid="match-page_profile-card-container"
+            className="match-page_profile-card-container"
+          >
             <ProfileCard user={displayedUser} />
           </div>
           <div
+            data-testid="smash-button-container"
             className="smash-button-container"
             onClick={friendRequestHandler}
           >

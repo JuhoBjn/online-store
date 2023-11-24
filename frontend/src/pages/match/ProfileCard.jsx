@@ -29,13 +29,13 @@ const ProfileCard = ({ user }) => {
               {user.firstname} {user.lastname}
             </h2>
           </span>
-          <h3>
+          <h3 data-testid="profile-card-user-city">
             {user.city}, {user.country}
           </h3>
         </div>
         <hr className="profile-card-content-separator" />
         <div className="profile-card-content-body">
-          <p>{user.bio}</p>
+          <p data-testid="profile-card-user-bio">{user.bio}</p>
         </div>
       </div>
     </div>
