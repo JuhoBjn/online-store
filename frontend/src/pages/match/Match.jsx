@@ -50,7 +50,7 @@ const Match = () => {
             className="pass-button-container"
             onClick={nextHandler}
           >
-            <h2>PASS</h2>
+            <h2 data-testid="pass-button-text">PASS</h2>
             <img
               id="pass-button-image"
               data-testid="pass-button-image"
@@ -69,7 +69,7 @@ const Match = () => {
             className="smash-button-container"
             onClick={friendRequestHandler}
           >
-            <h2>SMASH</h2>
+            <h2 data-testid="smash-button-text">SMASH</h2>
             <img
               id="smash-button-image"
               data-testid="smash-button-image"
