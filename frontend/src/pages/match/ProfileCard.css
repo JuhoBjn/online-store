@@ -1,6 +1,8 @@
 .profile-card {
-  width: 25em;
-  height: 40em;
+  max-width: 25em;
+  width: 100%;
+  max-height: 80vh;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -14,7 +16,7 @@
 
 .profile-card-image-container {
   width: 100%;
-  height: fit-content;
+  height: 100%;
   overflow: hidden;
 }
 
