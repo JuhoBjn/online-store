@@ -24,6 +24,16 @@ describe("The frontpage", () => {
     expect(screen.getByTestId("frontpage-content")).toBeInTheDocument();
   });
 
+  it("should display pricing info", () => {
+    render(
+      <BrowserRouter>
+        <Frontpage />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId("frontpage-content-pricing")).toBeInTheDocument();
+  });
+
   it("should display a button to join the platform", () => {
     render(
       <BrowserRouter>

@@ -33,6 +33,13 @@ const Frontpage = () => {
           diverse array of engaging activities, cultural experiences, and
           supportive connections.
         </p>
+        <p
+          id="frontpage-content-pricing"
+          data-testid="frontpage-content-pricing"
+        >
+          Join us now and try it 30 days for free <br />
+          (after trial 14.99€/month)
+        </p>
       </div>
       <Button
         id="join-button"
