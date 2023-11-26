@@ -58,7 +58,8 @@ const Authorization = () => {
         emailRef.current.value,
         passwordRef.current.value
       );
-      navigate("/edit-profile");
+      const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+      navigate(`/user/${storedUser.id}/edit`);
     } catch (error) {
       setShowErrorMessage(true);
       if (error.message.includes("password")) {
