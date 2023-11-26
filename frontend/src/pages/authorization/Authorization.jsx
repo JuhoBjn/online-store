@@ -73,6 +73,11 @@ const Authorization = () => {
   };
 
   useEffect(() => {
+    const hashSignupMode = location.hash.substring(1);
+    setLoginMode(hashSignupMode === "signup" ? false : true);
+  }, []);
+
+  useEffect(() => {
     // Navigate to the home page if the user is already logged in.
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     if (currentUser?.token) {

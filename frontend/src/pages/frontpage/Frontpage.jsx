@@ -9,8 +9,8 @@ import "./Frontpage.css";
 const Frontpage = () => {
   const navigate = useNavigate();
 
-  const navigateToAuthHandler = () => {
-    navigate("/auth");
+  const navigateToSignupHandler = () => {
+    navigate("/auth#signup");
   };
 
   // Redirect user to the news page if they're logged in.
@@ -54,7 +54,7 @@ const Frontpage = () => {
         id="join-button"
         data-testid="join-button"
         type="confirm"
-        onClick={navigateToAuthHandler}
+        onClick={navigateToSignupHandler}
       >
         Join
       </Button>
