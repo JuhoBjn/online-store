@@ -14,6 +14,16 @@ describe("The frontpage", () => {
     expect(screen.getByTestId("frontpage-title")).toBeInTheDocument();
   });
 
+  it("should display a banner image", () => {
+    render(
+      <BrowserRouter>
+        <Frontpage />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId("frontpage-banner-image")).toBeInTheDocument();
+  });
+
   it("should display text content", () => {
     render(
       <BrowserRouter>

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 import Button from "../../components/button/Button";
+import FrontpageBanner from "../../assets/Frontpage_banner.jpg";
 
 import "./Frontpage.css";
 
@@ -22,6 +23,14 @@ const Frontpage = () => {
 
   return (
     <div className="frontpage">
+      <div className="frontpage-banner-container">
+        <img
+          className="frontpage-banner-image"
+          data-testid="frontpage-banner-image"
+          src={FrontpageBanner}
+          alt="Banner image of a painting workshop"
+        />
+      </div>
       <div className="frontpage-content">
         <h2 data-testid="frontpage-title" id="frontpage-title">
           What is GoldenAge?
