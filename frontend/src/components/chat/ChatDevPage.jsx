@@ -15,16 +15,15 @@ const ChatDevPage = () => {
     lastname: "Smith"
   };
 
-  const chatId = null;
-
   console.log(user);
   return (
     <>
       <Chat
         user={user}
         friend={friend}
-        chatId={chatId}
-        isDisabled={true}
+        eventId={"e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e1e1"}
+        eventName={"Test Event"}
+        isDisabled={false}
         disabledMessage="Can't message non friend"
       />
     </>

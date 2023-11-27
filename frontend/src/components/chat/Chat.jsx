@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import MessageBubble from "./MessageBubble";
 
 let socket = null;
 
@@ -73,6 +74,7 @@ const Chat = ({
   user,
   friend = null,
   eventId = null,
+  eventName = null,
   isDisabled = false,
   disabledMessage = ""
 }) => {
@@ -143,13 +145,28 @@ const Chat = ({
   }, [user.token]);
 
   return (
-    <div>
-      <div>Chat</div>
+    <div className="chat-container">
+      <div className="chat-container__title">Chat</div>
+      {eventId && eventName && (
+        <div className="chat-container__event-info">
+          <div>{eventName}</div>
+        </div>
+      )}
+      {friend && (
+        <div className="chat-container__friend-info">
+          <div>
+            {friend.firstname} {friend.lastname}
+          </div>
+        </div>
+      )}
+
       {messages.map((message, index) => (
-        <div key={index}>
-          <div>{message.name}</div>
-          <div>{message.message}</div>
-          <div>{message.sentAt}</div>
+        <div key={index} className="chat-container__message-container">
+          <MessageBubble
+            message={message}
+            isMine={message.senderUserId === user.id}
+            isGroupChat={Boolean(eventId)}
+          />
         </div>
       ))}
       <form
@@ -160,9 +177,22 @@ const Chat = ({
           e.target.message.value = "";
         }}
       >
-        {isDisabled && <div>{disabledMessage}</div>}
-        <input type="text" name="message" disabled={isDisabled} />
-        <button type="submit" disabled={isDisabled}>
+        {isDisabled && (
+          <div className="chat-container__disabled-message">
+            {disabledMessage}
+          </div>
+        )}
+        <input
+          type="text"
+          name="message"
+          disabled={isDisabled}
+          className="chat-container__message-input"
+        />
+        <button
+          type="submit"
+          disabled={isDisabled}
+          className="chat-container__send-button"
+        >
           Send
         </button>
       </form>
