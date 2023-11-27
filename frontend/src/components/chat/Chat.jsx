@@ -1,84 +1,172 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-/*
- * @param {object} props
- * @param {object} props.user
- * @param {object} props.user.id
- * @param {object} props.user.token
- * @param {object} props.user.firstname
- * @param {object} props.user.lastname
- * @param {object} [props.friend]
- * @param {object} props.friend.id
- * @param {object} props.friend.firstname
- * @param {object} props.friend.lastname
- * @param {string} [props.chatId]
- * @returns {JSX.Element}
+let socket = null;
+
+const connectSocket = (token) => {
+  console.log("connecting socket...");
+  socket = io(import.meta.env.VITE_SOCKET_URL, {
+    auth: {
+      token: token
+    }
+  });
+  console.log("connected socket");
+};
+
+const disconnectSocket = () => {
+  if (socket) {
+    console.log("disconnecting socket");
+    socket.disconnect();
+  }
+};
+
+/**
+ * Sends request to server to join direct chat room
+ * @param {Object} friend - Friend object
+ * @param {String} friend.id - Friend ID
+ * @param {String} friend.firstname - Friend first name
+ * @param {String} friend.lastname - Friend last name
+ * @returns {Promise<void>} Promise that resolves when server responds
  */
-const Chat = ({ user, friend = null, chatId = null }) => {
+const joinDirectChatRoom = async (friend) => {
+  if (socket) {
+    console.log("joining direct chat room");
+    const res = await socket.emitWithAck("join-direct-chat", friend);
+    console.log(res);
+  }
+};
+
+/**
+ * Sends request to server to get chat history
+ * @param {Object} friend - Friend object
+ */
+const getChatHistory = (friend) => {
+  if (friend && socket) {
+    console.log("sending request for chat history");
+    socket.emit("get-message-history", friend, (res) => {
+      if (res) {
+        console.log(res);
+      }
+    });
+  } else {
+    console.error("No friend or socket provided");
+  }
+};
+
+/*
+ * Chat component
+ * @param {Object} props
+ * @param {Object} props.user - User object
+ * @param {String} props.user.token - User token
+ * @param {String} props.user.firstname - User first name
+ * @param {String} props.user.lastname - User last name
+ * @param {Object} [props.friend] - Friend object
+ * @param {String} props.friend.id - Friend ID
+ * @param {String} props.friend.firstname - Friend first name
+ * @param {String} props.friend.lastname - Friend last name
+ * @param {String} [props.eventId] - Event ID
+ * @param {Boolean} [props.isDisabled] - Whether or not to disable chat
+ * @param {String} [props.disabledMessage] - Message to display when chat is disabled
+ * @returns {JSX.Element} JSX Element for Chat component
+ */
+const Chat = ({
+  user,
+  friend = null,
+  eventId = null,
+  isDisabled = false,
+  disabledMessage = ""
+}) => {
   const [messages, setMessages] = useState([]);
 
-  if (!user?.token) return <div>No user token</div>;
-  if (!friend && !chatId) return <div>No friend or chatId</div>;
-
-  const socketUrl = import.meta.env.VITE_SOCKET_URL;
-  const socket = io(socketUrl, {
-    auth: {
-      token: user.token
+  // Use effect to connect socket on mount and disconnect on unmount
+  useEffect(() => {
+    if (!user?.token) {
+      console.error("No user token");
+      return;
     }
-  });
 
-  socket.on("connect", async () => {
-    console.log("connected");
+    connectSocket(user.token);
+    console.log("socket", socket);
+    return () => {
+      // Clean up socket on unmount
+      disconnectSocket();
+    };
+  }, [user.token]);
+
+  useEffect(() => {
+    const joinRoomAndGetChatHistory = async () => {
+      await joinDirectChatRoom(friend);
+      getChatHistory(friend);
+    };
 
     if (friend) {
-      const res = await socket.emitWithAck("join-direct-chat", friend);
-      console.log(res);
-
-      await socket.emitWithAck("get-message-history", friend);
+      joinRoomAndGetChatHistory();
     }
-  });
-
-  socket.on("message-history", (messageHistory) => {
-    console.log("message-history", messageHistory);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("disconnected");
-
-    socket.off("connect");
-    socket.off("disconnect");
-
-    socket.disconnect();
-  });
-
-  socket.on("message", (message) => {
-    console.log("message", message);
-  });
+  }, [friend]);
 
   const sendMessage = async (message) => {
-    console.log("send-message", message);
-    const res = await socket.emit("send-message", {
-      name: `${user.firstname} ${user.lastname}`,
-      message: message
-    });
-    console.log(res);
+    console.log("sending message", message);
+    if (socket) {
+      console.log("socket exists");
+      const res = await socket.emitWithAck("send-message", {
+        name: `${user.firstname} ${user.lastname}`,
+        message: message
+      });
+
+      if (res?.status === "Bad request") {
+        console.error("Bad request: ", res?.message);
+        return;
+      }
+      console.log(res);
+    }
   };
 
+  useEffect(() => {
+    if (socket) {
+      socket.on("message", (message) => {
+        console.log("message received", message);
+        setMessages((prevMessages) => [...prevMessages, message]);
+      });
+
+      socket.on("message-history", (messageHistory) => {
+        console.log("message history received", messageHistory);
+        setMessages(messageHistory);
+      });
+
+      return () => {
+        socket.off("message");
+        socket.off("message-history");
+      };
+    } else {
+      console.error("No socket");
+    }
+  }, [user.token]);
+
   return (
-    <>
+    <div>
       <div>Chat</div>
+      {messages.map((message, index) => (
+        <div key={index}>
+          <div>{message.name}</div>
+          <div>{message.message}</div>
+          <div>{message.sentAt}</div>
+        </div>
+      ))}
       <form
         onSubmit={(e) => {
           e.preventDefault();
           const message = e.target.message.value;
           sendMessage(message);
+          e.target.message.value = "";
         }}
       >
-        <input type="text" name="message" />
-        <button type="submit">Send</button>
+        {isDisabled && <div>{disabledMessage}</div>}
+        <input type="text" name="message" disabled={isDisabled} />
+        <button type="submit" disabled={isDisabled}>
+          Send
+        </button>
       </form>
-    </>
+    </div>
   );
 };
 
