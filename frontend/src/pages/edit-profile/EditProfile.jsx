@@ -144,6 +144,7 @@ const EditProfile = () => {
                 name="postalcode"
                 type="text"
                 placeholder="Postal code"
+                maxLength={5}
                 value={userProfile.postalcode || ""}
                 onChange={() => updateUserProfileState(event)}
                 required
