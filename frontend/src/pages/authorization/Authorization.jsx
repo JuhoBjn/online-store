@@ -58,7 +58,8 @@ const Authorization = () => {
         emailRef.current.value,
         passwordRef.current.value
       );
-      navigate("/edit-profile");
+      const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+      navigate(`/user/${storedUser.id}/edit`);
     } catch (error) {
       setShowErrorMessage(true);
       if (error.message.includes("password")) {
@@ -71,6 +72,11 @@ const Authorization = () => {
       console.log(error.message);
     }
   };
+
+  useEffect(() => {
+    const hashSignupMode = location.hash.substring(1);
+    setLoginMode(hashSignupMode === "signup" ? false : true);
+  }, []);
 
   useEffect(() => {
     // Navigate to the home page if the user is already logged in.

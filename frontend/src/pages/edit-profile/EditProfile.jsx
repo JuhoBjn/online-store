@@ -15,7 +15,6 @@ const EditProfile = () => {
 
   const updateUserProfileState = (event) => {
     event.preventDefault();
-    console.log(event.target.name, event.target.value);
     setUserProfile((prev) => {
       return { ...prev, [event.target.name]: event.target.value };
     });
@@ -31,7 +30,7 @@ const EditProfile = () => {
       email: userProfile.email,
       postal_code: userProfile.postalcode,
       city: userProfile.city,
-      country: userProfile.country,
+      country: userProfile.country ?? "fi",
       phone: userProfile.phone,
       premium: userProfile === 1
     };
@@ -67,7 +66,7 @@ const EditProfile = () => {
                 type="text"
                 placeholder="First name"
                 maxLength={20}
-                value={userProfile.firstname}
+                value={userProfile.firstname || ""}
                 onChange={() => updateUserProfileState(event)}
                 required
               />
@@ -81,7 +80,7 @@ const EditProfile = () => {
                 type="text"
                 placeholder="Last name"
                 maxLength={30}
-                value={userProfile.lastname}
+                value={userProfile.lastname || ""}
                 onChange={() => updateUserProfileState(event)}
                 required
               />
@@ -94,7 +93,7 @@ const EditProfile = () => {
             name="bio"
             placeholder="Enter your bio here"
             maxLength={400}
-            value={userProfile.bio}
+            value={userProfile.bio || ""}
             onChange={() => updateUserProfileState(event)}
             required
           />
@@ -118,7 +117,7 @@ const EditProfile = () => {
             type="tel"
             placeholder="Phone"
             maxLength={15}
-            value={userProfile.phone}
+            value={userProfile.phone || ""}
             onChange={() => updateUserProfileState(event)}
             required
           />
@@ -131,7 +130,8 @@ const EditProfile = () => {
                 name="city"
                 type="text"
                 placeholder="City"
-                value={userProfile.city}
+                value={userProfile.city || ""}
+                maxLength={85}
                 onChange={() => updateUserProfileState(event)}
                 required
               />
@@ -144,7 +144,8 @@ const EditProfile = () => {
                 name="postalcode"
                 type="text"
                 placeholder="Postal code"
-                value={userProfile.postalcode}
+                maxLength={5}
+                value={userProfile.postalcode || ""}
                 onChange={() => updateUserProfileState(event)}
                 required
               />
@@ -156,7 +157,7 @@ const EditProfile = () => {
             className="country-dropdown"
             id="country-input"
             data-testid="country-input"
-            value={userProfile.country}
+            value={userProfile.country || "fi"}
             onChange={() => updateUserProfileState(event)}
             required
           >

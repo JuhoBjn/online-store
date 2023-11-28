@@ -248,6 +248,7 @@ function App() {
     if (logoutTimer) {
       clearTimeout(logoutTimer);
     }
+    window.location.reload();
     console.log("User logged out");
   };
 
