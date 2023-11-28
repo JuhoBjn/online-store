@@ -3,14 +3,6 @@
   --gray: #cccccc;
 }
 
-.chat-container__messages-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-y: scroll;
-  padding: 0 1rem;
-}
-
 .chat-message-bubble {
   display: flex;
   flex-direction: column;

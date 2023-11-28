@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import MessageBubble from "./MessageBubble";
+import "./Chat.css";
 
 let socket = null;
 
@@ -159,16 +160,17 @@ const Chat = ({
           </div>
         </div>
       )}
-
-      {messages.map((message, index) => (
-        <div key={index} className="chat-container__message-container">
-          <MessageBubble
-            message={message}
-            isMine={message.senderUserId === user.id}
-            isGroupChat={Boolean(eventId)}
-          />
-        </div>
-      ))}
+      <div className="chat-container__messages-container">
+        {messages.map((message, index) => (
+          <div key={index} className="chat-container__message-container">
+            <MessageBubble
+              message={message}
+              isMine={message.senderUserId === user.id}
+              isGroupChat={Boolean(eventId)}
+            />
+          </div>
+        ))}
+      </div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
