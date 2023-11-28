@@ -294,3 +294,79 @@ Authorization: Bearer {{token}}
 GET http://localhost:5000/api/users/{{user_id}}/events
 Authorization: Bearer {{token}}
 
+### Create news article - with image
+
+POST http://localhost:5000/api/news
+Content-Type: multipart/form-data; boundary=--contentboundary
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+
+----contentboundary
+Content-Disposition: form-data; name="json"
+Content-Type: application/json
+
+{
+    "headline": "Test News",
+    "body": "This is a test news article",
+    "link": "https://example.com/test-news"
+}
+----contentboundary
+Content-Disposition: form-data; name="file"; filename="red.jpg"
+Content-Type: image/jpeg
+
+< ./red.jpg
+----contentboundary--
+
+### Create news article - no image
+
+POST http://localhost:5000/api/news
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+Content-Type: application/json
+
+{
+    "headline": "Test News",
+    "body": "This is a test news article",
+    "link": "https://example.com/test-news"
+}
+
+### Delete news article
+
+# @prompt news_id Enter news article id
+DELETE http://localhost:5000/api/news/{{news_id}}
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+
+### Update news article
+# @prompt news_id Enter news article id
+PATCH http://localhost:5000/api/news/{{news_id}}
+Content-Type: application/json
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+
+{
+    "headline": "Updated Test News",
+    "body": "This is an updated test news article",
+    "link": "https://example.com/updated-test-news"
+}
+
+### Update news article (partial update)
+# @prompt news_id Enter news article id
+PATCH http://localhost:5000/api/news/{{news_id}}
+Content-Type: application/json
+Authorization: Bearer {{caretakerLogin.response.body.token}}
+
+{
+    "body": "This is some updated test news article body"
+}
+
+### Get news article details
+# @prompt news_id Enter news article id
+GET http://localhost:5000/api/news/{{news_id}}
+Authorization: Bearer {{token}}
+
+### Get list of news articles with pagination
+
+GET http://localhost:5000/api/news?limit=10&page=1
+Authorization: Bearer {{token}}
+
+### Get list of news articles
+
+GET http://localhost:5000/api/news
+Authorization: Bearer {{token}}

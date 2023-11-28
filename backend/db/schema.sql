@@ -145,6 +145,26 @@ CREATE TABLE `messages` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `news`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `news` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `headline` varchar(255) NOT NULL,
+  `body` varchar(4096) NOT NULL,
+  `link` varchar(255) DEFAULT NULL,
+  `picture_id` int DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `picture_id` (`picture_id`),
+  CONSTRAINT `news_ibfk_1` FOREIGN KEY (`picture_id`) REFERENCES `files` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `roles`
 --
 
@@ -230,5 +250,6 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20231114145827'),
   ('20231114194708'),
   ('20231118215618'),
-  ('20231121210858');
+  ('20231121210858'),
+  ('20231123225118');
 UNLOCK TABLES;
