@@ -33,6 +33,28 @@ describe("The authentication page", () => {
     cy.signup("victor@test.com", "Victor12345");
   });
 
+  it("should direct the user to the edit profile page after signing up", () => {
+    cy.signup("matthew@test.com", "Matthew12345");
+
+    cy.url().should("contain", "edit");
+  });
+
+  it("should allow a user to create their profile after signing up", () => {
+    cy.signup("guy@test.com", "Guy12345");
+
+    cy.url().should("contain", "edit");
+
+    cy.get('[data-testid="firstname-input"]').type("Guy");
+    cy.get('[data-testid="lastname-input"]').type("Fieri");
+    cy.get('[data-testid="bio-input"]').type(
+      "This is the profile of Guy Fieri."
+    );
+    cy.get('[data-testid="phone-input"]').type("1234567890");
+    cy.get('[data-testid="city-input"]').type("Helsinki");
+    cy.get('[data-testid="postalcode-input"]').type("00200");
+    cy.get('[data-testid="country-input"]').select("fi");
+  });
+
   it("should not allow a user to sign up with an invalid email", () => {
     cy.signup("victortest.com", "Victor21345", true);
 
