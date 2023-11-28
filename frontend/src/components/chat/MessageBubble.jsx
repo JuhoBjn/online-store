@@ -6,18 +6,18 @@ const MessageBubble = ({ message, isMine, isGroupChat }) => {
 
   return (
     <div className="chat-message-bubble-container">
-      <div
-        className={`chat-message-bubble ${
-          isMine ? "chat-message-bubble--mine" : "chat-message-bubble--theirs"
-        }`}
-      >
-        <div>
+      <div className="chat-message-bubble">
+        <div
+          className={`chat-message-bubble__elements ${
+            isMine
+              ? "chat-message-bubble__elements--mine"
+              : "chat-message-bubble__elements--theirs"
+          }`}
+        >
           {isGroupChat && !isMine && (
             <div className="chat-message-bubble__name">{name}</div>
           )}
-          <div className="chat-message-bubble__content">
-            <div className="chat-message-bubble__text">{textContent}</div>
-          </div>
+          <div className="chat-message-bubble__content">{textContent}</div>
           <div className="chat-message-bubble__time">{formatTime(sentAt)}</div>
         </div>
       </div>

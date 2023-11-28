@@ -3,43 +3,45 @@
   --gray: #cccccc;
 }
 
+.chat-container__messages-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: scroll;
+  padding: 0 1rem;
+}
+
 .chat-message-bubble {
   display: flex;
-  justify-content: flex-start;
-  align-items: start;
-  margin-bottom: 10px;
+  flex-direction: column;
+  margin-bottom: 1rem;
 }
 
-.chat-message-bubble--mine {
-  justify-content: flex-end;
-}
-
-.chat-message-bubble__content {
-  padding: 10px;
-  border-radius: 10px;
-  background-color: var(--gray);
-  color: rgb(0, 0, 0);
+.chat-message-bubble__elements {
   max-width: 75%;
 }
 
-.chat-message-bubble--mine .chat-message-bubble__content {
+.chat-message-bubble__elements--theirs {
+  align-self: flex-start;
+}
+
+.chat-message-bubble__elements--mine {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
   align-items: flex-end;
-  background-color: var(--blue);
 }
 
-.chat-message-bubble__name {
-  margin-bottom: 5px;
+.chat-message-bubble__elements--theirs .chat-message-bubble__content {
+  background: var(--gray);
 }
 
-.chat-message-bubble--mine .chat-message-bubble__name {
-  text-align: right;
+.chat-message-bubble__elements--mine .chat-message-bubble__content {
+  background: var(--blue);
 }
 
-.chat-message-bubble__time {
-  font-size: 0.8em;
-  color: rgb(0, 0, 0);
-}
-
-.chat-message-bubble--mine .chat-message-bubble__time {
-  color: rgb(0, 0, 0);
+.chat-message-bubble__content {
+  background: var(--gray);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
 }
