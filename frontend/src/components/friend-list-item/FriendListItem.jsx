@@ -9,7 +9,7 @@ const FriendListItem = ({ id, emailHash, firstname, lastname }) => {
         <img
           data-testid="friend-list-item-profile-picture"
           src={`https://www.gravatar.com/avatar/${emailHash}?d=mp`}
-          alt={`${firstname} ${lastname}&apos;s profile picture`}
+          alt={`${firstname} ${lastname}'s profile picture`}
         />
       </div>
       <div className="friend-list-item-content">
