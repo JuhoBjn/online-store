@@ -131,6 +131,7 @@ const EditProfile = () => {
                 type="text"
                 placeholder="City"
                 value={userProfile.city || ""}
+                maxLength={85}
                 onChange={() => updateUserProfileState(event)}
                 required
               />
