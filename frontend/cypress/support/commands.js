@@ -23,7 +23,7 @@ Cypress.Commands.add("signup", (email, password, supposedToFail = false) => {
   cy.get('[data-testid="submit-button"]').click();
 
   if (!supposedToFail) {
-    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/`);
+    cy.url().should("contain", "edit");
   }
 });
 

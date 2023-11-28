@@ -31,7 +31,7 @@ describe("The front page", () => {
     cy.get("#join-button").should("be.visible");
     cy.get("#join-button").click();
 
-    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/auth`);
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/auth#signup`);
   });
 
   it("should allow a user to navigate to signup/login through the sign up / log in button", () => {
