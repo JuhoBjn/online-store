@@ -13,15 +13,18 @@ const NewsArticlePage = () => {
       <article className="news-page-article-container">
         <div className="news-page-article-image-container">
           <img
+            data-testid="news-page-article-image"
             src={article.imageUrl}
             alt={`Article picture: ${article.headline}`}
           />
         </div>
         <div className="news-page-article-header">
-          <h1>{article.headline}</h1>
+          <h1 data-testid="news-page-article-headline">{article.headline}</h1>
           <div className="news-page-article-header-dates">
             {article.createdAt && (
-              <p>Posted: {timeFormat(article.createdAt)}</p>
+              <p data-testid="news-page-article-posted-at">
+                Posted: {timeFormat(article.createdAt)}
+              </p>
             )}
             {article.updatedAt !== article.createdAt && (
               <p>Updated: {timeFormat(article.updatedAt)}</p>
@@ -29,10 +32,12 @@ const NewsArticlePage = () => {
           </div>
         </div>
         <div className="news-page-article-body">
-          <p>{article.body}</p>
+          <p data-testid="news-page-article-body">{article.body}</p>
         </div>
         <div className="news-page-article-link-container">
-          <Link to={article.link}>Follow article link</Link>
+          <Link data-testid="news-page-article-link" to={article.link}>
+            Follow article link
+          </Link>
         </div>
       </article>
     </div>
