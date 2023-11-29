@@ -30,6 +30,7 @@ import EditProfile from "./pages/edit-profile/EditProfile";
 import { EditProfileLoader } from "./pages/edit-profile/EditProfileLoader";
 
 import "./App.css";
+import ChatDevPage from "./components/chat/ChatDevPage";
 
 const router = createBrowserRouter([
   {
@@ -104,6 +105,10 @@ const router = createBrowserRouter([
     path: "/user/:id/edit",
     element: <EditProfile />,
     loader: EditProfileLoader
+  },
+  {
+    path: "/chat",
+    element: <ChatDevPage />
   },
   {
     path: "/frontpage",
