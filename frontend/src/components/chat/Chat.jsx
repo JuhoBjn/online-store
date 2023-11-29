@@ -188,12 +188,14 @@ const Chat = ({
           }}
         >
           <input
+            data-testid="message-box"
             type="text"
             name="message"
             disabled={isDisabled}
             className="chat-container__bottom-area__message-input"
           />
           <button
+            data-testid="send-button"
             type="submit"
             disabled={isDisabled}
             className="chat-container__bottom-area__send-button"
