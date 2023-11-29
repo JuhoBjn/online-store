@@ -174,6 +174,11 @@ const Chat = ({
         ))}
       </div>
       <div className="chat-container__bottom-area">
+        {isDisabled && (
+          <p className="chat-container__bottom-area__disabled-message">
+            {disabledMessage}
+          </p>
+        )}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -182,11 +187,6 @@ const Chat = ({
             e.target.message.value = "";
           }}
         >
-          {isDisabled && (
-            <div className="chat-container__bottom-area__disabled-message">
-              {disabledMessage}
-            </div>
-          )}
           <input
             type="text"
             name="message"
