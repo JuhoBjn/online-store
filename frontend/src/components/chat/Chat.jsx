@@ -147,19 +147,21 @@ const Chat = ({
 
   return (
     <div className="chat-container">
-      <div className="chat-container__title">Chat</div>
-      {eventId && eventName && (
-        <div className="chat-container__event-info">
-          <div>{eventName}</div>
-        </div>
-      )}
-      {friend && (
-        <div className="chat-container__friend-info">
-          <div>
-            {friend.firstname} {friend.lastname}
+      <div className="chat-container__chat-info">
+        <div className="chat-container__chat-info__title">Chat</div>
+        {eventId && eventName && (
+          <div className="chat-container__chat-info__event-info">
+            <div>{eventName}</div>
           </div>
-        </div>
-      )}
+        )}
+        {friend && (
+          <div className="chat-container__chat-info__friend-info">
+            <div>
+              {friend.firstname} {friend.lastname}
+            </div>
+          </div>
+        )}
+      </div>
       <div className="chat-container__messages-container">
         {messages.map((message, index) => (
           <div key={index} className="chat-container__message-container">
@@ -171,33 +173,35 @@ const Chat = ({
           </div>
         ))}
       </div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const message = e.target.message.value;
-          sendMessage(message);
-          e.target.message.value = "";
-        }}
-      >
-        {isDisabled && (
-          <div className="chat-container__disabled-message">
-            {disabledMessage}
-          </div>
-        )}
-        <input
-          type="text"
-          name="message"
-          disabled={isDisabled}
-          className="chat-container__message-input"
-        />
-        <button
-          type="submit"
-          disabled={isDisabled}
-          className="chat-container__send-button"
+      <div className="chat-container__bottom-area">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const message = e.target.message.value;
+            sendMessage(message);
+            e.target.message.value = "";
+          }}
         >
-          Send
-        </button>
-      </form>
+          {isDisabled && (
+            <div className="chat-container__bottom-area__disabled-message">
+              {disabledMessage}
+            </div>
+          )}
+          <input
+            type="text"
+            name="message"
+            disabled={isDisabled}
+            className="chat-container__bottom-area__message-input"
+          />
+          <button
+            type="submit"
+            disabled={isDisabled}
+            className="chat-container__bottom-area__send-button"
+          >
+            Send
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
