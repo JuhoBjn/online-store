@@ -35,6 +35,7 @@ import FriendRequests from "./pages/friends/FriendRequests";
 import { FriendRequestsLoader } from "./pages/friends/FriendRequestsLoader";
 
 import "./App.css";
+import ChatDevPage from "./components/chat/ChatDevPage";
 
 const router = createBrowserRouter([
   {
@@ -130,6 +131,10 @@ const router = createBrowserRouter([
         loader: FriendRequestsLoader
       }
     ]
+  },
+  {
+    path: "/chat",
+    element: <ChatDevPage />
   },
   {
     path: "/frontpage",
