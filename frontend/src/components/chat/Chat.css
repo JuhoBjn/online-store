@@ -25,12 +25,14 @@
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .chat-container__chat-info__event-info,
 .chat-container__chat-info__friend-info {
   font-size: 18px;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .chat-container__messages-container {

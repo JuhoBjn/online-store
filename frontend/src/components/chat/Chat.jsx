@@ -148,17 +148,17 @@ const Chat = ({
   return (
     <div className="chat-container">
       <div className="chat-container__chat-info">
-        <div className="chat-container__chat-info__title">Chat</div>
+        <h1 className="chat-container__chat-info__title">Chat</h1>
         {eventId && eventName && (
           <div className="chat-container__chat-info__event-info">
-            <div>{eventName}</div>
+            <p>{eventName}</p>
           </div>
         )}
         {friend && (
           <div className="chat-container__chat-info__friend-info">
-            <div>
+            <p>
               {friend.firstname} {friend.lastname}
-            </div>
+            </p>
           </div>
         )}
       </div>
