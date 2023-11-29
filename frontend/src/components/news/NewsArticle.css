@@ -1,5 +1,6 @@
 .news-article-container {
   height: fit-content;
+  max-height: 30em;
   width: calc(100% - 2 * 0.5em);
   display: flex;
   flex-direction: row;
@@ -44,8 +45,11 @@
 }
 
 .news-article-content p {
+  overflow: hidden;
+  text-overflow: ellipsis;
   height: fit-content;
   line-height: 20px;
+  max-height: 100px;
 }
 
 @media (max-width: 768px) {
@@ -63,4 +67,3 @@
     width: 100%;
   }
 }
-

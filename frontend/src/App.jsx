@@ -16,6 +16,8 @@ import Authorization from "./pages/authorization/Authorization";
 import ResetPassword from "./pages/reset-password/ResetPassword";
 import News from "./pages/news/News";
 import { NewsLoader } from "./pages/news/NewsLoader";
+import NewsArticlePage from "./pages/news-article/NewsArticlePage";
+import { NewsArticlePageLoader } from "./pages/news-article/NewsArticlePageLoader";
 import Activities from "./pages/activities/Activities";
 import { ActivitiesLoader } from "./pages/activities/ActivitiesLoader";
 import Messages from "./pages/messages/Messages";
@@ -40,6 +42,16 @@ const router = createBrowserRouter([
       <>
         <LoggedInNavBar />
         <News />
+      </>
+    )
+  },
+  {
+    path: "/article/:id",
+    loader: NewsArticlePageLoader,
+    element: (
+      <>
+        <LoggedInNavBar />
+        <NewsArticlePage />
       </>
     )
   },
