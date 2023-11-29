@@ -26,7 +26,14 @@ module.exports = (io, socket) => {
       return callback({ status: "Bad request", message: error.message });
     }
 
-    io.to(socket.data.chatId).emit("message", payload);
+    const message = {
+      senderUserId: socket.data.user.id,
+      name: payload.name,
+      message: payload.message,
+      sentAt: new Date()
+    };
+
+    io.to(socket.data.chatId).emit("message", message);
 
     try {
       const success = await chatDb.addMessage(
@@ -119,6 +126,7 @@ module.exports = (io, socket) => {
         const messages = [];
         messageHistory.map((message) => {
           const tempMessage = {
+            senderUserId: message.sender,
             name: `${message.firstname} ${message.lastname}`,
             message: message.message,
             sentAt: message.sent_at
