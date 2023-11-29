@@ -1,8 +1,9 @@
 import "./MessageBubble.css";
 import formatTime from "./timeFormat";
+import { Link } from "react-router-dom";
 
 const MessageBubble = ({ message, isMine, isGroupChat }) => {
-  const { message: textContent, sentAt, name } = message;
+  const { message: textContent, sentAt, name, senderUserId } = message;
 
   return (
     <div className="chat-message-bubble-container">
@@ -15,7 +16,9 @@ const MessageBubble = ({ message, isMine, isGroupChat }) => {
           }`}
         >
           {isGroupChat && !isMine && (
-            <div className="chat-message-bubble__name">{name}</div>
+            <div className="chat-message-bubble__name">
+              <Link to={`/user/${senderUserId}`}>{name}</Link>{" "}
+            </div>
           )}
           <div className="chat-message-bubble__content">{textContent}</div>
           <div className="chat-message-bubble__time">{formatTime(sentAt)}</div>
