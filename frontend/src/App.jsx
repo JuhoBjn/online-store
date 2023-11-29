@@ -28,6 +28,11 @@ import UserProfile from "./pages/user-profile/UserProfile";
 import { UserProfileLoader } from "./pages/user-profile/UserProfileLoader";
 import EditProfile from "./pages/edit-profile/EditProfile";
 import { EditProfileLoader } from "./pages/edit-profile/EditProfileLoader";
+import FriendsPage from "./pages/friends/FriendsPage";
+import Friends from "./pages/friends/Friends";
+import { FriendsLoader } from "./pages/friends/FriendsLoader";
+import FriendRequests from "./pages/friends/FriendRequests";
+import { FriendRequestsLoader } from "./pages/friends/FriendRequestsLoader";
 
 import "./App.css";
 import ChatDevPage from "./components/chat/ChatDevPage";
@@ -105,6 +110,27 @@ const router = createBrowserRouter([
     path: "/user/:id/edit",
     element: <EditProfile />,
     loader: EditProfileLoader
+  },
+  {
+    path: "/friends",
+    element: (
+      <>
+        <LoggedInNavBar />
+        <FriendsPage />
+      </>
+    ),
+    children: [
+      {
+        path: "/friends/all",
+        element: <Friends />,
+        loader: FriendsLoader
+      },
+      {
+        path: "/friends/friend-requests",
+        element: <FriendRequests />,
+        loader: FriendRequestsLoader
+      }
+    ]
   },
   {
     path: "/chat",

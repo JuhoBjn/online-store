@@ -52,6 +52,7 @@ describe("The logged in nav bar", () => {
 
     cy.get(".dropdown-menu-container").should("be.visible");
     cy.get('[data-testid="go-to-profile"]').should("be.visible");
+    cy.get('[data-testid="go-to-friends"]').should("be.visible");
     cy.get('[data-testid="log-out"]').should("be.visible");
   });
 
@@ -71,5 +72,14 @@ describe("The logged in nav bar", () => {
     cy.get('[data-testid="log-out"]').click();
 
     cy.url().should("be.equal", `${Cypress.config("baseUrl")}/frontpage`);
+  });
+
+  it("should allow a user to navigate to the friends page", () => {
+    cy.login("bobb@test.com", "Bob12345");
+    cy.get('[data-testid="profile-picture"]').click();
+
+    cy.get('[data-testid="go-to-friends"]').click();
+
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/friends/all`);
   });
 });
