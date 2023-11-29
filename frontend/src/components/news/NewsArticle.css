@@ -26,8 +26,10 @@
   object-fit: contain;
 }
 
-.right {
-  order: 2;
+@media (min-width: 768px) {
+  .right {
+    order: 2;
+  }
 }
 
 .news-article-content {
@@ -45,3 +47,20 @@
   height: fit-content;
   line-height: 20px;
 }
+
+@media (max-width: 768px) {
+  .news-article-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .news-article-image-container {
+    width: 100%;
+    height: fit-content;
+  }
+
+  .news-article-content {
+    width: 100%;
+  }
+}
+
