@@ -1,6 +1,6 @@
 :root {
-  --blue: #83bffe;
-  --gray: #cccccc;
+  --message-bubble-own: var(--light-green);
+  --message-bubble-theirs: #cccccc;
 }
 
 .chat-message-bubble {
@@ -26,15 +26,15 @@
 }
 
 .chat-message-bubble__elements--theirs .chat-message-bubble__content {
-  background: var(--gray);
+  background: var(--message-bubble-theirs);
 }
 
 .chat-message-bubble__elements--mine .chat-message-bubble__content {
-  background: var(--blue);
+  background: var(--message-bubble-own);
 }
 
 .chat-message-bubble__content {
-  background: var(--gray);
+  background: var(--message-bubble-theirs);
   padding: 0.5rem;
   border-radius: 0.5rem;
 }
