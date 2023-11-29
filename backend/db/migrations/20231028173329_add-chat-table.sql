@@ -4,7 +4,7 @@ CREATE TABLE `chats` (
   `type` ENUM('direct', 'group') NOT NULL,
   `name` VARCHAR(32) NOT NULL DEFAULT 'New chat',
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `last_message_at` TIMESTAMP DEFAULT NULL,
+  `last_message_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`chat_id`)
 );
 
