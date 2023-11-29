@@ -21,7 +21,6 @@ const NewsList = ({ articles }) => {
               headline={article.headline}
               body={article.body}
               imageUrl={article.image_url ?? ""}
-              link={article.link}
             />
           </li>
         ))}

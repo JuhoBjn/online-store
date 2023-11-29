@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import "./NewsArticle.css";
 
-const NewsArticle = ({ id, headline, body, imageUrl, link }) => {
+const NewsArticle = ({ id, headline, body, imageUrl }) => {
   return (
     <>
       <article
@@ -21,7 +21,7 @@ const NewsArticle = ({ id, headline, body, imageUrl, link }) => {
           />
         </div>
         <div className="news-article-content">
-          <Link to={link} data-testid="news-article-headline">
+          <Link to={`/article/${id}`} data-testid="news-article-headline">
             {headline}
           </Link>
           <p data-testid="news-article-body">{body}</p>
