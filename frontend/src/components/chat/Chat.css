@@ -47,9 +47,6 @@
 }
 
 .chat-container__bottom-area {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
   padding: 0 1rem;
 }
 

@@ -23,7 +23,7 @@ const ChatDevPage = () => {
         friend={friend}
         eventId={"e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e1e1"}
         eventName={"Test Event"}
-        isDisabled={false}
+        isDisabled={true}
         disabledMessage="Can't message non friend"
       />
     </>
