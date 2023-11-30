@@ -1,0 +1,7 @@
+.caretaker-page {
+  /* height = 100 viewport height - navbar */
+  height: calc(100vh - 5em);
+  width: 100vw;
+  padding-top: 5em;
+  background-color: var(--main-background-color);
+}
