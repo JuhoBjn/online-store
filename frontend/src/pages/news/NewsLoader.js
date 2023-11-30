@@ -2,12 +2,32 @@ import { redirect } from "react-router-dom";
 
 import { fetchAllNews } from "../../utils/NewsAPI";
 
-export const NewsLoader = () => {
+import { fetchAllNews } from "../../utils/NewsAPI";
+import { fetchUserEvents } from "../../utils/UsersAPI";
+
+export const NewsLoader = async () => {
   const storedUser = JSON.parse(localStorage.getItem("currentUser"));
 
   if (!storedUser?.token) {
     return redirect("/frontpage");
   }
 
-  return fetchAllNews(storedUser.token);
+  const [news, userEvents] = await Promise.all([
+    fetch(`${import.meta.env.VITE_BACKEND_API}/api/news`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${storedUser.token}`,
+        Accept: "application/json"
+      }
+    }),
+    fetchUserEvents(storedUser.id, storedUser.token)
+  ]);
+
+  const eventDates = [];
+  userEvents.map((event) => {
+    const date = new Date(event.starts_at);
+    eventDates.splice(0, 0, date);
+  });
+
+  return { news, eventDates };
 };
