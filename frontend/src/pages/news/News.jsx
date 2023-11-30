@@ -1,9 +1,19 @@
+import { useState, useEffect } from "react";
+import { useLoaderData } from "react-router-dom";
+
+import CalendarSidebar from "../../components/calendar-sidebar/CalendarSidebar";
+
 import "./News.css";
 
 const News = () => {
+  const [data] = useState(useLoaderData());
+
   return (
     <div className="news-page">
-      <h1>News page</h1>
+      <div className="news-container" />
+      <div className="calendar-container">
+        <CalendarSidebar calendar={data.eventDates} />
+      </div>
     </div>
   );
 };

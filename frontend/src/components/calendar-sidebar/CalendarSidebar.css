@@ -1,0 +1,15 @@
+.calendar-sidebar {
+  width: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1em;
+  background-color: var(--main-background-color);
+}
+
+.calendar-sidebar-container {
+  height: fit-content;
+  width: fit-content;
+}
