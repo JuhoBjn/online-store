@@ -194,6 +194,7 @@ VALUES (
     );
 
 -- Add a friendship between Larry Smith and Bob Builder.
+
 INSERT INTO `friends`(`user_id`, `friend_user_id`)
 VALUES (
         '239aec9f-066e-4e6a-88d7-9cdccd43445b',
@@ -254,3 +255,113 @@ VALUES (
         '858560f9-fc03-43b0-b931-01213e4787ce',
         'It''s a bit cloudy, but otherwise alright.'
     );
+
+-- There's a lot of creating and dropping triggers below. This is to
+-- have the events on different days.
+
+-- Add triggers to set event start and end dates into the future 
+-- upon inserting data to the events table
+CREATE TRIGGER event_start_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.starts_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 DAY);
+
+CREATE TRIGGER event_end_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.ends_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 DAY);
+
+-- Add add events for
+INSERT INTO `events`(`name`, `description`)
+VALUES (
+        'First event',
+        'The opening event to start the season'
+);
+
+DROP TRIGGER event_start_date_insert;
+DROP TRIGGER event_end_date_insert;
+
+
+CREATE TRIGGER event_start_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.starts_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 5 DAY);
+
+CREATE TRIGGER event_end_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.ends_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 5 DAY);
+
+INSERT INTO `events`(`name`, `description`)
+VALUES (
+        'Karaoke Night',
+        "Karaoke night at the old folks' home"
+);
+
+DROP TRIGGER event_start_date_insert;
+DROP TRIGGER event_end_date_insert;
+
+
+CREATE TRIGGER event_start_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.starts_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 8 DAY);
+
+CREATE TRIGGER event_end_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.ends_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 13 DAY);
+
+INSERT INTO `events`(`name`, `description`)
+VALUES (
+        'Germany exchange',
+        'The GoldenAge crew has set up an exchange with their partered business to the beautiful city of Tothenburg Ob Der Tauber.'
+);
+
+DROP TRIGGER event_start_date_insert;
+DROP TRIGGER event_end_date_insert;
+
+CREATE TRIGGER event_start_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.starts_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY);
+
+CREATE TRIGGER event_end_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.ends_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY);
+
+INSERT INTO `events`(`name`, `description`)
+VALUES (
+        'Speed Dating',
+        'Speed dating for the elderly. Come find a new love.'
+);
+
+DROP TRIGGER event_start_date_insert;
+DROP TRIGGER event_end_date_insert;
+
+CREATE TRIGGER event_start_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.starts_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY);
+
+CREATE TRIGGER event_end_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.ends_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY);
+
+INSERT INTO `events`(`name`, `description`)
+VALUES (
+        'Dance Night',
+        'Celebrate the rhythm of life at our enchanting Dance Night for Seniors! Join us for an evening filled with joy, laughter, and the timeless elegance of dance. Let the music transport you to a bygone era as we create a warm and inviting atmosphere for seniors to relish the beauty of movement. Whether you prefer the graceful waltz or the lively beats of swing, our event promises a delightful blend of classic tunes and modern favorites. Embrace the opportunity to twirl, sway, and connect with friends old and new in a celebration tailored to the golden years. Let the dance floor become a canvas for memories, as we come together to share in the delight of a night designed especially for you. Don your dancing shoes and join us for a magical evening where age is just a number, and the spirit of dance knows no bounds!'
+);
+
+DROP TRIGGER event_start_date_insert;
+DROP TRIGGER event_end_date_insert;
+
+CREATE TRIGGER event_start_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.starts_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 9 DAY);
+
+CREATE TRIGGER event_end_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.ends_at = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 9 DAY);
+
+INSERT INTO `events`(`name`, `description`)
+VALUES (
+        'Sports',
+        'Experience the thrill of friendly competition at our Elderly Sports Extravaganza! Join us for a day of camaraderie and light-hearted games tailored for seniors. From leisurely walks to spirited bocce ball matches, this event is all about staying active, having fun, and fostering a sense of community. Lace up and let the games begin!'
+);
+
+DROP TRIGGER event_start_date_insert;
+DROP TRIGGER event_end_date_insert;
