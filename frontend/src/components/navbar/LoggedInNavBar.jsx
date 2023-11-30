@@ -25,6 +25,10 @@ const LoggedInNavBar = () => {
     navigate("/friends");
   };
 
+  const navigateToCaretakerPageHandler = () => {
+    navigate("/caretaker");
+  };
+
   const logoutHandler = () => {
     console.log("Logout");
     authContext.logout();
@@ -82,8 +86,10 @@ const LoggedInNavBar = () => {
           <>
             <TransparentOverlay onClick={toggleDropdownMenu} />
             <DropdownMenu
+              userRole={authContext.role}
               navigateToProfileHandler={navigateToProfileHandler}
               navigateToFriendsHandler={navigateToFriendsHandler}
+              navigateToCaretakerPageHandler={navigateToCaretakerPageHandler}
               logoutHandler={logoutHandler}
             />
           </>
