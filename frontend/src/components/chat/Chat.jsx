@@ -88,15 +88,17 @@ const Chat = ({
       return;
     }
 
-    connectSocket(user.token);
+    connectSocket(user?.token);
     console.log("socket", socket);
     return () => {
       // Clean up socket on unmount
       disconnectSocket();
     };
-  }, [user.token]);
+  }, [user?.token]);
 
   useEffect(() => {
+    setMessages([]); // Clear old messages when friend changes
+    socket.connect(); // Need to reconnect socket after disconnecting as Chat component is not unmounted
     const joinRoomAndGetChatHistory = async () => {
       await joinDirectChatRoom(friend);
       getChatHistory(friend);
@@ -143,7 +145,7 @@ const Chat = ({
     } else {
       console.error("No socket");
     }
-  }, [user.token]);
+  }, [user?.token]);
 
   return (
     <div className="chat-container">
@@ -174,11 +176,11 @@ const Chat = ({
         ))}
       </div>
       <div className="chat-container__bottom-area">
-        {isDisabled && (
+        {isDisabled ? (
           <p className="chat-container__bottom-area__disabled-message">
             {disabledMessage}
           </p>
-        )}
+        ) : null}
         <form
           onSubmit={(e) => {
             e.preventDefault();
