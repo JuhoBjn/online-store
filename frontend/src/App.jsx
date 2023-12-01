@@ -19,7 +19,6 @@ import { NewsLoader } from "./pages/news/NewsLoader";
 import Activities from "./pages/activities/Activities";
 import { ActivitiesLoader } from "./pages/activities/ActivitiesLoader";
 import Messages from "./pages/messages/Messages";
-import { MessagesLoader } from "./pages/messages/MessagesLoader";
 import Match from "./pages/match/Match";
 import { MatchLoader } from "./pages/match/MatchLoader";
 import Help from "./pages/help/Help";
@@ -69,7 +68,10 @@ const router = createBrowserRouter([
   },
   {
     path: "/messages",
-    loader: MessagesLoader,
+    // loader: FriendsLoader({ keepUnfriended: true }),
+    loader: async () => {
+      return await FriendsLoader({ keepUnfriended: true });
+    },
     element: (
       <>
         <LoggedInNavBar />
