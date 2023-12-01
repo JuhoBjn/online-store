@@ -35,6 +35,7 @@ import FriendRequests from "./pages/friends/FriendRequests";
 import { FriendRequestsLoader } from "./pages/friends/FriendRequestsLoader";
 import Caretaker from "./pages/caretaker/Caretaker";
 import { CaretakerLoader } from "./pages/caretaker/CaretakerLoader";
+import NewArticle from "./pages/caretaker/NewArticle";
 
 import "./App.css";
 import ChatDevPage from "./components/chat/ChatDevPage";
@@ -142,7 +143,13 @@ const router = createBrowserRouter([
         <Caretaker />
       </>
     ),
-    loader: CaretakerLoader
+    loader: CaretakerLoader,
+    children: [
+      {
+        path: "/caretaker/news/new-article",
+        element: <NewArticle />
+      }
+    ]
   },
   {
     path: "/chat",
