@@ -2,7 +2,13 @@ import { Link } from "react-router-dom";
 
 import "./FriendListItem.css";
 
-const FriendListItem = ({ id, emailHash, firstname, lastname }) => {
+const FriendListItem = ({
+  id,
+  emailHash,
+  firstname,
+  lastname,
+  linkDisabled
+}) => {
   return (
     <div className="friend-list-item">
       <div className="friend-list-item-profile-pic-container">
@@ -13,9 +19,15 @@ const FriendListItem = ({ id, emailHash, firstname, lastname }) => {
         />
       </div>
       <div className="friend-list-item-content">
-        <Link data-testid="friend-list-item-username" to={`/user/${id}`}>
-          {firstname} {lastname}
-        </Link>
+        {linkDisabled ? (
+          <p data-testid="friend-list-item-username">
+            {firstname} {lastname}
+          </p>
+        ) : (
+          <Link data-testid="friend-list-item-username" to={`/user/${id}`}>
+            {firstname} {lastname}
+          </Link>
+        )}
       </div>
     </div>
   );
