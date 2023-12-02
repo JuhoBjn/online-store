@@ -74,8 +74,11 @@ const EditArticle = () => {
 
   return (
     <div className="edit-article-page">
-      <header className="edit-article-page-header">
-        <h2>Edit news article</h2>
+      <header
+        data-testid="edit-article-page-header"
+        className="edit-article-page-header"
+      >
+        <h2 data-testid="edit-article-page-title">Edit news article</h2>
       </header>
       <div className="edit-article-form-container">
         <form className="edit-article-form" onSubmit={updateArticleHandler}>
