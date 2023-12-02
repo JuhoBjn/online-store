@@ -1,0 +1,21 @@
+.posted-articles-page {
+  /* height = 100% - padding */
+  height: calc(100% - 2 * 2em);
+  /* width = 100% - padding */
+  width: calc(100% - 2 * 2em);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2em;
+  background-color: var(--main-background-color);
+  overflow: hidden;
+}
+
+.posted-articles-container {
+  height: fit-content;
+  max-height: 80%;
+  width: 90%;
+  max-width: 40em;
+  overflow-y: scroll;
+}

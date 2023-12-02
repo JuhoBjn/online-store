@@ -36,6 +36,8 @@ import { FriendRequestsLoader } from "./pages/friends/FriendRequestsLoader";
 import Caretaker from "./pages/caretaker/Caretaker";
 import { CaretakerLoader } from "./pages/caretaker/CaretakerLoader";
 import NewArticle from "./pages/caretaker/NewArticle";
+import PostedArticles from "./pages/caretaker/PostedArticles";
+import { MyArticlesLoader } from "./pages/caretaker/PostedArticlesLoader";
 
 import "./App.css";
 import ChatDevPage from "./components/chat/ChatDevPage";
@@ -148,6 +150,11 @@ const router = createBrowserRouter([
       {
         path: "/caretaker/news/new-article",
         element: <NewArticle />
+      },
+      {
+        path: "/caretaker/news/posted-articles",
+        element: <PostedArticles />,
+        loader: MyArticlesLoader
       }
     ]
   },

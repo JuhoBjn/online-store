@@ -8,8 +8,11 @@ const CaretakerSidebar = () => {
   const navigate = useNavigate();
 
   const openNewArticleForm = () => {
-    console.log("Navigate to create new article page");
     navigate("/caretaker/news/new-article");
+  };
+
+  const openMyArticlesPage = () => {
+    navigate("/caretaker/news/posted-articles");
   };
 
   return (
@@ -23,6 +26,13 @@ const CaretakerSidebar = () => {
         onClick={openNewArticleForm}
       >
         + New article
+      </Button>
+      <Button
+        testId="my-articles-button"
+        type="action"
+        onClick={openMyArticlesPage}
+      >
+        Posted articles
       </Button>
     </aside>
   );
