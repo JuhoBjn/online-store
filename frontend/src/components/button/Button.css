@@ -33,4 +33,5 @@
 
 .danger {
   background-color: var(--red);
+  color: var(--main-background-color);
 }
