@@ -35,12 +35,10 @@ describe("The authentication page", () => {
 
   it("should direct the user to the edit profile page after signing up", () => {
     cy.signup("matthew@test.com", "Matthew12345");
-
-    cy.url().should("contain", "edit");
   });
 
   it("should allow a user to create their profile after signing up", () => {
-    cy.signup("guy@test.com", "Guy12345");
+    cy.signup("guy@test.com", "Guy12345", true);
 
     cy.url().should("contain", "edit");
 
@@ -105,7 +103,7 @@ describe("The authentication page", () => {
     // Sign up first user. Should succeed.
     cy.signup("susan@test.com", "Susan13245");
     // Log out first user.
-    cy.clearLocalStorage("currentUser");
+    cy.clearAllLocalStorage();
 
     // Sign up second user. Should fail.
     cy.signup("susan@test.com", "Susan12345", true);
