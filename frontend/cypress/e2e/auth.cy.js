@@ -51,6 +51,10 @@ describe("The authentication page", () => {
     cy.get('[data-testid="city-input"]').type("Helsinki");
     cy.get('[data-testid="postalcode-input"]').type("00200");
     cy.get('[data-testid="country-input"]').select("fi");
+
+    cy.contains("Update profile").click();
+
+    cy.url().should("contain", "user");
   });
 
   it("should not allow a user to sign up with an invalid email", () => {
