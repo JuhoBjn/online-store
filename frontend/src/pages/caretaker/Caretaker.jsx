@@ -8,7 +8,10 @@ const Caretaker = () => {
   return (
     <div className="caretaker-page">
       <CaretakerSidebar />
-      <div className="caretaker-page-child-route-container">
+      <div
+        data-testid="caretaker-page-child-route-container"
+        className="caretaker-page-child-route-container"
+      >
         <Outlet />
       </div>
     </div>

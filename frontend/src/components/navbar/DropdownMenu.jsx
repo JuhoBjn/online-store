@@ -7,7 +7,6 @@ const DropdownMenu = ({
   navigateToCaretakerPageHandler,
   logoutHandler
 }) => {
-  console.log(userRole === "caretaker");
   return (
     <div className="dropdown-menu-container">
       <ul id="dropdown-menu-links">

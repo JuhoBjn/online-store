@@ -114,7 +114,9 @@ const NewArticle = () => {
             maxLength={255}
             required
           />
-          <Button type="confirm">Post article</Button>
+          <Button testId="post-article-button" type="confirm">
+            Post article
+          </Button>
         </form>
       </div>
     </div>

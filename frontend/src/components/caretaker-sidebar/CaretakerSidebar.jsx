@@ -13,8 +13,15 @@ const CaretakerSidebar = () => {
   };
 
   return (
-    <aside className="caretaker-sidebar-container">
-      <Button type="action" onClick={openNewArticleForm}>
+    <aside
+      data-testid="caretaker-sidebar-container"
+      className="caretaker-sidebar-container"
+    >
+      <Button
+        testId="new-article-button"
+        type="action"
+        onClick={openNewArticleForm}
+      >
         + New article
       </Button>
     </aside>
