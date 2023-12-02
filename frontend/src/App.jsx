@@ -35,9 +35,9 @@ import FriendRequests from "./pages/friends/FriendRequests";
 import { FriendRequestsLoader } from "./pages/friends/FriendRequestsLoader";
 import Caretaker from "./pages/caretaker/Caretaker";
 import { CaretakerLoader } from "./pages/caretaker/CaretakerLoader";
-import NewArticle from "./pages/caretaker/NewArticle";
-import PostedArticles from "./pages/caretaker/PostedArticles";
-import { MyArticlesLoader } from "./pages/caretaker/PostedArticlesLoader";
+import NewArticle from "./pages/caretaker/new-article/NewArticle";
+import PostedArticles from "./pages/caretaker/posted-articles/PostedArticles";
+import { MyArticlesLoader } from "./pages/caretaker/posted-articles/PostedArticlesLoader";
 
 import "./App.css";
 import ChatDevPage from "./components/chat/ChatDevPage";

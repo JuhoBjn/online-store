@@ -1,9 +1,9 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AuthContext } from "../../utils/AuthContext";
-import Button from "../../components/button/Button";
-import { createNewArticle } from "../../utils/NewsAPI";
+import { AuthContext } from "../../../utils/AuthContext";
+import Button from "../../../components/button/Button";
+import { createNewArticle } from "../../../utils/NewsAPI";
 
 import "./NewArticle.css";
 

@@ -1,6 +1,6 @@
 import { redirect } from "react-router-dom";
 
-import { fetchAllNews } from "../../utils/NewsAPI";
+import { fetchAllNews } from "../../../utils/NewsAPI";
 
 export const MyArticlesLoader = () => {
   const storedUser = JSON.parse(localStorage.getItem("currentUser"));

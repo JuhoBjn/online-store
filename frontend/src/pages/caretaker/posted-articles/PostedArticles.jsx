@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 
 import "./PostedArticles.css";
-import CompactArticleList from "../../components/compact-article-list/CompactArticleList";
+import CompactArticleList from "../../../components/compact-article-list/CompactArticleList";
 
 const PostedArticles = () => {
   const [articles] = useState(useLoaderData());
