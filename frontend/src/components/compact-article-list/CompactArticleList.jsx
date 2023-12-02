@@ -31,7 +31,7 @@ const CompactArticleList = ({ articles }) => {
           <Link
             id="compact-article-link"
             className="compact-article-link"
-            to={`/news/article/${article.id}`}
+            to={`/article/${article.id}`}
           >
             {article.headline}
           </Link>
