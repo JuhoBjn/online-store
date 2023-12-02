@@ -11,6 +11,7 @@ const NewArticle = () => {
   const [article, setArticle] = useState(null);
   const [articlePicture, setArticlePicture] = useState(null);
   const [articlePicturePreview, setArticlePicturePreview] = useState(null);
+  const [articlePosted, setArticlePosted] = useState(false);
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -52,7 +53,8 @@ const NewArticle = () => {
 
     const response = await createNewArticle(formData, authContext.token);
     if (response) {
-      return navigate("/caretaker");
+      setArticlePosted(true);
+      setTimeout(() => navigate("/caretaker"), 800);
     } else {
       console.error("Failed to post article");
       alert("Failed to post article. Please try again.");
@@ -89,6 +91,7 @@ const NewArticle = () => {
               data-testid="article-headline-input"
               name="headline"
               placeholder="Enter a headline"
+              value={article?.headline ? article.headline : ""}
               onChange={() => updateArticleState(event)}
               required
             />
@@ -114,9 +117,13 @@ const NewArticle = () => {
             maxLength={255}
             required
           />
-          <Button testId="post-article-button" type="confirm">
-            Post article
-          </Button>
+          {articlePosted ? (
+            <p>&#x2714; Article posted</p>
+          ) : (
+            <Button testId="post-article-button" type="confirm">
+              Post article
+            </Button>
+          )}
         </form>
       </div>
     </div>
