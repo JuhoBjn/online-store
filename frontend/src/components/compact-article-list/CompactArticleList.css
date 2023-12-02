@@ -16,7 +16,6 @@
   border-style: solid;
   border-width: 1px;
   border-color: var(--dark-brown);
-  cursor: pointer;
 }
 
 .compact-article-list-item a:hover {

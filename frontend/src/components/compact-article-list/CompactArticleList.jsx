@@ -11,10 +11,6 @@ const CompactArticleList = ({ articles }) => {
     return <h3 data-testid="no-articles-found">No articles found</h3>;
   }
 
-  const listItemClickHandler = () => {
-    document.getElementById("compact-article-link").click();
-  };
-
   const editButtonHandler = (articleId) => {
     navigate(`/caretaker/news/${articleId}/edit`);
   };
@@ -26,7 +22,6 @@ const CompactArticleList = ({ articles }) => {
           data-testid="compact-article-list-item"
           className="compact-article-list-item"
           key={article.id}
-          onClick={listItemClickHandler}
         >
           <Link
             id="compact-article-link"

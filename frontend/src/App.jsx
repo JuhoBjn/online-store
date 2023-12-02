@@ -38,6 +38,8 @@ import { CaretakerLoader } from "./pages/caretaker/CaretakerLoader";
 import NewArticle from "./pages/caretaker/new-article/NewArticle";
 import PostedArticles from "./pages/caretaker/posted-articles/PostedArticles";
 import { MyArticlesLoader } from "./pages/caretaker/posted-articles/PostedArticlesLoader";
+import EditArticle from "./pages/caretaker/edit-article/EditArticle";
+import { EditArticleLoader } from "./pages/caretaker/edit-article/EditArticleLoader";
 
 import "./App.css";
 import ChatDevPage from "./components/chat/ChatDevPage";
@@ -155,6 +157,11 @@ const router = createBrowserRouter([
         path: "/caretaker/news/posted-articles",
         element: <PostedArticles />,
         loader: MyArticlesLoader
+      },
+      {
+        path: "/caretaker/news/:id/edit",
+        element: <EditArticle />,
+        loader: EditArticleLoader
       }
     ]
   },
@@ -191,7 +198,11 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Navigate to="/" replace="true" />
+    element: <Navigate to="/" replace="true" />,
+    loader: () => {
+      console.log("Redirecting to root from ", window.location);
+      return true;
+    }
   }
 ]);
 
