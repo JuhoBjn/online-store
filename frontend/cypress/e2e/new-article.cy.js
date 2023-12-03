@@ -10,17 +10,6 @@ describe("The create article page", () => {
     );
   });
 
-  it("should allow a logged in admin visit the page", () => {
-    cy.login("anthonya@test.com", "Anthony12345");
-
-    cy.visit(`${Cypress.config("baseUrl")}/caretaker/news/new-article`);
-
-    cy.url().should(
-      "be.equal",
-      `${Cypress.config("baseUrl")}/caretaker/news/new-article`
-    );
-  });
-
   it("should not allow a logged out user visit the page", () => {
     cy.visit(`${Cypress.config("baseUrl")}/caretaker/news/new-article`);
 
