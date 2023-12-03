@@ -35,6 +35,21 @@ describe("The create article page", () => {
     cy.get('[data-testid="post-article-button"]').should("be.visible");
   });
 
+  it("should allow a user to post an article without a picture", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.visit(`${Cypress.config("baseUrl")}/caretaker/news/new-article`);
+
+    cy.get('[data-testid="article-headline-input"]').type("Test article");
+    cy.get('[data-testid="article-body-input"]').type(
+      "This is a test article without a picture."
+    );
+    cy.get('[data-testid="article-link-input"]').type("https://example.com");
+    cy.get('[data-testid="post-article-button"]').click();
+
+    cy.contains("Article posted").should("be.visible");
+  });
+
   it("should allow a user to post an article with a picture", () => {
     cy.login("bobb@test.com", "Bob12345");
 
