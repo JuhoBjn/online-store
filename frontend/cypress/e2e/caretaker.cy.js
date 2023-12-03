@@ -6,7 +6,7 @@ describe("The caretaker page", () => {
 
     cy.url().should("be.equal", `${Cypress.config("baseUrl")}/caretaker`);
   });
-  
+
   it("should allow a logged in admin visit the page", () => {
     cy.login("anthonya@test.com", "Anthony12345");
 
