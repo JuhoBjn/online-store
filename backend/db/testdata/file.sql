@@ -312,7 +312,7 @@ INSERT INTO `events`(`id`, `name`, `description`)
 VALUES (
         3,
         'Germany exchange',
-        'The GoldenAge crew has set up an exchange with their partered business to the beautiful city of Tothenburg Ob Der Tauber.'
+        'The GoldenAge crew has set up an exchange with their partered business to the beautiful city of Rothenburg Ob Der Tauber.'
 );
 
 DROP TRIGGER event_start_date_insert;
