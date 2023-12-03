@@ -28,7 +28,7 @@ const CaretakerSidebar = () => {
         + New article
       </Button>
       <Button
-        testId="my-articles-button"
+        testId="posted-articles-button"
         type="action"
         onClick={openMyArticlesPage}
       >
