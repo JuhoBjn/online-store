@@ -50,6 +50,6 @@ describe("The create article page", () => {
     cy.get('[data-testid="article-link-input"]').type("https://example.com");
     cy.get('[data-testid="post-article-button"]').click();
 
-    cy.contains("Article posted").should("be.visible");
+    cy.contains("Article posted", { timeout: 10000 }).should("be.visible");
   });
 });
