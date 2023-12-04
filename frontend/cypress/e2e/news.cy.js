@@ -73,3 +73,44 @@ describe("The news article page", () => {
     cy.get('[data-testid="news-page-article-link"]').should("be.visible");
   });
 });
+
+describe("The calendar sidebar", () => {
+  it("should display a sidebar for the calendar components", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.get(".calendar-sidebar").should("be.visible");
+  });
+
+  it("should display a month view calendar", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.get('[data-testid="calendar-sidebar-month-container"]').should(
+      "be.visible"
+    );
+  });
+
+  it("should display a daily schedule", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.contains("Today's schedule").should("be.visible");
+    cy.get('[data-testid="calendar-sidebar-day-container"]').should(
+      "be.visible"
+    );
+  });
+
+  it("should display a button to navigate to the activities view", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.get('[data-testid="add-new-activity-button"]').scrollIntoView();
+    cy.get('[data-testid="add-new-activity-button"]').should("be.visible");
+  });
+
+  it("should allow a user to navigate to the activities page", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.get('[data-testid="add-new-activity-button"]').scrollIntoView();
+    cy.get('[data-testid="add-new-activity-button"]').click();
+
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/activities`);
+  });
+});
