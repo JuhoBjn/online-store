@@ -372,6 +372,18 @@ VALUES (
 DROP TRIGGER event_start_date_insert;
 DROP TRIGGER event_end_date_insert;
 
+CREATE TRIGGER event_end_date_insert BEFORE
+INSERT ON `events` FOR EACH ROW
+SET NEW.ends_at = ADDTIME(CURRENT_TIMESTAMP, '03:00:00');
+
+INSERT INTO `events`(`id`, `name`, `description`, `starts_at`)
+VALUES (
+        7,
+        'Golden Memories Gala',
+        "Join us for an enchanting evening at the Golden Memories Gala, a nostalgic celebration for the elderly. Revel in live music, share cherished stories, and savor delectable cuisine. Let's create golden moments together, honoring a lifetime of memories and building new connections.",
+        CURRENT_TIMESTAMP
+);
+
 -- Sign Bob the Builder up for four of the created events.
 
 INSERT INTO `event_attendees`(`event_id`, `user_id`)
@@ -379,4 +391,5 @@ VALUES
     (1, "59158c35-8d77-43f1-bc63-3c5b4265b276"),
     (2, "59158c35-8d77-43f1-bc63-3c5b4265b276"),
     (3, "59158c35-8d77-43f1-bc63-3c5b4265b276"),
-    (6, "59158c35-8d77-43f1-bc63-3c5b4265b276");
+    (6, "59158c35-8d77-43f1-bc63-3c5b4265b276"),
+    (7, "59158c35-8d77-43f1-bc63-3c5b4265b276");
