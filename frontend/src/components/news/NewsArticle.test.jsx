@@ -44,6 +44,21 @@ describe("The news article component", () => {
     expect(screen.getByTestId("news-article-image")).toBeInTheDocument();
   });
 
+  it("should not display an image when no image is provided", () => {
+    render(
+      <BrowserRouter>
+        <NewsArticle
+          id={testArticle.id}
+          headline={testArticle.headline}
+          body={testArticle.body}
+          link={testArticle.link}
+        />
+      </BrowserRouter>
+    );
+
+    expect(screen.queryByTestId("news-article-image")).not.toBeInTheDocument();
+  });
+
   it("should display a headline", () => {
     render(
       <BrowserRouter>
