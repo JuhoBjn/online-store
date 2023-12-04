@@ -37,6 +37,7 @@
   cursor: pointer;
   position: relative;
   margin-bottom: 2em;
+  overflow: scroll;
 }
 
 .new-article-form-picture-input-container input {
