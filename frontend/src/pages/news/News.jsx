@@ -15,7 +15,7 @@ const News = () => {
         <NewsList articles={data.news} />
       </div>
       <div className="calendar-container">
-        <CalendarSidebar calendar={data.eventDates} />
+        <CalendarSidebar calendar={data?.eventDates ?? []} />
       </div>
     </div>
   );
