@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 
-import CalendarSidebar from "../../components/calendar-sidebar/CalendarSidebar";
 import NewsList from "../../components/news/NewsList";
+import CalendarSidebar from "../../components/calendar-sidebar/CalendarSidebar";
 
 import "./News.css";
 

@@ -1,8 +1,6 @@
 import { redirect } from "react-router-dom";
 
 import { fetchAllNews } from "../../utils/NewsAPI";
-
-import { fetchAllNews } from "../../utils/NewsAPI";
 import { fetchUserEvents } from "../../utils/UsersAPI";
 
 export const NewsLoader = async () => {
@@ -13,13 +11,7 @@ export const NewsLoader = async () => {
   }
 
   const [news, userEvents] = await Promise.all([
-    fetch(`${import.meta.env.VITE_BACKEND_API}/api/news`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${storedUser.token}`,
-        Accept: "application/json"
-      }
-    }),
+    fetchAllNews(storedUser.token),
     fetchUserEvents(storedUser.id, storedUser.token)
   ]);
 
