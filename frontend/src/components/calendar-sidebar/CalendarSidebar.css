@@ -1,0 +1,33 @@
+.calendar-sidebar {
+  /* width = 100% - padding */
+  width: calc(100% - 2 * 0.5em);
+  /* height = 100% - padding */
+  height: calc(100% - 2 * 1em);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2em;
+  padding: 1em 0.5em;
+  background-color: var(--main-background-color);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.calendar-sidebar-month-container {
+  height: fit-content;
+  width: calc(100% - 2 * 0.5em);
+}
+
+.calendar-sidebar-day-container {
+  height: 100%;
+  min-height: 10em;
+  /* width = 100% - padding */
+  width: calc(100% - 2 * 0.5em);
+}
+
+#calendar-sidebar-day-schedule-title {
+  height: 20px;
+  margin: 0;
+  margin-bottom: 0.5em;
+}

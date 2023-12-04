@@ -1,9 +1,22 @@
+import { useState } from "react";
+import { useLoaderData } from "react-router-dom";
+
+import NewsList from "../../components/news/NewsList";
+import CalendarSidebar from "../../components/calendar-sidebar/CalendarSidebar";
+
 import "./News.css";
 
 const News = () => {
+  const [data] = useState(useLoaderData());
+
   return (
     <div className="news-page">
-      <h1>News page</h1>
+      <div className="news-page-articles-container">
+        <NewsList articles={data?.news ?? []} />
+      </div>
+      <div className="calendar-container">
+        <CalendarSidebar calendar={data?.eventDates ?? []} />
+      </div>
     </div>
   );
 };

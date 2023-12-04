@@ -1,5 +1,32 @@
 .news-page {
-  height: 100vh;
+  /* height = 100 viewport height - navbar */
+  height: calc(100vh - 5em);
   width: 100vw;
   margin-top: 5em;
+  background-color: var(--main-background-color);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+.news-page-articles-container {
+  height: calc(100% - 2 * 2em);
+  width: calc(100% - 2 * 2em);
+  padding: 2em;
+  display: flex;
+  flex-direction: row;
+}
+
+.news-container {
+  height: 100%;
+  width: 100%;
+  background-color: var(--main-background-color);
+}
+
+.calendar-container {
+  height: 100%;
+  width: 36em;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: black;
 }

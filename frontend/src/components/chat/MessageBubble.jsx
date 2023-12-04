@@ -1,5 +1,5 @@
 import "./MessageBubble.css";
-import formatTime from "./timeFormat";
+import formatTime from "../../utils/timeFormat";
 import { Link } from "react-router-dom";
 
 const MessageBubble = ({ message, isMine, isGroupChat }) => {
