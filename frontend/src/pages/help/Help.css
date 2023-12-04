@@ -1,5 +1,57 @@
 .help-page {
-  height: 100vh;
+  /* height = 100 viewport height - navbar */
+  height: calc(100vh - 5em);
   width: 100vw;
   padding-top: 5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--main-background-color);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.help-page-container {
+  height: 100%;
+  width: calc(100% - 2 * 2em);
+  max-width: 60em;
+  padding: 0 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.help-page-header {
+  width: fit-content;
+  height: fit-content;
+  align-self: flex-start;
+  padding: 0.5em;
+  margin-top: 3em;
+  background-color: var(--light-green);
+}
+
+#help-page-title {
+  margin: 0;
+}
+
+.help-page-content {
+  padding-top: 1em;
+  width: 90%;
+  max-width: 60em;
+}
+
+.help-page-heading-2 {
+  margin: 2em 0 0 0;
+}
+
+.help-page-link {
+  color: blue;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.help-page-footer p {
+  margin: 0;
 }
