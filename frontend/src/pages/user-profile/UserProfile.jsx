@@ -94,7 +94,7 @@ const UserProfile = () => {
             {user?.isFriend && (
               <div className="profile-info-left-button-container">
                 <Button
-                  data-testid="unfriend-user-button"
+                  testId="unfriend-user-button"
                   type="unfriend"
                   onClick={unfriendUserHandler}
                 >
