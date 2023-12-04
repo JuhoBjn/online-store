@@ -35,6 +35,13 @@ import Friends from "./pages/friends/Friends";
 import { FriendsLoader } from "./pages/friends/FriendsLoader";
 import FriendRequests from "./pages/friends/FriendRequests";
 import { FriendRequestsLoader } from "./pages/friends/FriendRequestsLoader";
+import Caretaker from "./pages/caretaker/Caretaker";
+import { CaretakerLoader } from "./pages/caretaker/CaretakerLoader";
+import NewArticle from "./pages/caretaker/new-article/NewArticle";
+import PostedArticles from "./pages/caretaker/posted-articles/PostedArticles";
+import { MyArticlesLoader } from "./pages/caretaker/posted-articles/PostedArticlesLoader";
+import EditArticle from "./pages/caretaker/edit-article/EditArticle";
+import { EditArticleLoader } from "./pages/caretaker/edit-article/EditArticleLoader";
 
 import "./App.css";
 import ChatDevPage from "./components/chat/ChatDevPage";
@@ -145,6 +152,32 @@ const router = createBrowserRouter([
     ]
   },
   {
+    path: "/caretaker",
+    element: (
+      <>
+        <LoggedInNavBar />
+        <Caretaker />
+      </>
+    ),
+    loader: CaretakerLoader,
+    children: [
+      {
+        path: "/caretaker/news/new-article",
+        element: <NewArticle />
+      },
+      {
+        path: "/caretaker/news/posted-articles",
+        element: <PostedArticles />,
+        loader: MyArticlesLoader
+      },
+      {
+        path: "/caretaker/news/:id/edit",
+        element: <EditArticle />,
+        loader: EditArticleLoader
+      }
+    ]
+  },
+  {
     path: "/chat",
     element: <ChatDevPage />
   },
@@ -177,7 +210,11 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Navigate to="/" replace="true" />
+    element: <Navigate to="/" replace="true" />,
+    loader: () => {
+      console.log("Redirecting to root from ", window.location);
+      return true;
+    }
   }
 ]);
 
