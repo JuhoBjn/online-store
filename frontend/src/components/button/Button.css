@@ -34,3 +34,12 @@
 .danger {
   background-color: var(--red);
 }
+
+.unfriend {
+  background-color: var(--main-background-color);
+  color: var(--red);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  border-color: var(--red);
+}
