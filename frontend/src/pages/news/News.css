@@ -1,5 +1,6 @@
 .news-page {
-  height: 100vh;
+  /* height = 100 viewport height - navbar */
+  height: calc(100vh - 5em);
   width: 100vw;
   margin-top: 5em;
   display: flex;
@@ -14,7 +15,7 @@
 
 .calendar-container {
   height: 100%;
-  width: 25em;
+  width: 36em;
   border-left-style: solid;
   border-left-width: 1px;
   border-left-color: black;
