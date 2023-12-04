@@ -1,6 +1,9 @@
 .logged-in-navbar {
   height: 5em;
   width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
   background-color: var(--light-green);
   display: flex;
   flex-direction: row;

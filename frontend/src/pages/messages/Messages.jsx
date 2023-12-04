@@ -43,22 +43,20 @@ const Messages = () => {
       </div>
       <div className="messages-page__chat-container">
         {selectedFriendData ? (
-          <div>
-            <Chat
-              user={storedUser}
-              friend={{
-                id: selectedFriendData?.friend_user_id,
-                firstname: selectedFriendData?.friend_first_name,
-                lastname: selectedFriendData?.friend_last_name
-              }}
-              isDisabled={selectedFriendData?.is_unfriended}
-              disabledMessage={
-                selectedFriendData?.is_unfriended
-                  ? "You cannot chat as you are no longer friends with this user"
-                  : ""
-              }
-            />
-          </div>
+          <Chat
+            user={storedUser}
+            friend={{
+              id: selectedFriendData?.friend_user_id,
+              firstname: selectedFriendData?.friend_first_name,
+              lastname: selectedFriendData?.friend_last_name
+            }}
+            isDisabled={selectedFriendData?.is_unfriended}
+            disabledMessage={
+              selectedFriendData?.is_unfriended
+                ? "You cannot chat as you are no longer friends with this user"
+                : ""
+            }
+          />
         ) : (
           <div>
             <p>Select a friend to start chatting</p>
