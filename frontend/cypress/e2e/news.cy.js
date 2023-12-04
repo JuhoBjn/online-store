@@ -61,7 +61,7 @@ describe("The news article page", () => {
   it("should display a news article", () => {
     cy.login("bobb@test.com", "Bob12345");
 
-    cy.visit(`${Cypress.config("baseUrl")}/article/1`);
+    cy.visit(`${Cypress.config("baseUrl")}/article/2`);
 
     cy.get('[data-testid="news-page-article-headline"]').should("be.visible");
     cy.get('[data-testid="news-page-article-posted-at"]').should("be.visible");

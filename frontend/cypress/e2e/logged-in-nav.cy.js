@@ -82,4 +82,13 @@ describe("The logged in nav bar", () => {
 
     cy.url().should("be.equal", `${Cypress.config("baseUrl")}/friends/all`);
   });
+
+  it("should allow a logged in caretaker navigate to the caretaker page", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.get('[data-testid="profile-picture"]').click();
+    cy.get('[data-testid="go-to-caretaker-page"]').click();
+
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/caretaker`);
+  });
 });

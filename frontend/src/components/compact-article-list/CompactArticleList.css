@@ -1,0 +1,28 @@
+.compact-article-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.compact-article-list-item {
+  height: fit-content;
+  /* width = 100% - padding - borders */
+  width: calc(100% - 2 * 0.5em - 2 * 1px);
+  padding: 0.5em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--dark-brown);
+}
+
+.compact-article-list-item a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.compact-article-link {
+  text-decoration: none;
+}

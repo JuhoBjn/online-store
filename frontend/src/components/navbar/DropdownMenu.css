@@ -2,9 +2,9 @@
   height: fit-content;
   width: 10em;
   position: relative;
-  top: 100%;
+  top: 0;
   left: 0;
-  transform: translate(-70%, -55%);
+  transform: translate(-70%, 0%);
   background-color: var(--light-green);
   border-style: none;
   border-radius: 10px;

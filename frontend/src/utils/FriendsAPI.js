@@ -152,10 +152,43 @@ const denyFriendRequest = async (userId, requestId, token) => {
   }
 };
 
+/**
+ * Unfriend a friended user.
+ * @param {String} userId ID of the current user
+ * @param {String} friendId ID of the user to unfriend
+ * @param {String} token JWT token
+ * @returns {Boolean} True if successful, otherwise false.
+ */
+const unfriendUser = async (userId, friendId, token) => {
+  try {
+    const response = await fetch(
+      `${
+        import.meta.env.VITE_BACKEND_API
+      }/api/users/${userId}/friends/${friendId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    const responseMessage = await response.json();
+    if (response.status !== 200) {
+      throw new Error(`Failed to unfriend user: ${responseMessage.message}`);
+    }
+    return true;
+  } catch (error) {
+    console.error(error.message);
+    return false;
+  }
+};
+
 export {
   getFriends,
   sendFriendRequest,
   getReceivedFriendRequests,
   acceptFriendRequest,
-  denyFriendRequest
+  denyFriendRequest,
+  unfriendUser
 };

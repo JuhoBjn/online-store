@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate, useLoaderData } from "react-router-dom";
 
 import { AuthContext } from "../../utils/AuthContext";
-import { sendFriendRequest } from "../../utils/FriendsAPI";
+import { sendFriendRequest, unfriendUser } from "../../utils/FriendsAPI";
 import { upgradeToPremium } from "../../utils/UsersAPI";
 
 import Button from "../../components/button/Button";
@@ -42,6 +42,26 @@ const UserProfile = () => {
     }
   };
 
+  const unfriendUserHandler = async () => {
+    const confirmMessage = `Are you sure you want to unfriend ${user.firstname} ${user.lastname}? You can send a new friend request to become friends again.`;
+    if (confirm(confirmMessage)) {
+      const success = await unfriendUser(
+        authContext.id,
+        user.id,
+        authContext.token
+      );
+      if (success) {
+        setUser((prev) => {
+          return { ...prev, isFriend: false };
+        });
+      } else {
+        alert(
+          `Failed to unfriend ${user.firstname} ${user.lastname}. Please try again.`
+        );
+      }
+    }
+  };
+
   const returnHandler = () => {
     navigate(-1);
   };
@@ -59,7 +79,7 @@ const UserProfile = () => {
               />
             </div>
             {!user.isFriend && user.isFriend !== undefined && (
-              <div className="friend-request-button-container">
+              <div className="profile-info-left-button-container">
                 {friendRequestSent ? (
                   <p data-testid="friend-request-sent">
                     &#x2714; Friend request sent
@@ -69,6 +89,17 @@ const UserProfile = () => {
                     Send friend request
                   </Button>
                 )}
+              </div>
+            )}
+            {user?.isFriend && (
+              <div className="profile-info-left-button-container">
+                <Button
+                  testId="unfriend-user-button"
+                  type="unfriend"
+                  onClick={unfriendUserHandler}
+                >
+                  Unfriend
+                </Button>
               </div>
             )}
           </div>
