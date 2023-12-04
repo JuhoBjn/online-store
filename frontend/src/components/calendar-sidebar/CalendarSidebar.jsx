@@ -23,7 +23,10 @@ const CalendarSidebar = ({ calendar }) => {
 
   return (
     <aside className="calendar-sidebar">
-      <div className="calendar-sidebar-month-container">
+      <div
+        data-testid="calendar-sidebar-month-container"
+        className="calendar-sidebar-month-container"
+      >
         <FullCalendar
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
@@ -41,10 +44,12 @@ const CalendarSidebar = ({ calendar }) => {
           eventClick={eventClickHandler}
         />
       </div>
-      <div className="calendar-sidebar-day-container">
+      <div
+        data-testid="calendar-sidebar-day-container"
+        className="calendar-sidebar-day-container"
+      >
         <h3 id="calendar-sidebar-day-schedule-title">Today&apos;s schedule</h3>
         <FullCalendar
-          id="day-calendar"
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridDay"
           events={events}
@@ -55,7 +60,11 @@ const CalendarSidebar = ({ calendar }) => {
           eventClick={eventClickHandler}
         />
       </div>
-      <Button type="action" onClick={navigateToActivitiesHandler}>
+      <Button
+        testId="add-new-activity-button"
+        type="action"
+        onClick={navigateToActivitiesHandler}
+      >
         Add new activity +
       </Button>
     </aside>

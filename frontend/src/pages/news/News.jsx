@@ -12,7 +12,7 @@ const News = () => {
     <div className="news-page">
       <div className="news-container" />
       <div className="calendar-container">
-        <CalendarSidebar calendar={data.eventDates} />
+        <CalendarSidebar calendar={data?.eventDates ?? []} />
       </div>
     </div>
   );
