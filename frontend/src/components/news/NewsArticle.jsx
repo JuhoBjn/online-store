@@ -14,11 +14,13 @@ const NewsArticle = ({ id, headline, body, imageUrl }) => {
             id % 2 == 0 ? "right" : "left"
           }`}
         >
-          <img
-            data-testid="news-article-image"
-            src={imageUrl}
-            alt={`Article image: ${headline}`}
-          />
+          {imageUrl && (
+            <img
+              data-testid="news-article-image"
+              src={imageUrl}
+              alt={`Article image: ${headline}`}
+            />
+          )}
         </div>
         <div className="news-article-content">
           <Link to={`/article/${id}`} data-testid="news-article-headline">
