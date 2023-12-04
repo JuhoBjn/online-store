@@ -41,6 +41,10 @@ jobs:
           # possibly also want insert test data
           mysql -h 127.0.0.1 -u root -ppass test < ./db/testdata/file.sql
 
+      - name: Start Minio instance (S3 combatible storage)
+        working-directory: .
+        run: docker compose -f ./docker-compose.yml up -d minio createbuckets
+
       - name: Start backend
         working-directory: ./backend
         env:
