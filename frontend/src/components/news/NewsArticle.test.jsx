@@ -2,13 +2,14 @@ import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 
 import NewsArticle from "./NewsArticle";
+import ElatedPensioner from "../../assets/Elated_pensioner.jpg";
 
 describe("The news article component", () => {
   const testArticle = {
     id: 1,
     headline: "BREAKING NEWS: The first test article has been posted",
     body: "The first article to display in this component has finally been released.",
-    imageUrl: null,
+    imageUrl: ElatedPensioner,
     link: "https://example.com"
   };
 
@@ -35,6 +36,7 @@ describe("The news article component", () => {
           headline={testArticle.headline}
           body={testArticle.body}
           link={testArticle.link}
+          imageUrl={testArticle.imageUrl}
         />
       </BrowserRouter>
     );

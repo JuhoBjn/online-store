@@ -12,11 +12,13 @@ const NewsArticlePage = () => {
     <div className="news-article-page">
       <article className="news-page-article-container">
         <div className="news-page-article-image-container">
-          <img
-            data-testid="news-page-article-image"
-            src={article.imageUrl}
-            alt={`Article picture: ${article.headline}`}
-          />
+          {article.imageUrl && (
+            <img
+              data-testid="news-page-article-image"
+              src={article.imageUrl}
+              alt={`Article picture: ${article.headline}`}
+            />
+          )}
         </div>
         <div className="news-page-article-header">
           <h1 data-testid="news-page-article-headline">{article.headline}</h1>

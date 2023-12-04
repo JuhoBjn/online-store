@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import NewsArticlePage from "./NewsArticlePage";
+import ElatedPensioner from "../../assets/Elated_pensioner.jpg";
 
 const testRouter = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ const testRouter = createBrowserRouter([
         created_at: "2023-11-29T20:46:38.000Z",
         updated_at: "2023-11-29T20:46:38.000Z",
         image_object_key: null,
-        image_url: null
+        imageUrl: ElatedPensioner
       };
     },
     element: <NewsArticlePage />

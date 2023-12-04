@@ -28,9 +28,6 @@ describe("The news page", () => {
     cy.get(
       ':nth-child(1) > [data-testid="news-article-container"] > .news-article-content > [data-testid="news-article-body"]'
     ).should("be.visible");
-    cy.get(
-      ':nth-child(1) > [data-testid="news-article-container"] > .news-article-image-container > [data-testid="news-article-image"]'
-    ).should("be.visible");
   });
 
   it("should allow a user to open news articles in a dedicated page", () => {
@@ -66,7 +63,6 @@ describe("The news article page", () => {
 
     cy.visit(`${Cypress.config("baseUrl")}/article/1`);
 
-    cy.get('[data-testid="news-page-article-image"]').should("be.visible");
     cy.get('[data-testid="news-page-article-headline"]').should("be.visible");
     cy.get('[data-testid="news-page-article-posted-at"]').should("be.visible");
     cy.get('[data-testid="news-page-article-body"]').should("be.visible");
