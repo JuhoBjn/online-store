@@ -23,10 +23,14 @@ export const NewsLoader = async () => {
     fetchUserEvents(storedUser.id, storedUser.token)
   ]);
 
-  const eventDates = [];
-  userEvents.map((event) => {
-    const date = new Date(event.starts_at);
-    eventDates.splice(0, 0, date);
+  const eventDates = userEvents.map((event) => {
+    return {
+      eventId: event.id,
+      title: event.name,
+      display: "block",
+      start: event.starts_at,
+      end: event.ends_at
+    };
   });
 
   return { news, eventDates };
