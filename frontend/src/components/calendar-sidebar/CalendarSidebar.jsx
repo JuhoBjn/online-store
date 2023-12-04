@@ -37,7 +37,7 @@ const CalendarSidebar = ({ calendar }) => {
             center: "",
             end: "prev,next"
           }}
-          height="100%"
+          height="auto"
           eventClick={eventClickHandler}
         />
       </div>
