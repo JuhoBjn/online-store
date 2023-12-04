@@ -7,6 +7,17 @@
   --bright-green: #6f923e;
   --dark-bright-green: #52b407;
   --red: #d60e0e;
+
+  /* Set color scheme for the calendar element on the news page */
+  --fc-button-text-color: var(--main-background-color);
+  --fc-button-bg-color: var(--dark-brown);
+  --fc-button-border-color: var(--dark-brown);
+  --fc-button-hover-bg-color: #553a31;
+  --fc-button-hover-border-color: #553a31;
+  --fc-button-active-bg-color: #4d342b;
+  --fc-button-active-border-color: #4d342b;
+  --fc-event-text-color: var(--main-background-color);
+  --fc-page-bg-color: var(--main-background-color);
 }
 
 body {
