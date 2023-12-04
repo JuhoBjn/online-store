@@ -18,8 +18,11 @@ const LoggedInNavBar = () => {
   };
 
   const navigateToProfileHandler = () => {
-    console.log("Navigate to profile", authContext.id);
     navigate(`/user/${authContext.id}`);
+  };
+
+  const navigateToFriendsHandler = () => {
+    navigate("/friends");
   };
 
   const logoutHandler = () => {
@@ -80,6 +83,7 @@ const LoggedInNavBar = () => {
             <TransparentOverlay onClick={toggleDropdownMenu} />
             <DropdownMenu
               navigateToProfileHandler={navigateToProfileHandler}
+              navigateToFriendsHandler={navigateToFriendsHandler}
               logoutHandler={logoutHandler}
             />
           </>

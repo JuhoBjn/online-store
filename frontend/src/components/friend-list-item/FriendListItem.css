@@ -1,0 +1,38 @@
+.friend-list-item {
+  height: 3em;
+  /* width: 100% - borders */
+  width: calc(100%- 2px);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--bright-green);
+}
+
+.friend-list-item-profile-pic-container {
+  height: 100%;
+  width: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25em;
+  overflow: hidden;
+}
+
+.friend-list-item-profile-pic-container img {
+  height: 2.5em;
+  width: 2.5em;
+  object-fit: contain;
+}
+
+.friend-list-item-content {
+  /* width = 100% - profile pic */
+  width: calc(100% - 3em);
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 1em;
+}

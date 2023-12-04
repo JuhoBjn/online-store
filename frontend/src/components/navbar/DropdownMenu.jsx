@@ -1,6 +1,10 @@
 import "./DropdownMenu.css";
 
-const DropdownMenu = ({ navigateToProfileHandler, logoutHandler }) => {
+const DropdownMenu = ({
+  navigateToProfileHandler,
+  navigateToFriendsHandler,
+  logoutHandler
+}) => {
   return (
     <div className="dropdown-menu-container">
       <ul id="dropdown-menu-links">
@@ -11,6 +15,15 @@ const DropdownMenu = ({ navigateToProfileHandler, logoutHandler }) => {
             onClick={navigateToProfileHandler}
           >
             <p>Go to profile</p>
+          </div>
+        </li>
+        <li>
+          <div
+            data-testid="go-to-friends"
+            className="dropdown-menu-link-container"
+            onClick={navigateToFriendsHandler}
+          >
+            <p>Friends</p>
           </div>
         </li>
         <li>

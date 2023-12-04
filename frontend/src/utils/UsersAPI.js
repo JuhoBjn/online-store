@@ -114,4 +114,42 @@ const updateProfile = async (id, token, profile) => {
   return responseMessage;
 };
 
-export { signup, login, getUser, upgradeToPremium, updateProfile };
+/**
+ * Fetch all events that a user has signed up for.
+ * @param {String} userId ID of the user
+ * @param {String} token JWT  token
+ * @returns
+ */
+const fetchUserEvents = async (userId, token) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_API}/api/users/${userId}/events`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json"
+        }
+      }
+    );
+    const responseMessage = await response.json();
+    if (response.status !== 200) {
+      throw new Error(
+        `Failed to fetch events for user: ${responseMessage.message}`
+      );
+    }
+    return responseMessage;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export {
+  signup,
+  login,
+  getUser,
+  upgradeToPremium,
+  updateProfile,
+  fetchUserEvents
+};
