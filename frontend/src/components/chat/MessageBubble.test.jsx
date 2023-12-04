@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import MessageBubble from "./MessageBubble";
-import formatTime from "./timeFormat";
+import formatTime from "../../utils/timeFormat";
 import { BrowserRouter } from "react-router-dom";
 
 describe("MessageBubble", () => {

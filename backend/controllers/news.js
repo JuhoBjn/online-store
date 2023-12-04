@@ -199,9 +199,10 @@ const getSingleNewsArticle = async (req, res) => {
     if (!newsObject) {
       return res.status(404).json({ error: "News not found" });
     }
-
-    newsObject = { ...newsObject, image_url: getS3Url(news.image_object_key) };
-
+    newsObject = {
+      ...newsObject,
+      image_url: getS3Url(newsObject.image_object_key)
+    };
     return res.status(200).json(newsObject);
   } catch (e) {
     console.log(e);
