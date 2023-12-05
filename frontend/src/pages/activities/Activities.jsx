@@ -14,7 +14,10 @@ const Activities = () => {
 
   return (
     <div className="activities-page">
-      <section className="activities-container">
+      <section
+        data-testid="activities-container"
+        className="activities-container"
+      >
         <ActivityList activities={activities} />
       </section>
     </div>
