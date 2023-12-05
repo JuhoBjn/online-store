@@ -207,7 +207,14 @@ const getEvent = async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }
 
-    event = { ...event, image_url: getS3Url(event.image_object_key) };
+    // Check if the requesting user has signed up for the event.
+    const signedUp = await events.checkAttendee(eventId, req.user.id);
+
+    event = {
+      ...event,
+      image_url: getS3Url(event.image_object_key),
+      signed_up: signedUp
+    };
 
     return res.status(200).json(event);
   } catch (e) {
