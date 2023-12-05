@@ -7,7 +7,7 @@ let socket = null;
 
 const connectSocket = (token) => {
   console.log("connecting socket...");
-  socket = io(import.meta.env.VITE_SOCKET_URL, {
+  socket = io(import.meta.env.VITE_SOCKET_URL || "http://localhost:5005", {
     auth: {
       token: token
     }
