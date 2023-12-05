@@ -1,9 +1,22 @@
+import { useState, useEffect } from "react";
+import { useLoaderData } from "react-router-dom";
+
+import ActivityList from "../../components/activity-list/ActivityList";
+
 import "./Activities.css";
 
 const Activities = () => {
+  const [activities] = useState(useLoaderData());
+
+  useEffect(() => {
+    console.log(activities);
+  }, [activities]);
+
   return (
     <div className="activities-page">
-      <h1>Activities page</h1>
+      <section className="activities-container">
+        <ActivityList activities={activities} />
+      </section>
     </div>
   );
 };

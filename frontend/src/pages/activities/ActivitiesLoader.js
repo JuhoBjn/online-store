@@ -1,9 +1,12 @@
 import { redirect } from "react-router-dom";
 
-export const ActivitiesLoader = () => {
+import { fetchAllActivities } from "../../utils/ActivityAPI";
+
+export const ActivitiesLoader = async () => {
   const storedUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!storedUser?.token) {
     return redirect("/frontpage");
   }
-  return true;
+
+  return await fetchAllActivities(storedUser.token);
 };

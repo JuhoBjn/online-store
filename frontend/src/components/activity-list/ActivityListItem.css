@@ -1,0 +1,22 @@
+.activity-list-item {
+  height: fit-content;
+  width: fit-content;
+  padding: 0.5em;
+  text-align: center;
+  cursor: pointer;
+}
+
+.activity-list-item :hover {
+  text-decoration: underline;
+}
+
+.activity-list-item-image {
+  height: 12em;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.activity-list-item-name {
+  margin: 5px;
+}
