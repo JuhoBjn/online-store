@@ -56,6 +56,8 @@ jobs:
         env:
           NODE_ENV: test
           VITE_BACKEND_API: http://localhost:5000
+          VITE_SOCKET_URL: http://localhost:5005
+
         run: npm run dev &
 
       - name: Start email server
