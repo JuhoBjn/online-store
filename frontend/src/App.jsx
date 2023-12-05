@@ -20,6 +20,8 @@ import NewsArticlePage from "./pages/news-article/NewsArticlePage";
 import { NewsArticlePageLoader } from "./pages/news-article/NewsArticlePageLoader";
 import Activities from "./pages/activities/Activities";
 import { ActivitiesLoader } from "./pages/activities/ActivitiesLoader";
+import Activity from "./pages/activity/Activity";
+import { ActivityLoader } from "./pages/activity/ActivityLoader";
 import Messages from "./pages/messages/Messages";
 import Match from "./pages/match/Match";
 import { MatchLoader } from "./pages/match/MatchLoader";
@@ -72,6 +74,16 @@ const router = createBrowserRouter([
       <>
         <LoggedInNavBar />
         <Activities />
+      </>
+    )
+  },
+  {
+    path: "/activity/:activityId",
+    loader: ActivityLoader,
+    element: (
+      <>
+        <LoggedInNavBar />
+        <Activity />
       </>
     )
   },

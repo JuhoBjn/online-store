@@ -1,7 +1,7 @@
 /**
  * Fetch all posted events.
  * @param {String} token JWT token
- * @returns {Array<Object> | false} List of events if successful, otherwise false.
+ * @returns {Array<Object> | false} List of events if successful, otherwise false
  */
 const fetchAllActivities = async (token) => {
   try {
@@ -26,4 +26,66 @@ const fetchAllActivities = async (token) => {
   }
 };
 
-export { fetchAllActivities };
+/**
+ *
+ * @param {String} activityId ID of the activity to fetch
+ * @param {String} token JWT token
+ * @returns {Object | false} Activity object if successful, otherwise false.
+ */
+const fetchSingleActivity = async (activityId, token) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_API}/api/events/${activityId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    const responseMessage = await response.json();
+    if (response.status !== 200) {
+      throw new Error(
+        `Failed to fetch activity details: ${responseMessage.error}`
+      );
+    }
+    return responseMessage;
+  } catch (error) {
+    console.error(error.message);
+    return false;
+  }
+};
+
+/**
+ * Add a user as an attendee for an activity.
+ * @param {Number} activityId ID of the activity
+ * @param {String} userId ID of the user
+ * @param {String} token JWT token
+ * @returns
+ */
+const signupForActivity = async (activityId, userId, token) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_API}/api/events/${activityId}/attendees`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ user_id: userId })
+      }
+    );
+    if (response.status !== 204) {
+      const responseMessage = response.json();
+      throw new Error(`Failed to sign up for event: ${responseMessage.error}`);
+    }
+    return true;
+  } catch (error) {
+    console.error(error.message);
+    return false;
+  }
+};
+
+export { fetchAllActivities, fetchSingleActivity, signupForActivity };
