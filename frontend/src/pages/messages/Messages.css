@@ -1,5 +1,49 @@
 .messages-page {
-  height: 100vh;
-  width: 100vw;
+  height: calc(100dvh - 5em); /* 5em is the height of the navbar */
+  padding: 0 1em;
+  background-color: var(--main-background-color);
+  display: flex;
+  flex-direction: column;
   margin-top: 5em;
+}
+
+.messages-page__friend-list-container {
+  height: 100%;
+  width: 20%;
+  background-color: var(--light-green);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.messages-page__chat-container {
+  height: 100%;
+  overflow: auto;
+}
+
+.messages-page__friend-list-item-container {
+  padding: 0.5em;
+  cursor: pointer;
+}
+
+.messages-page__friend-list-item-container.selected {
+  background: var(--light-green);
+}
+
+.messages-page__friends-list-container {
+  max-height: 25%;
+  overflow: auto;
+}
+
+.messages-page__friend-list-item-container:hover {
+  background: var(--light-green);
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.6);
 }

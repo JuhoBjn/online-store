@@ -21,7 +21,6 @@ import { NewsArticlePageLoader } from "./pages/news-article/NewsArticlePageLoade
 import Activities from "./pages/activities/Activities";
 import { ActivitiesLoader } from "./pages/activities/ActivitiesLoader";
 import Messages from "./pages/messages/Messages";
-import { MessagesLoader } from "./pages/messages/MessagesLoader";
 import Match from "./pages/match/Match";
 import { MatchLoader } from "./pages/match/MatchLoader";
 import Help from "./pages/help/Help";
@@ -44,7 +43,6 @@ import EditArticle from "./pages/caretaker/edit-article/EditArticle";
 import { EditArticleLoader } from "./pages/caretaker/edit-article/EditArticleLoader";
 
 import "./App.css";
-import ChatDevPage from "./components/chat/ChatDevPage";
 
 const router = createBrowserRouter([
   {
@@ -89,7 +87,10 @@ const router = createBrowserRouter([
   },
   {
     path: "/messages",
-    loader: MessagesLoader,
+    // loader: FriendsLoader({ keepUnfriended: true }),
+    loader: async () => {
+      return await FriendsLoader({ keepUnfriended: true });
+    },
     element: (
       <>
         <LoggedInNavBar />
@@ -176,10 +177,6 @@ const router = createBrowserRouter([
         loader: EditArticleLoader
       }
     ]
-  },
-  {
-    path: "/chat",
-    element: <ChatDevPage />
   },
   {
     path: "/frontpage",
