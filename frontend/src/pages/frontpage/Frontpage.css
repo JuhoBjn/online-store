@@ -3,6 +3,7 @@
   height: calc(100% - 7em);
   width: 100vw;
   margin-top: 7em;
+  display: flex;
   align-items: center;
   background-color: var(--main-background-color);
   overflow: scroll;
