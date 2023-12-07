@@ -19,6 +19,10 @@ const CaretakerSidebar = () => {
     navigate("/caretaker/activities/new-activity");
   };
 
+  const openCreatedActivities = () => {
+    navigate("/caretaker/activities");
+  };
+
   return (
     <aside
       data-testid="caretaker-sidebar-container"
@@ -44,6 +48,13 @@ const CaretakerSidebar = () => {
         onClick={openNewActivityForm}
       >
         + New activity
+      </Button>
+      <Button
+        testId="created-activities-button"
+        type="action"
+        onClick={openCreatedActivities}
+      >
+        Created activities
       </Button>
     </aside>
   );

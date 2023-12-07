@@ -44,4 +44,14 @@ describe("The caretaker sidebar", () => {
 
     expect(screen.getByTestId("new-activity-button")).toBeInTheDocument();
   });
+
+  it("should display a button to open created activities", () => {
+    render(
+      <BrowserRouter>
+        <CaretakerSidebar />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId("created-activities-button")).toBeInTheDocument();
+  });
 });
