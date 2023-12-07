@@ -32,9 +32,9 @@ const Frontpage = () => {
         />
       </div>
       <div className="frontpage-content">
-        <h2 data-testid="frontpage-title" id="frontpage-title">
+        <h1 data-testid="frontpage-title" id="frontpage-title">
           What is GoldenAge?
-        </h2>
+        </h1>
         <p data-testid="frontpage-content">
           GoldenAge is more than a community; it&apos;s a celebration of
           life&apos;s richness and the pursuit of vibrant connections. We are a
@@ -49,15 +49,15 @@ const Frontpage = () => {
           Join us now and try it 30 days for free <br />
           (after trial 14.99€/month)
         </p>
+        <Button
+          id="join-button"
+          data-testid="join-button"
+          type="confirm"
+          onClick={navigateToSignupHandler}
+        >
+          Join
+        </Button>
       </div>
-      <Button
-        id="join-button"
-        data-testid="join-button"
-        type="confirm"
-        onClick={navigateToSignupHandler}
-      >
-        Join
-      </Button>
     </div>
   );
 };

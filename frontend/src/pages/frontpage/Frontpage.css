@@ -1,19 +1,15 @@
 .frontpage {
-  /* height = 100vh - navbar */
-  height: calc(100vh - 7em);
+  /* height = 100% - navbar */
+  height: calc(100% - 7em);
   width: 100vw;
-  display: flex;
   margin-top: 7em;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
   background-color: var(--main-background-color);
-  overflow: hidden;
+  overflow: scroll;
 }
 
 .frontpage-banner-container {
-  height: fit-content;
-  max-height: 25%;
+  height: 15em;
   width: 100vw;
   position: absolute;
   top: 7em;
@@ -31,7 +27,16 @@
   height: fit-content;
   width: 80%;
   max-width: 50em;
+  position: absolute;
+  top: calc(7em + 15em);
+  left: 50%;
+  transform: translate(-50%, 0%);
   margin-top: 2em;
+  padding-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #frontpage-title {
@@ -40,7 +45,6 @@
 }
 
 #join-button {
-  margin-top: 5em;
   color: white;
   background-color: #426b1f;
   font-size: x-large;
