@@ -78,4 +78,17 @@ describe("The caretaker page", () => {
       `${Cypress.config("baseUrl")}/caretaker/news/posted-articles`
     );
   });
+
+  it("should allow a logged in caretaker to open the new activity page", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.visit(`${Cypress.config("baseUrl")}/caretaker`);
+
+    cy.get('[data-testid="new-activity-button"]').click();
+
+    cy.url().should(
+      "be.equal",
+      `${Cypress.config("baseUrl")}/caretaker/activities/new-activity`
+    );
+  });
 });

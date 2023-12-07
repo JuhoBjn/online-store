@@ -65,7 +65,9 @@ const NewActivity = () => {
     const response = await createActivity(formData, authContext.token);
     if (response) {
       setActivityCreated(true);
-      setTimeout(() => navigate("/caretaker", 1000));
+      setTimeout(() => {
+        navigate("/caretaker");
+      }, 1000);
     } else {
       console.error("Failed to create activity");
       alert("Failed to create activity. Please try again.");
@@ -80,7 +82,10 @@ const NewActivity = () => {
           className="new-activity-form"
           onSubmit={createNewActivity}
         >
-          <div className="new-activity-form-picture-input-container">
+          <div
+            data-testid="new-activity-form-picture-input-container"
+            className="new-activity-form-picture-input-container"
+          >
             {activityPicture && (
               <img
                 id="activity-picture-preview"
@@ -138,7 +143,7 @@ const NewActivity = () => {
             />
           </div>
           {activityCreated ? (
-            <p>&#x2714; Activity created</p>
+            <p data-testid="activity-created">&#x2714; Activity created</p>
           ) : (
             <Button testId="create-activity-button" type="confirm">
               Create activity
