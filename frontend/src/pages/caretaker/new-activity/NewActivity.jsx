@@ -75,7 +75,11 @@ const NewActivity = () => {
   return (
     <div className="new-activity-page">
       <section className="new-activity-form-container">
-        <form className="new-activity-form" onSubmit={createNewActivity}>
+        <form
+          data-testid="new-activity-form"
+          className="new-activity-form"
+          onSubmit={createNewActivity}
+        >
           <div className="new-activity-form-picture-input-container">
             {activityPicture && (
               <img
@@ -128,6 +132,7 @@ const NewActivity = () => {
             <label htmlFor="activity-date-picker">Start and end dates</label>
             <DateRangePicker
               id="activity-date-picker"
+              data-testid="activity-date-picker"
               value={activityDates}
               onChange={setActivityDates}
             />
