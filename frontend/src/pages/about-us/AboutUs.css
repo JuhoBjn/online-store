@@ -14,7 +14,7 @@
   height: fit-content;
   /* max-height: 100vh - navbar */
   max-height: calc(100vh - 7em);
-  width: 80%;
+  width: 90%;
   max-width: 60em;
   display: flex;
   flex-direction: row;
@@ -47,6 +47,20 @@
   height: 35em;
   width: auto;
   object-fit: contain;
+}
+
+.about-us-heading {
+  height: fit-content;
+  width: fit-content;
+  padding: 0.5em 1em;
+  margin: 0;
+  background-color: var(--light-green);
+}
+
+.about-us-paragraph {
+  height: fit-content;
+  width: fit-content;
+  margin-left: 2em;
 }
 
 @media (max-width: 850px) {
