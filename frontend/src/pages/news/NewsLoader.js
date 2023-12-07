@@ -15,15 +15,18 @@ export const NewsLoader = async () => {
     fetchUserEvents(storedUser.id, storedUser.token)
   ]);
 
-  const eventDates = userEvents.map((event) => {
-    return {
-      eventId: event.id,
-      title: event.name,
-      display: "block",
-      start: event.starts_at,
-      end: event.ends_at
-    };
-  });
+  let eventDates = [];
+  if (userEvents) {
+    eventDates = userEvents.map((event) => {
+      return {
+        eventId: event.id,
+        title: event.name,
+        display: "block",
+        start: event.starts_at,
+        end: event.ends_at
+      };
+    });
+  }
 
   return { news, eventDates };
 };

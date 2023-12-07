@@ -1,5 +1,16 @@
 .activities-page {
-  height: 100vh;
+  /* height = 100 dynamic viewport height - navbar */
+  height: calc(100dvh - 5em);
   width: 100vw;
-  padding-top: 5em;
+  padding-top: 7em;
+  display: flex;
+  justify-content: center;
+  background-color: var(--main-background-color);
+}
+
+.activities-container {
+  width: 90%;
+  height: 90%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }

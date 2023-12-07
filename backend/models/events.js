@@ -187,6 +187,18 @@ const eventsDB = {
     );
   },
   /**
+   * Check if a user is attending an event.
+   * @param {number} eventId The ID of the event
+   * @param {String} userId ID of the user
+   * @returns
+   */
+  checkAttendee: async (eventId, userId) => {
+    const queryString =
+      "SELECT * FROM event_attendees WHERE event_id = ? AND user_id = ?;";
+    const [rows] = await promisePool.query(queryString, [eventId, userId]);
+    return rows.length === 0 ? false : true;
+  },
+  /**
    * Get all attendees of an event.
    * @async
    * @param {number} eventId - The ID of the event.

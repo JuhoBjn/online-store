@@ -14,7 +14,7 @@ const CalendarSidebar = ({ calendar }) => {
 
   // Navigate to the event page when event is clicked.
   const eventClickHandler = (clickedEvent) => {
-    navigate(`/events/${clickedEvent.event.extendedProps.eventId}`);
+    navigate(`/activity/${clickedEvent.event.extendedProps.eventId}`);
   };
 
   const navigateToActivitiesHandler = () => {
