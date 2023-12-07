@@ -158,9 +158,17 @@
   }
 }
 
-@media (max-height: 680px) {
+@media (max-height: 850px) {
   .auth-page_logo {
     width: auto;
     height: 65px;
+  }
+
+  #auth-page_login-form-title {
+    margin-top: 0;
+  }
+
+  .auth-page_password-instructions li {
+    font-size: medium;
   }
 }
