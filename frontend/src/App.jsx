@@ -43,6 +43,7 @@ import PostedArticles from "./pages/caretaker/posted-articles/PostedArticles";
 import { MyArticlesLoader } from "./pages/caretaker/posted-articles/PostedArticlesLoader";
 import EditArticle from "./pages/caretaker/edit-article/EditArticle";
 import { EditArticleLoader } from "./pages/caretaker/edit-article/EditArticleLoader";
+import NewActivity from "./pages/caretaker/new-activity/NewActivity";
 
 import "./App.css";
 
@@ -187,6 +188,10 @@ const router = createBrowserRouter([
         path: "/caretaker/news/:id/edit",
         element: <EditArticle />,
         loader: EditArticleLoader
+      },
+      {
+        path: "/caretaker/activities/new-activity",
+        element: <NewActivity />
       }
     ]
   },

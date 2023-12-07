@@ -15,6 +15,10 @@ const CaretakerSidebar = () => {
     navigate("/caretaker/news/posted-articles");
   };
 
+  const openNewActivityForm = () => {
+    navigate("/caretaker/activities/new-activity");
+  };
+
   return (
     <aside
       data-testid="caretaker-sidebar-container"
@@ -33,6 +37,13 @@ const CaretakerSidebar = () => {
         onClick={openMyArticlesPage}
       >
         Posted articles
+      </Button>
+      <Button
+        testId="new-activity-button"
+        type="action"
+        onClick={openNewActivityForm}
+      >
+        + New activity
       </Button>
     </aside>
   );

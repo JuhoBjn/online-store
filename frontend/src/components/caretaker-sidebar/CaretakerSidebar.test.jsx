@@ -24,4 +24,24 @@ describe("The caretaker sidebar", () => {
 
     expect(screen.getByTestId("new-article-button")).toBeInTheDocument();
   });
+
+  it("should display a button to view posted articles", () => {
+    render(
+      <BrowserRouter>
+        <CaretakerSidebar />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId("posted-articles-button")).toBeInTheDocument();
+  });
+
+  it("should display a button to create a new activity", () => {
+    render(
+      <BrowserRouter>
+        <CaretakerSidebar />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByTestId("new-activity-button")).toBeInTheDocument();
+  });
 });
