@@ -12,3 +12,92 @@
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
+.new-activity-form-container {
+  height: fit-content;
+  width: 80%;
+  max-width: 45em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.new-activity-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.new-activity-form-picture-input-container {
+  max-height: 20em;
+  text-align: center;
+  border: 2px dashed var(--dark-brown);
+  padding: 1.75em;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 2em;
+  overflow: scroll;
+}
+
+.new-activity-form-picture-input-container input {
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.new-activity-form-picture-input-container h3 {
+  margin: 0;
+}
+
+#activity-picture-preview {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.new-activity-form-name-container {
+  width: 60%;
+  height: fit-content;
+}
+
+#activity-name-input {
+  /* width = 100% - padding - borders */
+  width: calc(100% - 2 * 0.75rem - 2 * 1px);
+  padding: 0.75rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--main-text-color);
+  font-size: large;
+}
+
+.new-activity-description-input-container {
+  width: 100%;
+  height: fit-content;
+}
+
+#activity-description-input {
+  /* width = 100% - padding - border */
+  width: calc(100% - 2 * 0.75rem - 2 * 1px);
+  max-height: 50em;
+  padding: 0.75rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--main-text-color);
+  resize: vertical;
+  font-size: large;
+}
+
+.new-activity-form-date-input-container {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+}

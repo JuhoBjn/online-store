@@ -88,4 +88,38 @@ const signupForActivity = async (activityId, userId, token) => {
   }
 };
 
-export { fetchAllActivities, fetchSingleActivity, signupForActivity };
+/**
+ * Create a new activity.
+ * @param {FormData} activity The activity to create
+ * @param {String} token JWT token
+ * @returns {number | false} ID of the created activity if successful, otherwise false.
+ */
+const createActivity = async (activity, token) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_API}/api/events`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: activity
+      }
+    );
+    const responseMessage = await response.json();
+    if (response.status !== 200) {
+      throw new Error(`Failed to create activity: ${responseMessage.error}`);
+    }
+    return responseMessage.id;
+  } catch (error) {
+    console.error(error.message);
+    return false;
+  }
+};
+
+export {
+  fetchAllActivities,
+  fetchSingleActivity,
+  signupForActivity,
+  createActivity
+};
