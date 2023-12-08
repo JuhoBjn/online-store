@@ -48,4 +48,26 @@ describe("The caretaker page created activities page", () => {
       ':nth-child(1) > .button-container > [data-testid="edit-activity-button"]'
     ).should("be.visible");
   });
+
+  it("should allow a caretaker to navigate to the activity page", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.visit(`${Cypress.config("baseUrl")}/caretaker/activities`);
+
+    cy.contains("Golden Memories Gala").click();
+
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/activity/7`);
+  });
+
+  it("should allow a caretaker to navigate to the edit activity page", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.visit(`${Cypress.config("baseUrl")}/caretaker/activities`);
+
+    cy.get(
+      ':nth-child(1) > .button-container > [data-testid="edit-activity-button"]'
+    ).click();
+
+    cy.url().should("contain", "/edit");
+  });
 });
