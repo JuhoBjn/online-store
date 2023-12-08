@@ -34,7 +34,7 @@ describe("The new activity page", () => {
     expect(screen.getByTestId("activity-name-input")).toBeInTheDocument();
   });
 
-  it("should display am input for the activity description", () => {
+  it("should display an input for the activity description", () => {
     render(
       <BrowserRouter>
         <NewActivity />
