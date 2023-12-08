@@ -1,3 +1,5 @@
+const eventsDB = require("../models/events");
+
 module.exports = (io, socket) => {
   const Joi = require("joi");
 
@@ -138,7 +140,100 @@ module.exports = (io, socket) => {
     }
   };
 
+  const joinEventChat = async (event, callback) => {
+    if (typeof callback !== "function") {
+      return socket.disconnect();
+    }
+
+    const schema = Joi.object({
+      eventId: Joi.number().integer().required()
+    });
+
+    const { error } = schema.validate(event);
+    if (error) {
+      return callback({ status: "Bad request", message: error.message });
+    }
+
+    const eventId = event.eventId;
+
+    const userId = socket.data.user?.id;
+    const userIsEventAttendee = await eventsDB.getEventAttendee(
+      eventId,
+      userId
+    );
+    if (userIsEventAttendee) {
+      let chatId = await chatDb.getEventChatId(eventId); // TODO: better error handling. DB access should be in try/catch.
+      if (!chatId) {
+        chatId = await chatDb.createEventChat(eventId);
+        if (!chatId) {
+          callback(`Failed to join event chat. Please try again.`);
+          return socket.disconnect();
+        }
+      }
+      socket.join(chatId);
+      socket.data.chatId = chatId;
+      callback(`You are now chatting in the event chat.`);
+    } else {
+      callback({
+        status: "Unauthorized",
+        message: "You must be an attendee of the event to join the chat."
+      });
+      socket.disconnect();
+    }
+  };
+
+  const getEventMessageHistory = async (event, callback) => {
+    if (typeof callback !== "function") {
+      return socket.disconnect();
+    }
+
+    if (!socket.data.chatId) {
+      callback({
+        status: "No room",
+        message: "You must join a room before you can fetch the message history"
+      });
+      socket.disconnect();
+    }
+
+    const schema = Joi.object({
+      eventId: Joi.number().integer().required()
+    });
+
+    const { error } = schema.validate(event);
+    if (error) {
+      return callback({ status: "Bad request", message: error.message });
+    }
+
+    const eventId = event.eventId;
+
+    const userId = socket.data.user?.id;
+    // TODO: better error handling. DB access should be in try/catch.
+    if (eventsDB.getEventAttendee(eventId, userId)) {
+      const chatId = await chatDb.getEventChatId(eventId);
+      if (!chatId) {
+        callback("Failed to fetch message history");
+        return;
+      }
+      const messageHistory = await chatDb.getMessageHistory(chatId);
+      if (messageHistory) {
+        const messages = [];
+        messageHistory.map((message) => {
+          const tempMessage = {
+            senderUserId: message.sender,
+            name: `${message.firstname} ${message.lastname}`,
+            message: message.message,
+            sentAt: message.sent_at
+          };
+          messages.push(tempMessage);
+        });
+        socket.emit("message-history", messages);
+      }
+    }
+  };
+
   socket.on("join-direct-chat", joinDirectChat);
   socket.on("get-message-history", getMessageHistory);
   socket.on("send-message", sendMessage);
+  socket.on("join-event-chat", joinEventChat);
+  socket.on("get-event-message-history", getEventMessageHistory);
 };
