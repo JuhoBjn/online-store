@@ -10,3 +10,20 @@
   align-items: center;
   background-color: var(--main-background-color);
 }
+
+.created-activities-header {
+  width: fit-content;
+  height: fit-content;
+}
+
+.created-activities-header h2 {
+  margin: 0;
+}
+
+.created-activities-list-container {
+  height: fit-content;
+  max-height: 80%;
+  width: 90%;
+  max-width: 40em;
+  overflow-y: scroll;
+}
