@@ -194,7 +194,6 @@ VALUES (
     );
 
 -- Add a friendship between Larry Smith and Bob Builder.
-
 INSERT INTO `friends`(`user_id`, `friend_user_id`)
 VALUES (
         '239aec9f-066e-4e6a-88d7-9cdccd43445b',
@@ -291,7 +290,6 @@ VALUES (
 
 -- There's a lot of creating and dropping triggers below. This is to
 -- have the events on different days.
-
 -- Add triggers to set event start and end dates into the future 
 -- upon inserting data to the events table
 CREATE TRIGGER event_start_date_insert BEFORE
@@ -308,11 +306,11 @@ VALUES (
         1,
         'First event',
         'The opening event to start the season'
-);
+    );
 
 DROP TRIGGER event_start_date_insert;
-DROP TRIGGER event_end_date_insert;
 
+DROP TRIGGER event_end_date_insert;
 
 CREATE TRIGGER event_start_date_insert BEFORE
 INSERT ON `events` FOR EACH ROW
@@ -327,11 +325,11 @@ VALUES (
         2,
         'Karaoke Night',
         "Karaoke night at the old folks' home"
-);
+    );
 
 DROP TRIGGER event_start_date_insert;
-DROP TRIGGER event_end_date_insert;
 
+DROP TRIGGER event_end_date_insert;
 
 CREATE TRIGGER event_start_date_insert BEFORE
 INSERT ON `events` FOR EACH ROW
@@ -346,9 +344,10 @@ VALUES (
         3,
         'Germany exchange',
         'The GoldenAge crew has set up an exchange with their partered business to the beautiful city of Rothenburg Ob Der Tauber.'
-);
+    );
 
 DROP TRIGGER event_start_date_insert;
+
 DROP TRIGGER event_end_date_insert;
 
 CREATE TRIGGER event_start_date_insert BEFORE
@@ -364,9 +363,10 @@ VALUES (
         4,
         'Speed Dating',
         'Speed dating for the elderly. Come find a new love.'
-);
+    );
 
 DROP TRIGGER event_start_date_insert;
+
 DROP TRIGGER event_end_date_insert;
 
 CREATE TRIGGER event_start_date_insert BEFORE
@@ -382,9 +382,10 @@ VALUES (
         5,
         'Dance Night',
         'Celebrate the rhythm of life at our enchanting Dance Night for Seniors! Join us for an evening filled with joy, laughter, and the timeless elegance of dance. Let the music transport you to a bygone era as we create a warm and inviting atmosphere for seniors to relish the beauty of movement. Whether you prefer the graceful waltz or the lively beats of swing, our event promises a delightful blend of classic tunes and modern favorites. Embrace the opportunity to twirl, sway, and connect with friends old and new in a celebration tailored to the golden years. Let the dance floor become a canvas for memories, as we come together to share in the delight of a night designed especially for you. Don your dancing shoes and join us for a magical evening where age is just a number, and the spirit of dance knows no bounds!'
-);
+    );
 
 DROP TRIGGER event_start_date_insert;
+
 DROP TRIGGER event_end_date_insert;
 
 CREATE TRIGGER event_start_date_insert BEFORE
@@ -400,9 +401,10 @@ VALUES (
         6,
         'Sports',
         'Experience the thrill of friendly competition at our Elderly Sports Extravaganza! Join us for a day of camaraderie and light-hearted games tailored for seniors. From leisurely walks to spirited bocce ball matches, this event is all about staying active, having fun, and fostering a sense of community. Lace up and let the games begin!'
-);
+    );
 
 DROP TRIGGER event_start_date_insert;
+
 DROP TRIGGER event_end_date_insert;
 
 CREATE TRIGGER event_end_date_insert BEFORE
@@ -415,16 +417,36 @@ VALUES (
         'Golden Memories Gala',
         "Join us for an enchanting evening at the Golden Memories Gala, a nostalgic celebration for the elderly. Revel in live music, share cherished stories, and savor delectable cuisine. Let's create golden moments together, honoring a lifetime of memories and building new connections.",
         CURRENT_TIMESTAMP
-);
+    );
 
 DROP TRIGGER event_end_date_insert;
 
 -- Sign Bob the Builder up for four of the created events.
-
 INSERT INTO `event_attendees`(`event_id`, `user_id`)
-VALUES 
-    (1, "59158c35-8d77-43f1-bc63-3c5b4265b276"),
+VALUES (1, "59158c35-8d77-43f1-bc63-3c5b4265b276"),
     (2, "59158c35-8d77-43f1-bc63-3c5b4265b276"),
     (3, "59158c35-8d77-43f1-bc63-3c5b4265b276"),
     (6, "59158c35-8d77-43f1-bc63-3c5b4265b276"),
     (7, "59158c35-8d77-43f1-bc63-3c5b4265b276");
+
+-- Add a chat for the event attendees
+INSERT INTO `chats`(`chat_id`, `type`)
+VALUES ('9390b65a-b768-41ea-81f2-3e611a6ee082', 'group');
+
+-- Add the chatid to the event
+UPDATE `events`
+SET `chat_id` = '9390b65a-b768-41ea-81f2-3e611a6ee082'
+WHERE `id` = 1;
+
+-- Add message to the event chat
+INSERT INTO `messages`(`chat_id`, `sender`, `message`)
+VALUES (
+        '9390b65a-b768-41ea-81f2-3e611a6ee082',
+        '59158c35-8d77-43f1-bc63-3c5b4265b276',
+        'This event is cool'
+    ),
+    (
+        '9390b65a-b768-41ea-81f2-3e611a6ee082',
+        '59158c35-8d77-43f1-bc63-3c5b4265b276',
+        'I like it'
+    )
