@@ -25,22 +25,12 @@ describe("The front page", () => {
     cy.get("#join-button").should("be.visible");
   });
 
-  it("should allow a user to navigate to signup/login through the join button", () => {
+  it("should allow a user to navigate to payment page through the join button", () => {
     cy.visit(`${Cypress.config("baseUrl")}/frontpage`);
 
     cy.get("#join-button").should("be.visible");
     cy.get("#join-button").click();
 
-    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/auth#signup`);
-  });
-
-  it("should allow a user to navigate to signup/login through the sign up / log in button", () => {
-    cy.visit(`${Cypress.config("baseUrl")}/frontpage`);
-
-    cy.get(
-      ".logged-out-navigation-button-container > .button-container > .button"
-    ).click();
-
-    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/auth`);
+    cy.url().should("be.equal", `${Cypress.config("baseUrl")}/payment`);
   });
 });

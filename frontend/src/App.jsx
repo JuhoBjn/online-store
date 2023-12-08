@@ -43,6 +43,7 @@ import PostedArticles from "./pages/caretaker/posted-articles/PostedArticles";
 import { MyArticlesLoader } from "./pages/caretaker/posted-articles/PostedArticlesLoader";
 import EditArticle from "./pages/caretaker/edit-article/EditArticle";
 import { EditArticleLoader } from "./pages/caretaker/edit-article/EditArticleLoader";
+import Payment from "./pages/payment/Payment";
 
 import "./App.css";
 
@@ -214,6 +215,14 @@ const router = createBrowserRouter([
       <>
         <LoggedOutNavBar />
         <ContactUs />
+      </>
+    )
+  },
+  {
+    path: "/payment",
+    element: (
+      <>
+        <Payment />
       </>
     )
   },
