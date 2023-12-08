@@ -171,7 +171,7 @@ const deleteActivity = async (activityId, token) => {
     );
     if (response.status !== 204) {
       const responseMessage = await response.json();
-      throw new Error(`Failded to delete activity: ${responseMessage.error}`);
+      throw new Error(`Failed to delete activity: ${responseMessage.error}`);
     }
     return true;
   } catch (error) {
