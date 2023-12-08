@@ -74,7 +74,7 @@ const EditActivity = () => {
   };
 
   useEffect(() => {
-    if (activity?.iamge_url && !activityPicturePreviewSetRef.current) {
+    if (activity?.image_url && !activityPicturePreviewSetRef.current) {
       setActivityPicturePreview(activity.image_url);
       activityPicturePreviewSetRef.current = true;
     }
