@@ -50,28 +50,28 @@ const imageRouter = createBrowserRouter([
   }
 ]);
 
-const signedUpRouter = createBrowserRouter([
-  {
-    path: "/",
-    element: <Activity />,
-    loader: () => {
-      return {
-        id: 1,
-        name: "Golden Memories Gala",
-        description:
-          "Join us for an enchanting evening at the Golden Memories Gala, a nostalgic celebration for the elderly. Revel in live music, share cherished stories, and savor delectable cuisine. Let's create golden moments together, honoring a lifetime of memories and building new connections.",
-        picture_id: null,
-        starts_at: "2023-12-05T20:25:23.000Z",
-        ends_at: "2023-12-05T23:25:23.000Z",
-        created_at: "2023-12-05T20:25:23.000Z",
-        updated_at: "2023-12-05T20:25:23.000Z",
-        image_object_key: null,
-        image_url: ElatedPensioner,
-        signed_up: true
-      };
-    }
-  }
-]);
+// const signedUpRouter = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <Activity />,
+//     loader: () => {
+//       return {
+//         id: 1,
+//         name: "Golden Memories Gala",
+//         description:
+//           "Join us for an enchanting evening at the Golden Memories Gala, a nostalgic celebration for the elderly. Revel in live music, share cherished stories, and savor delectable cuisine. Let's create golden moments together, honoring a lifetime of memories and building new connections.",
+//         picture_id: null,
+//         starts_at: "2023-12-05T20:25:23.000Z",
+//         ends_at: "2023-12-05T23:25:23.000Z",
+//         created_at: "2023-12-05T20:25:23.000Z",
+//         updated_at: "2023-12-05T20:25:23.000Z",
+//         image_object_key: null,
+//         image_url: ElatedPensioner,
+//         signed_up: true
+//       };
+//     }
+//   }
+// ]);
 
 describe("The activity page", () => {
   it("should display an image if one is provided", () => {
