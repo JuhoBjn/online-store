@@ -9,4 +9,86 @@
   justify-content: flex-start;
   align-items: center;
   background-color: var(--main-background-color);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.edit-activity-form-container {
+  height: fit-content;
+  width: 80%;
+  max-width: 45em;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.edit-activity-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.edit-activity-picture-container {
+  max-height: 22em;
+  height: fit-content;
+  padding: 1em;
+  overflow: scroll;
+}
+
+#activity-picture {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.edit-activity-page-name-input-container {
+  width: 60%;
+  height: fit-content;
+}
+
+#name-input {
+  /* width = 100% - padding - borders */
+  width: calc(100% - 2 * 0.75rem - 2 * 1px);
+  padding: 0.75rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--main-text-color);
+  font-size: large;
+}
+
+.edit-activity-page-description-input-container {
+  width: 100%;
+  height: fit-content;
+}
+
+#description-input {
+  /* width = 100% - padding - border */
+  width: calc(100% - 2 * 0.75rem - 2 * 1px);
+  max-height: 50em;
+  padding: 0.75rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--main-text-color);
+  resize: vertical;
+  font-size: large;
+}
+
+.activity-dates-input-container {
+  width: 260px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.edit-activity-footer {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
 }
