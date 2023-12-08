@@ -420,6 +420,12 @@ const EditProfile = () => {
             )}
           </div>
         </form>
+
+        <p className="edit-profile__gravatar-info">
+          You can change your profile picture at{" "}
+          <a href="https://gravatar.com">Gravatar</a>. Just make sure you use
+          the same email address you used to sign up for this site.
+        </p>
       </div>
     </div>
   );
