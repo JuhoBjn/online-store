@@ -96,8 +96,9 @@
 }
 
 .new-activity-form-date-input-container {
-  width: 100%;
+  width: 260px;
   height: fit-content;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
