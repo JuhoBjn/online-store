@@ -32,6 +32,7 @@ Cypress.Commands.add(
     cy.get("#auth-page_login-form-title").should("contain", "Sign up");
     cy.get('[data-testid="email-input"]').type(email);
     cy.get('[data-testid="password-input"]').type(password);
+    cy.get('[data-testid="tc-checkbox"]').check();
     cy.get('[data-testid="submit-button"]').click();
 
     if (!supposedToFail) {

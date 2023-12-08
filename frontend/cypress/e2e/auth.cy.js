@@ -103,6 +103,17 @@ describe("The authentication page", () => {
     );
   });
 
+  it("should now allow a user to sign up without accepting the terms and conditions", () => {
+    cy.visit(`${Cypress.config("baseUrl")}/auth#signup`);
+
+    cy.get('[data-testid="email-input"]').type("bobr@test.com");
+    cy.get('[data-testid="password-input"]').type("Bobr12345");
+    cy.get('[data-testid="submit-button"]').click();
+
+    cy.url().should("not.contain", "edit");
+    cy.url().should("contain", `${Cypress.config("baseUrl")}/auth`);
+  });
+
   it("should not allow two users to be created with the same email", () => {
     // Sign up first user. Should succeed.
     cy.signup("susan@test.com", "Susan13245");
@@ -186,5 +197,14 @@ describe("The authentication page", () => {
 
     cy.get('[data-testid="reset-password-link').click();
     cy.url().should("be.equal", `${Cypress.config("baseUrl")}/reset-password`);
+  });
+
+  it("should have a linkt to the Terms and Conditions page", () => {
+    cy.visit(`${Cypress.config("baseUrl")}/auth#signup`);
+
+    cy.get('[data-testid="terms-and-conditions-link"]').should("be.visible");
+    cy.get('[data-testid="terms-and-conditions-link"]')
+      .invoke("attr", "href")
+      .should("be.equal", "/terms-and-conditions");
   });
 });

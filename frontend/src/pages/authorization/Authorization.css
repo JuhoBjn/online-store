@@ -114,6 +114,7 @@
   flex-direction: column;
   justify-content: space-evenly;
   align-items: flex-start;
+  align-self: center;
   background-color: var(--main-background-color);
   filter: brightness(95%);
   border-style: solid;
@@ -129,6 +130,12 @@
 
 .auth-page_password-instructions ul {
   margin: 0;
+}
+
+.auth-page-tc-container {
+  width: 100%;
+  height: min-content;
+  margin-top: 1em;
 }
 
 .auth-page_login-form-footer {

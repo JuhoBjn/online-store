@@ -43,6 +43,7 @@ import PostedArticles from "./pages/caretaker/posted-articles/PostedArticles";
 import { MyArticlesLoader } from "./pages/caretaker/posted-articles/PostedArticlesLoader";
 import EditArticle from "./pages/caretaker/edit-article/EditArticle";
 import { EditArticleLoader } from "./pages/caretaker/edit-article/EditArticleLoader";
+import TermsAndConditions from "./pages/authorization/TermsAndConditions";
 
 import "./App.css";
 
@@ -123,6 +124,10 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: <Authorization />
+  },
+  {
+    path: "/terms-and-conditions",
+    element: <TermsAndConditions />
   },
   {
     path: "/reset-password",

@@ -1,0 +1,22 @@
+.terms-and-conditions-page {
+  height: fit-content;
+  /* width: 100 viewport width - padding */
+  width: calc(100vw - 2 * 2em);
+  padding: 2em;
+  background-color: var(--main-background-color);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.terms-and-conditions-page-heading {
+  height: fit-content;
+  width: fit-content;
+  background-color: var(--light-green);
+  padding: 0.5em;
+}
+
+.terms-and-conditions-paragraph {
+  height: fit-content;
+  width: calc(100vw - 2 * 2em - 3em);
+  margin-left: 3em;
+}
