@@ -103,7 +103,7 @@ describe("The authentication page", () => {
     );
   });
 
-  it("should now allow a user to sign up without accepting the terms and conditions", () => {
+  it("should not allow a user to sign up without accepting the terms and conditions", () => {
     cy.visit(`${Cypress.config("baseUrl")}/auth#signup`);
 
     cy.get('[data-testid="email-input"]').type("bobr@test.com");
