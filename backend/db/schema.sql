@@ -57,9 +57,12 @@ CREATE TABLE `events` (
   `ends_at` timestamp NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `chat_id` varchar(36) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `picture_id` (`picture_id`),
-  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`picture_id`) REFERENCES `files` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  KEY `fk_event_chat` (`chat_id`),
+  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`picture_id`) REFERENCES `files` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `fk_event_chat` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`chat_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -251,5 +254,6 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20231114194708'),
   ('20231118215618'),
   ('20231121210858'),
-  ('20231123225118');
+  ('20231123225118'),
+  ('20231207160633');
 UNLOCK TABLES;

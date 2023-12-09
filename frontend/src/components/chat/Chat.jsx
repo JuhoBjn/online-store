@@ -39,6 +39,21 @@ const joinDirectChatRoom = async (friend) => {
 };
 
 /**
+ * Sends request to server to join event chat room
+ * @param {String} eventId - Event ID
+ * @returns {Promise<void>} Promise that resolves when server responds
+ */
+const joinEventChatRoom = async (eventId) => {
+  if (socket) {
+    console.log("joining event chat room");
+    const res = await socket.emitWithAck("join-event-chat", {
+      eventId: eventId
+    });
+    console.log(res);
+  }
+};
+
+/**
  * Sends request to server to get chat history
  * @param {Object} friend - Friend object
  */
@@ -55,6 +70,23 @@ const getChatHistory = (friend) => {
   }
 };
 
+/**
+ * Sends request to server to get event chat history
+ * @param {String} eventId - Event ID
+ */
+const getEventChatHistory = (eventId) => {
+  if (eventId && socket) {
+    console.log("sending request for event chat history");
+    socket.emit("get-event-message-history", { eventId: eventId }, (res) => {
+      if (res) {
+        console.log(res);
+      }
+    });
+  } else {
+    console.error("No event ID or socket provided");
+  }
+};
+
 /*
  * Chat component
  * @param {Object} props
@@ -62,11 +94,13 @@ const getChatHistory = (friend) => {
  * @param {String} props.user.token - User token
  * @param {String} props.user.firstname - User first name
  * @param {String} props.user.lastname - User last name
+ * @param {String} props.user.id - User ID
  * @param {Object} [props.friend] - Friend object
  * @param {String} props.friend.id - Friend ID
  * @param {String} props.friend.firstname - Friend first name
  * @param {String} props.friend.lastname - Friend last name
  * @param {String} [props.eventId] - Event ID
+ * @param {String} [props.eventName] - Event name
  * @param {Boolean} [props.isDisabled] - Whether or not to disable chat
  * @param {String} [props.disabledMessage] - Message to display when chat is disabled
  * @returns {JSX.Element} JSX Element for Chat component
@@ -108,6 +142,19 @@ const Chat = ({
       joinRoomAndGetChatHistory();
     }
   }, [friend]);
+
+  useEffect(() => {
+    setMessages([]); // Clear old messages when event ID changes
+    socket.connect(); // Need to reconnect socket after disconnecting as Chat component is not unmounted
+    const joinRoomAndGetChatHistory = async () => {
+      await joinEventChatRoom(eventId);
+      getEventChatHistory(eventId);
+    };
+
+    if (eventId) {
+      joinRoomAndGetChatHistory();
+    }
+  }, [eventId]);
 
   const sendMessage = async (message) => {
     console.log("sending message", message);

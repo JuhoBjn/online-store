@@ -46,4 +46,23 @@ describe("The activity page", () => {
 
     cy.get('[data-testid="activity-signed-up"]').should("be.visible");
   });
+
+  it("should show chat after signing up for an event", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.visit(`${Cypress.config("baseUrl")}/activity/1`);
+
+    // skip clicking signup if already signed up
+    cy.get('[data-testid="activity-signed-up"]').then(($el) => {
+      if ($el.length === 0) {
+        cy.get('[data-testid="activity-signup-button"]').click();
+      }
+    });
+
+    cy.get('[data-testid="activity-signed-up"]').should("be.visible");
+
+    cy.get(".chat-container__chat-info__title").should("be.visible");
+
+    cy.contains("This event is cool").should("be.visible");
+  });
 });

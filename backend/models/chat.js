@@ -87,6 +87,35 @@ const models = {
       ORDER BY sent_at;`;
     const [rows] = await promisePool.query(queryString, [chatId]);
     return rows;
+  },
+  /**
+   * Get the chat ID of an event chat.
+   * @param {string} eventId ID of the event.
+   * @returns {string | null} Chat ID if an event chat exists, otherwise null.
+   */
+  getEventChatId: async (eventId) => {
+    const queryString = "SELECT chat_id FROM events WHERE id = ?;";
+    const [rows] = await promisePool.query(queryString, [eventId]);
+    return rows[0]?.chat_id || null;
+  },
+  /**
+   * Create an event chat.
+   * @param {string} eventId ID of the event.
+   * @returns {string | null} Chat ID if the chat was created, otherwise null.
+   */
+  createEventChat: async (eventId) => {
+    const chatId = genUuid();
+    try {
+      const createChatString =
+        "INSERT INTO chats (chat_id, type) VALUES (?, 'group');";
+      await promisePool.query(createChatString, [chatId]);
+      const updateChatIDInEventsString =
+        "UPDATE events SET chat_id = ? WHERE id = ?;";
+      await promisePool.query(updateChatIDInEventsString, [chatId, eventId]);
+      return chatId;
+    } catch (error) {
+      return null;
+    }
   }
 };
 
