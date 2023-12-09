@@ -10,7 +10,7 @@
 .match-container {
   height: 40em;
   max-height: 80vh;
-  width: 90%;
+  width: 70%;
   max-width: 55em;
   position: absolute;
   /* top = top + navbar + gap from navbar */
@@ -28,7 +28,6 @@
   width: fit-content;
   max-width: 30em;
   position: absolute;
-  /* top = top + navbar + gap from navbar */
   top: 0;
   left: 50%;
   transform: translate(-50%, 0%);
@@ -43,7 +42,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 4em;
+  margin-bottom: 2em;
 }
 
 .pass-button-container :hover {
@@ -55,16 +54,13 @@
   filter: opacity(20%);
 }
 
-.pass-button-container h2 {
-  margin: 0.75em 0;
-}
-
-#pass-button-image {
-  height: 7em;
+#pass-button-icon {
+  height: 100%;
+  width: 100%;
   object-fit: contain;
 }
 
-.smash-button-container {
+.accept-button-container {
   width: 100%;
   max-width: 10em;
   height: auto;
@@ -73,19 +69,16 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 4em;
+  margin-bottom: 2em;
 }
 
-.smash-button-container :hover {
+.accept-button-container :hover {
   cursor: pointer;
 }
 
-.smash-button-container h2 {
-  margin: 0.75em 0;
-}
-
-#smash-button-image {
-  height: 7em;
+#accept-button-icon {
+  height: 100%;
+  width: 100%;
   object-fit: contain;
 }
 
