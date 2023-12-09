@@ -48,6 +48,7 @@ import CreatedActivities from "./pages/caretaker/created-activities/CreatedActiv
 import { CreatedActivitiesLoader } from "./pages/caretaker/created-activities/CreatedActivitiesLoader";
 import EditActivity from "./pages/caretaker/edit-activity/EditActivity";
 import { EditActivityLoader } from "./pages/caretaker/edit-activity/EditActivityLoader";
+import TermsAndConditions from "./pages/authorization/TermsAndConditions";
 
 import "./App.css";
 
@@ -128,6 +129,10 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: <Authorization />
+  },
+  {
+    path: "/terms-and-conditions",
+    element: <TermsAndConditions />
   },
   {
     path: "/reset-password",
