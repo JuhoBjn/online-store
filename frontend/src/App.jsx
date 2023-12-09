@@ -49,6 +49,7 @@ import { CreatedActivitiesLoader } from "./pages/caretaker/created-activities/Cr
 import EditActivity from "./pages/caretaker/edit-activity/EditActivity";
 import { EditActivityLoader } from "./pages/caretaker/edit-activity/EditActivityLoader";
 import TermsAndConditions from "./pages/authorization/TermsAndConditions";
+import Payment from "./pages/payment/Payment";
 
 import "./App.css";
 
@@ -240,6 +241,10 @@ const router = createBrowserRouter([
         <ContactUs />
       </>
     )
+  },
+  {
+    path: "/payment",
+    element: <Payment />
   },
   {
     path: "*",
