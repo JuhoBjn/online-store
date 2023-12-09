@@ -199,7 +199,7 @@ describe("The authentication page", () => {
     cy.url().should("be.equal", `${Cypress.config("baseUrl")}/reset-password`);
   });
 
-  it("should have a linkt to the Terms and Conditions page", () => {
+  it("should have a link to the Terms and Conditions page", () => {
     cy.visit(`${Cypress.config("baseUrl")}/auth#signup`);
 
     cy.get('[data-testid="terms-and-conditions-link"]').should("be.visible");
