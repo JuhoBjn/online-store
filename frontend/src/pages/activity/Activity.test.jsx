@@ -92,6 +92,18 @@ describe("The activity page", () => {
     expect(screen.getByTestId("activity-name")).toBeInTheDocument();
   });
 
+  it("should display the date and time the activity starts", () => {
+    render(<RouterProvider router={imageRouter} />);
+
+    expect(screen.getByTestId("activity-start-date")).toBeInTheDocument();
+  });
+
+  it("should display the date and time the activity ends", () => {
+    render(<RouterProvider router={noImageRouter} />);
+
+    expect(screen.getByTestId("activity-end-date")).toBeInTheDocument();
+  });
+
   it("should display the activity description", () => {
     render(<RouterProvider router={noImageRouter} />);
 
