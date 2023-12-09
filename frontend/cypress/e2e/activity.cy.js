@@ -21,6 +21,22 @@ describe("The activity page", () => {
     cy.get('[data-testid="activity-name"]').should("be.visible");
   });
 
+  it("should display the date and time the activity starts", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.visit(`${Cypress.config("baseUrl")}/activity/1`);
+
+    cy.get('[data-testid="activity-start-date"]').should("be.visible");
+  });
+
+  it("should display the date and time the activity ends", () => {
+    cy.login("bobb@test.com", "Bob12345");
+
+    cy.visit(`${Cypress.config("baseUrl")}/activity/1`);
+
+    cy.get('[data-testid="activity-end-date"]').should("be.visible");
+  });
+
   it("should display a description of the activity", () => {
     cy.login("bobb@test.com", "Bob12345");
 

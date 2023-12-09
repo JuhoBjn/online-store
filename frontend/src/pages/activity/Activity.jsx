@@ -25,6 +25,17 @@ const Activity = () => {
     }
   };
 
+  const formatDate = (date) => {
+    const dateObj = new Date(date);
+    return `${dateObj.toLocaleDateString()} at ${dateObj.toLocaleTimeString(
+      [],
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    )}`;
+  };
+
   return (
     <div className="activity-page">
       <article className="activity-container">
@@ -42,6 +53,14 @@ const Activity = () => {
           <h1 data-testid="activity-name" className="activity-name">
             {activity.name}
           </h1>
+          <section className="activity-header-dates-container">
+            <p data-testid="activity-start-date">
+              Starts {formatDate(activity.starts_at)}
+            </p>
+            <p data-testid="activity-end-date">
+              Ends {formatDate(activity.ends_at)}
+            </p>
+          </section>
         </header>
         <section className="activity-body">
           <p
