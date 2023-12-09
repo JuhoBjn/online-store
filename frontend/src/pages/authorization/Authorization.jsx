@@ -15,6 +15,7 @@ const Authorization = () => {
 
   const emailRef = useRef("");
   const passwordRef = useRef("");
+  const termsAndConditionsRef = useRef(false);
 
   const toggleLoginMode = () => {
     setShowErrorMessage(false);
@@ -142,18 +143,41 @@ const Authorization = () => {
               </Link>
             )}
             {!loginMode && (
-              <div
-                className="auth-page_password-instructions"
-                data-testid="password-instructions"
-              >
-                <p>Password must have:</p>
-                <ul>
-                  <li>At least eight characters</li>
-                  <li>Include at least one capital letter</li>
-                  <li>Include at least one lowercase letter</li>
-                  <li>Include at least one number</li>
-                </ul>
-              </div>
+              <>
+                <div
+                  className="auth-page_password-instructions"
+                  data-testid="password-instructions"
+                >
+                  <p>Password must have:</p>
+                  <ul>
+                    <li>At least eight characters</li>
+                    <li>Include at least one capital letter</li>
+                    <li>Include at least one lowercase letter</li>
+                    <li>Include at least one number</li>
+                  </ul>
+                </div>
+                <div
+                  className="auth-page-tc-container"
+                  data-testid="auth-page-tc-container"
+                >
+                  <input
+                    id="tc-checkbox"
+                    data-testid="tc-checkbox"
+                    type="checkbox"
+                    ref={termsAndConditionsRef}
+                    required
+                  />
+                  <label htmlFor="tc-checkbox">
+                    <Link
+                      data-testid="terms-and-conditions-link"
+                      to="/terms-and-conditions"
+                      target="_blank"
+                    >
+                      I have read and accepted the Terms and Conditions
+                    </Link>
+                  </label>
+                </div>
+              </>
             )}
             <button
               className="auth-page_submit-button"

@@ -2,7 +2,7 @@
   height: 7em;
   width: 100vw;
   background-color: var(--main-background-color);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   display: flex;
@@ -10,6 +10,7 @@
   justify-content: flex-end;
   align-items: center;
   overflow: hidden;
+  z-index: 100;
 }
 
 .navigation-left {
@@ -25,7 +26,7 @@
 }
 
 .navigation-left img {
-  height: calc(100% - 20px);
+  height: 85px;
   width: auto;
   object-fit: contain;
 }
@@ -73,4 +74,19 @@
   justify-content: center;
   align-items: center;
   padding: 0 2em;
+}
+
+@media (max-width: 850px) {
+  .navigation-bar-container {
+    height: 270px;
+    flex-direction: column;
+    padding-bottom: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .logged-out-navigation-links ul {
+    flex-direction: column;
+  }
 }

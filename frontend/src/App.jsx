@@ -43,6 +43,12 @@ import PostedArticles from "./pages/caretaker/posted-articles/PostedArticles";
 import { MyArticlesLoader } from "./pages/caretaker/posted-articles/PostedArticlesLoader";
 import EditArticle from "./pages/caretaker/edit-article/EditArticle";
 import { EditArticleLoader } from "./pages/caretaker/edit-article/EditArticleLoader";
+import NewActivity from "./pages/caretaker/new-activity/NewActivity";
+import CreatedActivities from "./pages/caretaker/created-activities/CreatedActivities";
+import { CreatedActivitiesLoader } from "./pages/caretaker/created-activities/CreatedActivitiesLoader";
+import EditActivity from "./pages/caretaker/edit-activity/EditActivity";
+import { EditActivityLoader } from "./pages/caretaker/edit-activity/EditActivityLoader";
+import TermsAndConditions from "./pages/authorization/TermsAndConditions";
 import Payment from "./pages/payment/Payment";
 
 import "./App.css";
@@ -126,6 +132,10 @@ const router = createBrowserRouter([
     element: <Authorization />
   },
   {
+    path: "/terms-and-conditions",
+    element: <TermsAndConditions />
+  },
+  {
     path: "/reset-password",
     element: <ResetPassword />
   },
@@ -188,6 +198,20 @@ const router = createBrowserRouter([
         path: "/caretaker/news/:id/edit",
         element: <EditArticle />,
         loader: EditArticleLoader
+      },
+      {
+        path: "/caretaker/activities/new-activity",
+        element: <NewActivity />
+      },
+      {
+        path: "/caretaker/activities",
+        element: <CreatedActivities />,
+        loader: CreatedActivitiesLoader
+      },
+      {
+        path: "/caretaker/activities/:activityId/edit",
+        element: <EditActivity />,
+        loader: EditActivityLoader
       }
     ]
   },
@@ -220,11 +244,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/payment",
-    element: (
-      <>
-        <Payment />
-      </>
-    )
+    element: <Payment />
   },
   {
     path: "*",

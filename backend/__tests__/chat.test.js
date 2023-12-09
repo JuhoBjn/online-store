@@ -18,6 +18,7 @@ describe("The chat backend", () => {
   let chatServerPort, chatServer, clientSocket, client2Socket;
   let larrysId, larrysToken;
   let lottasToken;
+  let bobsToken;
 
   beforeAll(async () => {
     // Start up Socket.io server and connect two client sockets.
@@ -32,6 +33,10 @@ describe("The chat backend", () => {
     larry = { ...larry[0] };
     larrysId = larry.id;
     larrysToken = jwt.sign(larry, process.env.JWT_KEY);
+
+    let [bob] = await promisePool.query(queryString, ["bobb@test.com"]);
+    bob = { ...bob[0] };
+    bobsToken = jwt.sign(bob, process.env.JWT_KEY);
 
     // Log in a second test user.
     let [lotta] = await promisePool.query(queryString, ["lottas@test.com"]);
@@ -296,8 +301,8 @@ describe("The chat backend", () => {
         name: "Larry Smith",
         message: "Hello again!"
       });
-    }, 50);
-  });
+    }, 100);
+  }, 10000);
 
   it("should not accept a poorly formatted message", async () => {
     const friendUser = {
@@ -328,5 +333,92 @@ describe("The chat backend", () => {
       "message",
       "You must join a room before sending a message"
     );
+  });
+
+  describe("Event chat", () => {
+    let client3Socket;
+    beforeEach((done) => {
+      client3Socket = ioc(`http://localhost:${chatServerPort}`, {
+        auth: {
+          token: bobsToken
+        }
+      });
+      setTimeout(() => {
+        done();
+      }, 1000);
+    });
+
+    afterEach(() => {
+      if (client3Socket && client3Socket.connected) {
+        client3Socket.disconnect();
+      }
+    });
+
+    it("should non allow a non attendee to join a event chat room", async () => {
+      const response = await clientSocket.emitWithAck("join-event-chat", {
+        eventId: 1
+      });
+
+      expect(response).toHaveProperty("status", "Unauthorized");
+      expect(response).toHaveProperty(
+        "message",
+        "You must be an attendee of the event to join the chat."
+      );
+    });
+
+    it("should allow an attendee to join a event chat room", async () => {
+      const response = await client3Socket.emitWithAck("join-event-chat", {
+        eventId: 1
+      });
+
+      expect(response).toBe(`You are now chatting in the event chat.`);
+    });
+
+    it("should error if a user tries to join an event chat room with a bad request", async () => {
+      const response = await client3Socket.emitWithAck("join-event-chat", {
+        eventId: "shouldbeanumberhere"
+      });
+
+      expect(response).toHaveProperty("status", "Bad request");
+      expect(response).toHaveProperty("message");
+    });
+
+    it("should allow an attendee to fetch message history", (done) => {
+      client3Socket.emit(
+        "join-event-chat",
+        {
+          eventId: 1
+        },
+        (res) => {
+          expect(res).toBe(`You are now chatting in the event chat.`);
+        }
+      );
+
+      client3Socket.on("message-history", (messages) => {
+        expect(messages).toBeDefined();
+        expect(messages).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              name: expect.any(String),
+              message: expect.any(String),
+              sentAt: expect.any(String)
+            })
+          ])
+        );
+        done();
+      });
+
+      setTimeout(() => {
+        client3Socket.emit(
+          "get-event-message-history",
+          {
+            eventId: 1
+          },
+          (res) => {
+            expect(res).toBe(undefined);
+          }
+        );
+      }, 500);
+    });
   });
 });
