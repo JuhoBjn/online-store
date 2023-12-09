@@ -3,8 +3,8 @@ import { useLoaderData } from "react-router-dom";
 
 import ProfileCard from "./ProfileCard";
 import { AuthContext } from "../../utils/AuthContext";
-import LikeImage from "../../assets/Smash_that_like.png";
-import TrashBinImage from "../../assets/Trash_bin.png";
+import CheckMark from "../../assets/check.svg";
+import CrossMark from "../../assets/cross.svg";
 
 import "./Match.css";
 
@@ -50,12 +50,11 @@ const Match = () => {
             className="pass-button-container"
             onClick={nextHandler}
           >
-            <h2 data-testid="pass-button-text">PASS</h2>
             <img
-              id="pass-button-image"
-              data-testid="pass-button-image"
-              src={TrashBinImage}
-              alt="Pass - image"
+              id="pass-button-icon"
+              data-testid="pass-button-icon"
+              src={CrossMark}
+              alt="Pass button. Skip to the next user."
             />
           </div>
           <div
@@ -65,16 +64,15 @@ const Match = () => {
             <ProfileCard user={displayedUser} />
           </div>
           <div
-            data-testid="smash-button-container"
-            className="smash-button-container"
+            data-testid="accept-button-container"
+            className="accept-button-container"
             onClick={friendRequestHandler}
           >
-            <h2 data-testid="smash-button-text">SMASH</h2>
             <img
-              id="smash-button-image"
-              data-testid="smash-button-image"
-              src={LikeImage}
-              alt="Smash that like - button"
+              id="accept-button-icon"
+              data-testid="accept-button-icon"
+              src={CheckMark}
+              alt="Accept button. Sends friend request."
             />
           </div>
         </div>

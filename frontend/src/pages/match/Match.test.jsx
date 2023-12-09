@@ -41,7 +41,7 @@ describe("The match page", () => {
     ).toBeInTheDocument();
   });
 
-  it("should display SMASH and PASS buttons", () => {
+  it("should display accept and pass buttons", () => {
     render(
       <RouterProvider router={testRouter}>
         <Match />
@@ -49,6 +49,6 @@ describe("The match page", () => {
     );
 
     expect(screen.getByTestId("pass-button-container")).toBeInTheDocument();
-    expect(screen.getByTestId("smash-button-container")).toBeInTheDocument();
+    expect(screen.getByTestId("accept-button-container")).toBeInTheDocument();
   });
 });

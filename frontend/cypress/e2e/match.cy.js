@@ -16,19 +16,17 @@ describe("The match page", () => {
     cy.url().should("be.equal", `${Cypress.config("baseUrl")}/frontpage`);
   });
 
-  it("should display buttons to smash or pass the user", () => {
+  it("should display buttons to accept or pass the user", () => {
     cy.login("thomast@test.com", "Thomas12345");
 
     cy.visit(`${Cypress.config("baseUrl")}/match`);
     cy.url().should("be.equal", `${Cypress.config("baseUrl")}/match`);
 
     cy.get('[data-testid="pass-button-container"]').should("be.visible");
-    cy.get('[data-testid="pass-button-text"]').should("be.visible");
-    cy.get('[data-testid="pass-button-image"]').should("be.visible");
+    cy.get('[data-testid="pass-button-icon"]').should("be.visible");
 
-    cy.get('[data-testid="smash-button-container"]').should("be.visible");
-    cy.get('[data-testid="smash-button-text"]').should("be.visible");
-    cy.get('[data-testid="smash-button-image"]').should("be.visible");
+    cy.get('[data-testid="accept-button-container"]').should("be.visible");
+    cy.get('[data-testid="accept-button-icon"]').should("be.visible");
   });
 
   it("should display user profile card", () => {
@@ -65,7 +63,7 @@ describe("The match page", () => {
       });
   });
 
-  it("should display the next user when user clicks on smash", () => {
+  it("should display the next user when user clicks on accept", () => {
     cy.login("thomast@test.com", "Thomas12345");
 
     cy.visit(`${Cypress.config("baseUrl")}/match`);
@@ -77,7 +75,7 @@ describe("The match page", () => {
       .then((value) => {
         firstUsername = value;
       });
-    cy.get('[data-testid="smash-button-container"]').click();
+    cy.get('[data-testid="accept-button-container"]').click();
     cy.get('[data-testid="profile-card-user-name')
       .invoke("text")
       .should((text) => {
@@ -85,7 +83,7 @@ describe("The match page", () => {
       });
   });
 
-  it("should send a friend request when user clicks the smash button", () => {
+  it("should send a friend request when user clicks the accept button", () => {
     cy.intercept({
       method: "POST",
       url: `http://localhost:5000/api/users/${thomasId}/friend-requests/*`
@@ -96,7 +94,7 @@ describe("The match page", () => {
     cy.visit(`${Cypress.config("baseUrl")}/match`);
     cy.url().should("be.equal", `${Cypress.config("baseUrl")}/match`);
 
-    cy.get('[data-testid="smash-button-container"]').click();
+    cy.get('[data-testid="accept-button-container"]').click();
 
     cy.wait("@sendFriendRequest").its("state").should("be.equal", "Complete");
   });
