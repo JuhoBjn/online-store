@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import MessageBubble from "./MessageBubble";
 import "./Chat.css";
@@ -193,6 +193,14 @@ const Chat = ({
     }
   }, [user?.token]);
 
+  const endOfMessagesRef = useRef(null);
+
+  useEffect(() => {
+    if (endOfMessagesRef.current) {
+      endOfMessagesRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   return (
     <div className="chat-container">
       <div className="chat-container__chat-info">
@@ -217,6 +225,7 @@ const Chat = ({
               message={message}
               isMine={message.senderUserId === user.id}
               isGroupChat={Boolean(eventId)}
+              ref={index === messages.length - 1 ? endOfMessagesRef : null}
             />
           </div>
         ))}
