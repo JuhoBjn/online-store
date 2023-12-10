@@ -24,13 +24,22 @@ body {
   margin: 0;
 }
 
-h1,
-h2,
-h3,
-h4 {
+h1 {
+  font-family: "Lilita One", sans-serif;
+  color: var(--main-text-color);
+  font-size: 35px;
+}
+
+h2 {
   font-family: "Lilita One", sans-serif;
   color: var(--main-text-color);
   font-size: xx-large;
+}
+
+h3 {
+  font-family: "Lilita One", sans-serif;
+  color: var(--main-text-color);
+  font-size: x-large;
 }
 
 p,
