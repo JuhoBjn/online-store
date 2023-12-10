@@ -34,6 +34,22 @@ services:
       - fromGroup: onlinestore-staging
 
   - type: web
+    name: onlinestore-backend-socketio-stg
+    env: node
+    region: frankfurt
+    plan: free
+    branch: main
+    rootDir: backend
+    autoDeploy: false
+    numInstances: 1
+    envVars:
+      - fromGroup: onlinestore-staging
+      - PORT: 5005
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /healthz
+
+  - type: web
     name: onlinestore-backend-prod
     env: node
     region: frankfurt
