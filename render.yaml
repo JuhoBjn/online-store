@@ -44,7 +44,8 @@ services:
     numInstances: 1
     envVars:
       - fromGroup: onlinestore-staging
-      - PORT: 5005
+      - key: PORT
+        value: 5005
     buildCommand: npm ci --omit=dev
     startCommand: npm start
     healthCheckPath: /healthz
