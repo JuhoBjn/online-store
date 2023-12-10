@@ -48,6 +48,8 @@ const io = new Server({
       "http://localhost:5173",
       "https://onlinestore-frontend-stg.onrender.com",
       "https://onlinestore-frontend-prod.onrender.com",
+      "https://onlinestore-frontend-stg.onrender.com:5005",
+      "https://onlinestore-frontend-prod.onrender.com:5005",
       `http://localhost:${process.env.PORT || 5000}`
     ],
     credentials: true,
