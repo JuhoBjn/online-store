@@ -1,13 +1,14 @@
 import { useLoaderData } from "react-router-dom";
 import FriendListItem from "../../components/friend-list-item/FriendListItem";
 import "./Messages.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Chat from "../../components/chat/Chat";
+import { AuthContext } from "../../utils/AuthContext";
 
 const Messages = () => {
   const allFriendsData = useLoaderData();
   const [selectedFriendData, setSelectedFriendData] = useState(null);
-  const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+  const authContext = useContext(AuthContext);
 
   const handleFriendClick = (friendId) => {
     setSelectedFriendData(
@@ -44,7 +45,7 @@ const Messages = () => {
       <div className="messages-page__chat-container">
         {selectedFriendData ? (
           <Chat
-            user={storedUser}
+            user={authContext}
             friend={{
               id: selectedFriendData?.friend_user_id,
               firstname: selectedFriendData?.friend_first_name,

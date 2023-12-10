@@ -7,7 +7,7 @@ let socket = null;
 
 const connectSocket = (token) => {
   console.log("connecting socket...");
-  socket = io(import.meta.env.VITE_SOCKET_URL || "http://localhost:5005", {
+  socket = io(import.meta.env.VITE_BACKEND_URL || "http://localhost:5000", {
     auth: {
       token: token
     }
@@ -118,7 +118,6 @@ const Chat = ({
   // Use effect to connect socket on mount and disconnect on unmount
   useEffect(() => {
     if (!user?.token) {
-      console.error("No user token");
       return;
     }
 
