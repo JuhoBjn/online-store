@@ -1,6 +1,8 @@
 .profile-card {
-  width: fit-content;
   height: 100%;
+  max-height: calc(35em - 2 * 1px - 3px);
+  min-height: 26em;
+  aspect-ratio: 6 / 9.5;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -9,7 +11,7 @@
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .profile-card-image-container {
@@ -21,7 +23,7 @@
 #profile-card-image {
   height: 100%;
   width: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .profile-card-content-separator {
@@ -41,6 +43,11 @@
   padding: 0 2em;
 }
 
+.profile-card-content-header h2,
+.profile-card-content-header h3 {
+  margin: 0;
+}
+
 .profile-card-content-body {
   padding: 0 2em;
 }
@@ -52,4 +59,15 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+@media (max-width: 768px) {
+  .profile-card p {
+    font-size: medium;
+  }
+
+  .profile-card h2,
+  .profile-card h3 {
+    font-size: large;
+  }
 }

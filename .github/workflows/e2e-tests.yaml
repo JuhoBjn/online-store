@@ -56,7 +56,7 @@ jobs:
         env:
           NODE_ENV: test
           VITE_BACKEND_API: http://localhost:5000
-          VITE_SOCKET_URL: http://localhost:5005
+          VITE_SOCKET_URL: http://localhost:5000
 
         run: npm run dev &
 

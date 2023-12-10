@@ -77,7 +77,6 @@ jobs:
     env:
       DATABASE_URL_STAGING: ${{ secrets.DATABASE_URL_STAGING }}
       BACKEND_DEPLOY_STAGING_WEBHOOK: ${{ secrets.BACKEND_DEPLOY_STAGING_WEBHOOK }}
-      BACKEND_SOCKETIO_DEPLOY_STAGING_WEBHOOK: ${{ secrets.BACKEND_SOCKETIO_DEPLOY_STAGING_WEBHOOK }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -96,9 +95,7 @@ jobs:
         run: npx dbmate -e DATABASE_URL_STAGING --no-dump-schema up
 
       - name: Trigger deploy to staging
-        run: |
-          curl -s "$BACKEND_DEPLOY_STAGING_WEBHOOK"
-          curl -s "$BACKEND_SOCKETIO_DEPLOY_STAGING_WEBHOOK"
+        run: curl -s "$BACKEND_DEPLOY_STAGING_WEBHOOK"
 
   deploy-production:
     runs-on: ubuntu-latest
