@@ -41,7 +41,8 @@ app.use("/api/events", events);
 const news = require("./routes/news");
 app.use("/api/news", news);
 
-const io = new Server({
+const httpServer = require("http").createServer(app);
+const io = new Server(httpServer, {
   cors: {
     origin: [
       "http://127.0.0.1:5173",
@@ -78,4 +79,4 @@ io.on("connection", (socket) => {
   });
 });
 
-module.exports = { app, io };
+module.exports = { app, io, httpServer };
