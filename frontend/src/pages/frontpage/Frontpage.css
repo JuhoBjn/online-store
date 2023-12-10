@@ -1,6 +1,6 @@
 .frontpage {
   /* height = 100% - navbar */
-  height: calc(100% - 7em);
+  height: calc(100dvh - 7em);
   width: 100vw;
   margin-top: 7em;
   display: flex;
