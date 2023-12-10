@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const { Server } = require("socket.io");
 
 // Load test environment variables when running tests
 if (process.env.NODE_ENV === "test") {
@@ -41,21 +40,24 @@ app.use("/api/events", events);
 const news = require("./routes/news");
 app.use("/api/news", news);
 
-const io = new Server({
-  cors: {
-    origin: [
-      "http://127.0.0.1:5173",
-      "http://localhost:5173",
-      "https://onlinestore-frontend-stg.onrender.com",
-      "https://onlinestore-frontend-prod.onrender.com",
-      "https://onlinestore-frontend-stg.onrender.com:5005",
-      "https://onlinestore-frontend-prod.onrender.com:5005",
-      `http://localhost:${process.env.PORT || 5000}`
-    ],
-    credentials: true,
-    optionsSuccessStatus: 200
-  }
-});
+const http = require("http").createServer(app);
+const io = require("socket.io")(http);
+
+// const io = new Server({
+//   cors: {
+//     origin: [
+//       "http://127.0.0.1:5173",
+//       "http://localhost:5173",
+//       "https://onlinestore-frontend-stg.onrender.com",
+//       "https://onlinestore-frontend-prod.onrender.com",
+//       "https://onlinestore-frontend-stg.onrender.com:5005",
+//       "https://onlinestore-frontend-prod.onrender.com:5005",
+//       `http://localhost:${process.env.PORT || 5000}`
+//     ],
+//     credentials: true,
+//     optionsSuccessStatus: 200
+//   }
+// });
 
 const registerChatHandlers = require("./chat/chatHandlers");
 const socketVerifyToken = require("./middleware/socketVerifyToken");
@@ -78,4 +80,4 @@ io.on("connection", (socket) => {
   });
 });
 
-module.exports = { app, io };
+module.exports = { app, io, http };
