@@ -7,7 +7,7 @@ let socket = null;
 
 const connectSocket = (token) => {
   console.log("connecting socket...");
-  socket = io(import.meta.env.VITE_BACKEND_URL || "http://localhost:5000", {
+  socket = io(import.meta.env.VITE_BACKEND_API || "http://localhost:5000", {
     auth: {
       token: token
     }
